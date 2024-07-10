@@ -1,0 +1,28 @@
+{
+  "name": "pde-v2",
+  "version": "1.0.0",
+  "description": "Collaborative code editor for Processing",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doradocodes/pde-v2.git"
+  },
+  "keywords": [
+    "Processing",
+    "code",
+    "editor"
+  ],
+  "author": "doradocodes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/doradocodes/pde-v2/issues"
+  },
+  "homepage": "https://github.com/doradocodes/pde-v2#readme",
+  "devDependencies": {
+    "electron": "^31.2.0"
+  }
+}
