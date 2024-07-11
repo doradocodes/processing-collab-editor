@@ -1,4 +1,4 @@
-# pde-v2
+# Processing Collaborative Code Editor
 
 ## Description
 Prototype for a new collaborative code editor for Processing (2024 pr05).
@@ -14,7 +14,7 @@ Prototype for a new collaborative code editor for Processing (2024 pr05).
 
 As the first week of the pr05 program, I met with my mentors, Raphael, Sinan, and Ted, to discuss the initial thoughts and context behind this project. The project began with some intentions in mind:
 
-- As an opportunity to revamp the existing Processing IDE (PDE), which historically has been difficult to update and is no longer being maintained by its original developer
+- To experiment with creating a collaborative code editor for Processing
 - A way to use more modern technologies that could make it easier for others to contribute to
 - Add a collaboration feature, similar to p5Live
 - Design a UI that could speed up the process for beginners to spin up a sketch
