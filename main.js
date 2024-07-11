@@ -3,6 +3,9 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require('electron')
 const path = require('node:path')
+const { exec } = require('child_process')
+const { ipcMain } = require('electron')
+
 
 const createWindow = () => {
     // Create the browser window.
@@ -43,3 +46,17 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.handle('run-processing', (event, sketchPath) => {
+    return new Promise((resolve, reject) => {
+        exec(`processing-java --sketch=${sketchPath} --run`, (error, stdout, stderr) => {
+            if (error) {
+                reject(`error: ${error.message}`);
+            } else if (stderr) {
+                reject(`stderr: ${stderr}`);
+            } else {
+                resolve(`stdout: ${stdout}`);
+            }
+        });
+    });
+});

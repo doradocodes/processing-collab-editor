@@ -12,3 +12,10 @@ window.addEventListener('DOMContentLoaded', () => {
         replaceText(`${dependency}-version`, process.versions[dependency])
     }
 })
+
+
+const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('electronAPI', {
+    runProcessing: (sketchPath) => ipcRenderer.invoke('run-processing', sketchPath)
+});
