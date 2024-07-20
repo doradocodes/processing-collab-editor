@@ -49,14 +49,22 @@ app.on('window-all-closed', () => {
 
 ipcMain.handle('run-processing', (event, sketchPath) => {
     return new Promise((resolve, reject) => {
-        exec(`processing-java --sketch=${sketchPath} --run`, (error, stdout, stderr) => {
-            if (error) {
-                reject(`error: ${error.message}`);
-            } else if (stderr) {
-                reject(`stderr: ${stderr}`);
-            } else {
-                resolve(`stdout: ${stdout}`);
-            }
+        const process = exec(`processing-java --sketch=${sketchPath} --run`);
+
+        process.stdout.on('data', (data) => {
+            event.sender.send('processing-output', data.toString());
+        });
+
+        process.stderr.on('data', (data) => {
+            event.sender.send('processing-output', data.toString());
+        });
+
+        process.on('close', (code) => {
+            resolve(`Process exited with code ${code}`);
+        });
+
+        process.on('error', (error) => {
+            reject(`error: ${error.message}`);
         });
     });
 });

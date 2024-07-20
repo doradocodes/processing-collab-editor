@@ -17,5 +17,6 @@ window.addEventListener('DOMContentLoaded', () => {
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    runProcessing: (sketchPath) => ipcRenderer.invoke('run-processing', sketchPath)
+    runProcessing: (sketchPath) => ipcRenderer.invoke('run-processing', sketchPath),
+    onProcessingOutput: (callback) => ipcRenderer.on('processing-output', (event, data) => callback(data))
 });
