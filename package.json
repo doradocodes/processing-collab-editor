@@ -1,0 +1,48 @@
+{
+  "name": "processing-collab-editor",
+  "version": "1.0.0",
+  "main": "dist-electron/main/index.js",
+  "description": "Processing Collab Editor",
+  "author": "Dora Do",
+  "license": "MIT",
+  "private": true,
+  "debug": {
+    "env": {
+      "VITE_DEV_SERVER_URL": "http://127.0.0.1:7777/"
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && electron-builder",
+    "preview": "vite preview",
+    "pree2e": "vite build --mode=test",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "@codemirror/commands": "^6.6.0",
+    "@codemirror/lang-java": "^6.0.1",
+    "@codemirror/language": "^6.10.2",
+    "@codemirror/view": "^6.28.6",
+    "codemirror": "^6.0.1",
+    "electron-updater": "^6.1.8",
+    "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.1",
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.18",
+    "electron": "^29.1.1",
+    "electron-builder": "^24.13.3",
+    "postcss": "^8.4.35",
+    "postcss-import": "^16.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.4.1",
+    "vite": "^5.1.5",
+    "vite-plugin-electron": "^0.28.4",
+    "vite-plugin-electron-renderer": "^0.14.5"
+  }
+}
