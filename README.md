@@ -5,6 +5,42 @@ Prototype for a new collaborative code editor for Processing (2024 pr05).
 
 ## Weekly Reports
 
+### Week 3 (July 22, 2024 - July 28, 2024)
+#### Completed tasks & progress
+
+This week, the main objective was to experiment with using Theia, the IDE framework, and a more custom build with CodeMirror.
+
+##### Theia
+
+I started with Theia, since we’ve seen it used with other popular open source tools like Arduino IDE. Initially, I was having a lot of trouble getting the Theia build up and running when trying to use the [“Build your own IDE/Tool” instructions from the Theia docs](https://theia-ide.org/docs/composing_applications/), but not successfully getting anything running there. Through some additional research, I then found the `theia-blueprint` [repo](https://github.com/eclipse-theia/theia-blueprint), which is the original repo for Theia (now referred to as Theia IDE). I was also having a lot of issues building this repo. For instance, I had to change my Node version from v21 to v18, and I downloaded the zip vs. cloning the repo which caused problems with submodules (something new I learned!). Since I was going back and forth between the Theia and CodeMirror build, I didn’t have time to play with the features/functionality this week. I plan to see how customizable the framework is next week and make a decision on whether we should move forward with it.
+
+##### CodeMirror
+
+For the CodeMirror experiment, I wanted to install CodeMirror6 on my existing Electron build, but I needed a bundler. I chose Vite.js, since it is a bundler I’m most familiar with and it’s quick setup works well for a prototype. I was running into issues with just adding the Vite bundler to my existing app, so I download a cloned a [template](https://electron-vite.github.io/guide/templates.html) that combines Electron, Vite, and a React framework (React being the front-end framework I would use if we were to move forward with this build). I was able to create a basic Java editor and wrap the CodeMirror library in a component. This build doesn’t run any code yet, only takes the contents of the CodeMirror editor after clicking the “Run” button, and writing it to a temp file. The next step of this build would be to take the path of the generated temp file and passing it to the Processing library. I think this is a viable build, so I will leave it as is until we can determine if we would rather move forward with Theia instead.
+
+##### Other alternatives
+
+I recently looked into how Google Colab was built, and it is a custom build of an open source software called [JupyterLab](https://jupyter.org/). I think Jupyter could be another thing we look into, because it already includes a lot of features that we want in PCE*, including:
+
+- A prebuilt UI that we can work from, that centers around this idea of “notebooks” (similar to “sketches” as we wanted)
+- An extension for collaborative editing (JupyterLab RTC, built on yjs)
+- Support LSP (`jupyterlab-lsp`)
+- Deployment of a cloud editor and a desktop editor
+- Customization of the UI (will need to play with this also, to actually see how customizable the UI is)
+
+In the next week, I’ll also create a build off this framework.
+
+*Processing Collaborative Editor, PCE for short
+
+#### Next steps
+
+By the next week, I think a framework should be chosen so that we can move on to design and development. I will be creating a chart that compares all the frameworks, and will discuss with Sinan in our next meeting about which to move forward with (would love for Rapahel and Ted to join this call for their input).
+
+#### Open questions
+
+- Any thoughts on which direction to move forward so far?
+- Are there any other frameworks that I should be looking into?
+
 ### Week 2 (July 8, 2024 - July 14, 2024)
 #### Completed tasks
 
