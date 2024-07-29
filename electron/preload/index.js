@@ -21,4 +21,7 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 
   // You can expose other APTs you need here.
   // ...
+  writeTempFile: (content) => ipcRenderer.invoke('write-temp-file', content),
+  runProcessing: (sketchPath) => ipcRenderer.invoke('run-processing', sketchPath),
+  onProcessingOutput: (callback) => ipcRenderer.on('processing-output', (event, data) => callback(data))
 })

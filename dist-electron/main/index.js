@@ -51,7 +51,7 @@ async function createWindow() {
 function createTempFile() {
   const tempDir = os.tmpdir();
   const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-  const tempFilePath = path.join(tempDir, `tempfile-${uniqueSuffix}.txt`);
+  const tempFilePath = path.join(tempDir, `tempfile-${uniqueSuffix}.pde`);
   return tempFilePath;
 }
 function writeTempFile(content) {
@@ -116,6 +116,7 @@ ipcMain.handle("run-processing", (event, sketchPath) => {
   });
 });
 ipcMain.handle("write-temp-file", (event, content) => {
+  console.log("write-temp-file", content);
   const filePath = writeTempFile(content);
   console.log("write-temp-file", filePath);
 });

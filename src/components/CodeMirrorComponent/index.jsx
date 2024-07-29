@@ -18,7 +18,7 @@ const CodeMirrorComponent = () => {
     const runCode = () => {
         const content = view.state.doc.toString();
         console.log(content);
-        window.electronAPI.runProcessing(content);
+        window.ipcRenderer.writeTempFile(content);
     };
 
     return <div className="editor-wrapper">
