@@ -9,7 +9,7 @@ int xspacing = 8;   // How far apart should each horizontal location be spaced
 int w;              // Width of entire wave
 int maxwaves = 4;   // total # of waves to add together
 
- theta = 0.0;
+float theta = 0.0;
 float[] amplitude = new float[maxwaves];   // Height of wave
 float[] dx = new float[maxwaves];          // Value for incrementing X, to be calculated as a function of period and xspacing
 float[] yvalues;                           // Using an array to store height values for the wave (not entirely necessary)
