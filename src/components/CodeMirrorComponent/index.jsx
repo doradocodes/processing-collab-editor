@@ -18,7 +18,7 @@ const CodeMirrorComponent = () => {
     const runCode = () => {
         const content = view.state.doc.toString();
         console.log(content);
-        window.ipcRenderer.writeTempFile(content);
+        window.ipcRenderer.runProcessing(content);
     };
 
     return <div className="editor-wrapper">

@@ -48,22 +48,31 @@ async function createWindow() {
     return { action: "deny" };
   });
 }
-function createTempFile() {
-  const tempDir = os.tmpdir();
+function createTempName() {
   const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-  const tempFilePath = path.join(tempDir, `tempfile-${uniqueSuffix}.pde`);
-  return tempFilePath;
+  return `tempfile-${uniqueSuffix}`;
 }
 function writeTempFile(content) {
-  const tempFilePath = createTempFile();
-  fs.writeFile(tempFilePath, content, (err) => {
-    if (err) {
-      console.error("Error writing to temporary file", err);
-    } else {
-      console.log(`Temporary file created at ${tempFilePath}`);
-    }
+  const tempFileName = createTempName();
+  const folderPath = path.join(os.tmpdir(), "processing-sketches", tempFileName);
+  const filePath = path.join(folderPath, `${tempFileName}.pde`);
+  return new Promise((resolve, reject) => {
+    fs.mkdir(folderPath, { recursive: true }, (err) => {
+      if (err) {
+        console.error(`Error creating folder: ${err.message}`);
+        reject(err);
+      }
+      console.log("Folder created successfully.");
+      fs.writeFile(filePath, content, (err2) => {
+        if (err2) {
+          console.error(`Error writing file: ${err2.message}`);
+          reject(err2);
+        }
+        console.log("File written successfully.");
+        resolve(folderPath);
+      });
+    });
   });
-  return tempFilePath;
 }
 app.whenReady().then(createWindow);
 app.on("window-all-closed", () => {
@@ -98,9 +107,11 @@ ipcMain.handle("open-win", (_, arg) => {
     childWindow.loadFile(indexHtml, { hash: arg });
   }
 });
-ipcMain.handle("run-processing", (event, sketchPath) => {
-  return new Promise((resolve, reject) => {
-    const process2 = exec(`processing-java --sketch=${sketchPath} --run`);
+ipcMain.handle("run-processing", (event, content) => {
+  return new Promise(async (resolve, reject) => {
+    const folderPath = await writeTempFile(content);
+    console.log("Running Processing sketch", folderPath);
+    const process2 = exec(`processing-java --sketch=${folderPath} --run`);
     process2.stdout.on("data", (data) => {
       event.sender.send("processing-output", data.toString());
     });
