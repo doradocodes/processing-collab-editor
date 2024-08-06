@@ -5,6 +5,29 @@ Prototype for a new collaborative code editor for Processing (2024 pr05).
 
 ## Weekly Reports
 
+### Week 4 (July 29, 2024 - August 4, 2024)
+#### Completed tasks & progress
+This week, I met with Sinan and Raphael to discuss my current findings with the possible directions for implementation of this project. For more straightforward decision-making, I mostly focused on using either Theia or building a more custom build with CodeMirror. Below is a comparison chart of the two possible directions:
+
+| Framework | Pros   | Cons |
+|---|-------| --- |
+| Theia | - Prebuilt framework <br> - Used by other popular IDEs (ie. Arduino IDE)<br> - Features are built modularly, can be included/excluded through package.json <br> - Desktop app deployment already set up (uses Electron)                                                   | - Does not have existing live collaborative extension <br> - Fixed to VSCode-style layout <br> - Difficult to enable/disable features (haven’t been able to successfully do this from their docs) <br> - Slower development (no dev environment, need to rebuild every time for changes)
+  | CodeMirror | - CodeMirror easy to implement <br> - A lot of support since also used on p5 web editor <br> - Full control of UI <br> - CodeMirror has live collab extension (but not using yjs) <br> - Less dependency on other third-party plugins <br> - More rapid development for a prototype | - Dependency on CodeMirror <br> - Required to build new UI components from scratch <br> - More QA required 
+
+
+From our meeting this week, Sinan and Raphael suggested that I bring my research to the next pr05 cohort meeting to get opinions from the other members. Some of them have had experience with libraries like CodeMirror, and it would be useful to learn about their experiences with usage and maintenance of it. It was also suggested that we get opinions from Q, Rachel, and Cassie, the p5 project leads, to see if they have any learnings/suggestions with building the p5 editor. Since this project is intended to be a prototype of a code editor, whichever direction we choose will at least give us in depth experience with either framework. However, I think it’s best to make a clear decision soon so that design and development can begin and we can have a working prototype by the end of this grant duration.
+
+We also discussed design ideas for this editor’s UI. For instance, Raphael pointed out that students often get confused and frustrated by the concept of file systems, so potentially the UI should hide the file system and handle creating/saving files automatically. We also discussed how collaboration sessions should be created: one idea would be to allow creations of “rooms” which could generate an ID or URL which other users (most likely students) could use to join the room.
+
+#### Next steps
+
+- Share and discuss my learnings with the other cohort members and with the p5 leads
+- Choose a direction by the end of next week, so that design and development can begin
+- Begin sketching/creating wireframes of the UI
+- Create diagrams for how collaborative editing should work (from a UX standpoint, and for technical architecture)
+
+---
+
 ### Week 3 (July 22, 2024 - July 28, 2024)
 #### Completed tasks & progress
 
@@ -41,6 +64,8 @@ By the next week, I think a framework should be chosen so that we can move on to
 - Any thoughts on which direction to move forward so far?
 - Are there any other frameworks that I should be looking into?
 
+---
+
 ### Week 2 (July 8, 2024 - July 14, 2024)
 #### Completed tasks
 
@@ -66,7 +91,7 @@ Note: all code changes are committed to a branch called `electron` .
 - Look into Theia vs. CodeMirror
 - Add more description into each feature on the MVP doc and break them down into tasks
 
-----
+---
 
 ### Week 1 (July 1, 2024 - July 7, 2024)
 #### Summary of meetings
