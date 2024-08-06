@@ -158,17 +158,19 @@ ipcMain.handle('open-win', (_, arg) => {
 
 ipcMain.handle('run-processing', (event, content) => {
   return new Promise(async (resolve, reject) => {
-    const folderPath = await writeTempFile(content);
+    // const folderPath = await writeTempFile(content);
 
-    console.log('Running Processing sketch', folderPath);
-    const process = exec(`processing-java --sketch=${folderPath} --run`);
+    console.log('Running Processing sketch', '/Users/dorado/Development/pde-v2/sketch_240710b');
+    const process = exec(`processing-java --sketch=/Users/dorado/Development/pde-v2/sketch_240710b --run`);
 
     process.stdout.on('data', (data) => {
+      console.log('data', data.toString());
       event.sender.send('processing-output', data.toString());
     });
 
     process.stderr.on('data', (data) => {
-      event.sender.send('processing-output', data.toString());
+      console.log('error', data.toString());
+      event.sender.send('processing-output-err', data.toString());
     });
 
     process.on('close', (code) => {
@@ -176,6 +178,7 @@ ipcMain.handle('run-processing', (event, content) => {
     });
 
     process.on('error', (error) => {
+      console.log('error', error.message);
       reject(`error: ${error.message}`);
     });
   });
