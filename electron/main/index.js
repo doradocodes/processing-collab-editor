@@ -117,51 +117,53 @@ function writeTempFile(content) {
 
 app.whenReady().then(createWindow)
 
-app.on('window-all-closed', () => {
-  win = null
-  if (process.platform !== 'darwin') app.quit()
-})
-
-app.on('second-instance', () => {
-  if (win) {
-    // Focus on the main window if the user tried to open another
-    if (win.isMinimized()) win.restore()
-    win.focus()
-  }
-})
-
-app.on('activate', () => {
-  const allWindows = BrowserWindow.getAllWindows()
-  if (allWindows.length) {
-    allWindows[0].focus()
-  } else {
-    createWindow()
-  }
-})
-
-// New window example arg: new windows url
-ipcMain.handle('open-win', (_, arg) => {
-  const childWindow = new BrowserWindow({
-    webPreferences: {
-      preload,
-      nodeIntegration: true,
-      contextIsolation: false,
-    },
-  })
-
-  if (VITE_DEV_SERVER_URL) {
-    childWindow.loadURL(`${VITE_DEV_SERVER_URL}#${arg}`)
-  } else {
-    childWindow.loadFile(indexHtml, { hash: arg })
-  }
-})
+// app.on('window-all-closed', () => {
+//   win = null
+//   if (process.platform !== 'darwin') app.quit()
+// })
+//
+// app.on('second-instance', () => {
+//   if (win) {
+//     // Focus on the main window if the user tried to open another
+//     if (win.isMinimized()) win.restore()
+//     win.focus()
+//   }
+// })
+//
+// app.on('activate', () => {
+//   const allWindows = BrowserWindow.getAllWindows()
+//   if (allWindows.length) {
+//     allWindows[0].focus()
+//   } else {
+//     createWindow()
+//   }
+// })
+//
+// // New window example arg: new windows url
+// ipcMain.handle('open-win', (_, arg) => {
+//   const childWindow = new BrowserWindow({
+//     webPreferences: {
+//       preload,
+//       nodeIntegration: true,
+//       contextIsolation: false,
+//     },
+//   })
+//
+//   if (VITE_DEV_SERVER_URL) {
+//     childWindow.loadURL(`${VITE_DEV_SERVER_URL}#${arg}`)
+//   } else {
+//     childWindow.loadFile(indexHtml, { hash: arg })
+//   }
+// })
 
 ipcMain.handle('run-processing', (event, content) => {
   return new Promise(async (resolve, reject) => {
     // const folderPath = await writeTempFile(content);
 
-    console.log('Running Processing sketch', '/Users/dorado/Development/pde-v2/sketch_240710b');
-    const process = exec(`processing-java --sketch=/Users/dorado/Development/pde-v2/sketch_240710b --run`);
+    // console.log('Running Processing sketch', '/Users/dorado/Development/pde-v2/sketch_240710b');
+    const process = exec(`./processing-java --sketch=/Users/dorado/Documents/Processing/sketch_240807b --output=/Users/dorado/Development/pde-v2/Documents/Processing --force --run`);
+    // const process = exec('ls')
+
 
     process.stdout.on('data', (data) => {
       console.log('data', data.toString());
@@ -169,7 +171,7 @@ ipcMain.handle('run-processing', (event, content) => {
     });
 
     process.stderr.on('data', (data) => {
-      console.log('error', data.toString());
+      console.log('Processing error', data.toString());
       event.sender.send('processing-output-err', data.toString());
     });
 
@@ -178,14 +180,8 @@ ipcMain.handle('run-processing', (event, content) => {
     });
 
     process.on('error', (error) => {
-      console.log('error', error.message);
-      reject(`error: ${error.message}`);
+      console.log(error.message);
+      reject(`process error: ${error.message}`);
     });
   });
-});
-
-ipcMain.handle('write-temp-file', (event, content) => {
-  console.log('write-temp-file', content);
-  const filePath = writeTempFile(content);
-  console.log('write-temp-file', filePath);
 });

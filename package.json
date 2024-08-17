@@ -1,7 +1,7 @@
 {
   "name": "processing-collab-editor",
   "version": "1.0.0",
-  "main": "dist-electron/main/index.js",
+  "main": "main.cjs",
   "description": "Processing Collab Editor",
   "author": "Dora Do",
   "license": "MIT",
@@ -14,10 +14,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && electron-builder",
+    "build": "vite build",
     "preview": "vite preview",
     "pree2e": "vite build --mode=test",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "start": "electron ."
   },
   "dependencies": {
     "@codemirror/commands": "^6.6.0",
