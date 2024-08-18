@@ -13,15 +13,16 @@ const createWindow = () => {
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: true,
+            contextIsolation: true,
         }
     })
+    // Load your React app in production mode
+    const startUrl = process.env.ELECTRON_START_URL || path.join(__dirname, '../build/index.html');
+    mainWindow.loadURL(startUrl);
 
-    // and load the index.html of the app.
-    mainWindow.loadFile('index.html')
-
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
@@ -49,13 +50,16 @@ app.on('window-all-closed', () => {
 
 ipcMain.handle('run-processing', (event, sketchPath) => {
     return new Promise((resolve, reject) => {
+        console.log('Running Processing sketch:', sketchPath)
         const process = exec(`processing-java --sketch=${sketchPath} --run`);
 
         process.stdout.on('data', (data) => {
+            console.log('stdout:', data.toString());
             event.sender.send('processing-output', data.toString());
         });
 
         process.stderr.on('data', (data) => {
+            console.error('stderr:', data.toString());
             event.sender.send('processing-output', data.toString());
         });
 
