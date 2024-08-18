@@ -1,7 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    runProcessing: (sketchPath) => ipcRenderer.invoke('run-processing', sketchPath),
+    runProcessing: (fileName, content) => ipcRenderer.invoke('run-processing', fileName, content),
     onProcessingOutput: (callback) => ipcRenderer.on('processing-output', (event, data) => callback(data))
 });
 

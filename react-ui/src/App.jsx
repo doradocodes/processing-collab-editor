@@ -1,18 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import CodeMirrorComponent from "./components/CodeMirrorComponent/index.jsx";
 
 function App() {
-    const [sketchPath, setSketchPath] = useState('')
-
   return (
-    <>
-        <input type="text" value={sketchPath} onChange={(e) => setSketchPath(e.target.value)} />
-        <button onClick={() => {
-            window.electronAPI.runProcessing(sketchPath);
-        }}>Run Processing</button>
-    </>
+    <div className='App'>
+        <div className="header">
+            Header
+        </div>
+        <div className="layout">
+            {/*<div className="column">*/}
+
+            {/*</div>*/}
+            <div className="column">
+                <CodeMirrorComponent/>
+            </div>
+        </div>
+
+
+    </div>
   )
 }
 

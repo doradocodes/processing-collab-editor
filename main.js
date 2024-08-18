@@ -5,6 +5,7 @@ const { app, BrowserWindow } = require('electron')
 const path = require('node:path')
 const { exec } = require('child_process')
 const { ipcMain } = require('electron')
+const fs = require('node:fs');
 
 
 const createWindow = () => {
@@ -48,27 +49,69 @@ app.on('window-all-closed', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-ipcMain.handle('run-processing', (event, sketchPath) => {
+const createSketchFile = (fileName, fileContent) => {
+    const folderName = fileName;
+    // const folderName = 'test_sketch5';
+    const folderPath = path.join(__dirname + '/sketches', folderName);
+    const filePath = path.join(folderPath, folderName + '.pde');
+    return new Promise ((resolve, reject) => {
+        try {
+            fs.mkdirSync(folderPath, { recursive: true });
+            fs.writeFileSync(filePath, fileContent, { encoding: 'utf8' });
+            resolve(folderPath);
+        } catch (error) {
+            reject(error);
+        }
+
+        // fs.mkdir(folderPath, { recursive: true }, (err) => {
+        //     if (err) {
+        //         console.error(`Error creating folder: ${err.message}`);
+        //         reject(err);
+        //     }
+        //
+        //     console.log('Folder created successfully.');
+        //
+        //     // Write the file
+        //     fs.writeFile(filePath, fileContent, { encoding: 'utf8' }, (err) => {
+        //         if (err) {
+        //             console.error(`Error writing file: ${err.message}`);
+        //             reject(err);
+        //         }
+        //
+        //         console.log('File written successfully.');
+        //         resolve(folderPath);
+        //     });
+        // });
+    });
+}
+
+ipcMain.handle('run-processing', (event, fileName, content) => {
     return new Promise((resolve, reject) => {
-        console.log('Running Processing sketch:', sketchPath)
-        const process = exec(`processing-java --sketch=${sketchPath} --run`);
+        createSketchFile(fileName, content).then((folderPath) => {
+            console.log('Sketch created successfully', folderPath);
 
-        process.stdout.on('data', (data) => {
-            console.log('stdout:', data.toString());
-            event.sender.send('processing-output', data.toString());
-        });
+            const process = exec(`processing-java --sketch=${folderPath} --run`);
 
-        process.stderr.on('data', (data) => {
-            console.error('stderr:', data.toString());
-            event.sender.send('processing-output', data.toString());
-        });
+            process.stdout.on('data', (data) => {
+                console.log('stdout:', data.toString());
+                event.sender.send('processing-output', data.toString());
+            });
 
-        process.on('close', (code) => {
-            resolve(`Process exited with code ${code}`);
-        });
+            process.stderr.on('data', (data) => {
+                console.error('stderr:', data.toString());
+                event.sender.send('processing-output', data.toString());
+            });
 
-        process.on('error', (error) => {
-            reject(`error: ${error.message}`);
+            process.on('close', (code) => {
+                resolve(`Process exited with code ${code}`);
+            });
+
+            process.on('error', (error) => {
+                reject(`error: ${error.message}`);
+            });
+        }).catch((error) => {
+            console.error('Error creating sketch:', error);
+            reject(error);
         });
     });
 });
