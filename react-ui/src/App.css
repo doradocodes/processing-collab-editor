@@ -1,23 +1,27 @@
 #root {
-  width: 100%;
-  height: 100%;
-  background: #535bf2;
-  box-sizing: border-box;
-  padding: 20px;
+    width: 100%;
+    height: 100%;
+    background: var(--background-color);
+    box-sizing: border-box;
 }
 
 .App {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  height: 100%;
+    display: grid;
+    grid-template-rows: 50px 1fr;
+    /*gap: 10px;*/
+    width: 100%;
+    height: 100%;
 }
 
-.layout {
-  display: grid;
-  /*grid-template-columns: 1fr 2fr;*/
-  gap: 20px;
-  width: 100%;
-  height: 100%;
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 10px;
+    margin: 0 20px;
+}
+
+.logo {
+    width: 35px;
+    height: 35px;
 }

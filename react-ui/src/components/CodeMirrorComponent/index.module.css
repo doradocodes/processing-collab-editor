@@ -1,17 +1,13 @@
 .wrapper {
-    height: 100%;
-    display: grid;
-    grid-template-rows: 85% auto;
-    gap: 10px;
-    position: relative;
+    max-height: 100%;
 }
 
 .editor {
     background: white;
-    border-radius: 5px;
     overflow: auto;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     position: relative;
+    height: 100%;
 }
 
 .editorGutter {
@@ -25,21 +21,5 @@
     border-right: 1px solid #ddd;
 }
 
-.console {
-    background: white;
-    border-radius: 5px;
-    overflow: auto;
-    /*padding: 10px;*/
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
 
-.output {
-    padding: 10px;
 
-}
-
-.playButton {
-    position: absolute;
-    top: -35px;
-    right: 0;
-}

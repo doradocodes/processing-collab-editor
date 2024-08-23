@@ -13,7 +13,8 @@
     "@codemirror/lang-java": "^6.0.1",
     "codemirror": "^6.0.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
