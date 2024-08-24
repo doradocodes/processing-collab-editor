@@ -1,0 +1,21 @@
+.layout {
+    display: grid;
+    grid-template-rows: 75vh 20px auto; /* 75vh max height */
+}
+
+.layout > * {
+    height: auto;
+}
+
+
+.layout > *:nth-child(1) {
+    margin: 20px;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.layout > *:nth-child(3) {
+    margin: 20px;
+}
+
+

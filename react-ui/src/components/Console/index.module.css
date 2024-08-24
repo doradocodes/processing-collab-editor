@@ -1,0 +1,12 @@
+.console {
+    background: white;
+    border-radius: 5px;
+    overflow: auto;
+    /*padding: 10px;*/
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.output {
+    padding: 10px;
+
+}
