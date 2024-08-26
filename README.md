@@ -5,6 +5,51 @@ Prototype for a new collaborative code editor for Processing (2024 pr05).
 
 ## Weekly Reports
 
+### Week 6 (August 12, 2024 - August 18, 2024)
+#### Meeting summaries
+
+This week, Sinan and I met and walked through the Figma prototype of the PCE UI. After Sinan’s feedback, we thought it was best to continue with this iteration of the designs, and move on to development. The main goal of this project would be to prototype and have a proof of concept for the collaborative ending, so we came to the conclusion that we should move forward with the CodeMirror approach, which has faster development. We still planned to meet with Luca to discuss the pros and cons of using Theia for future reference.
+
+During our meeting with Luca, he explained the motivation behind transitioning to Theia. The plan was to use the same stack for both the Desktop and Cloud IDE, but this wasn’t feasible for a multitude of reasons, resulting in Arduino having two separate IDEs. The older one is still based on Angular.js and React, with components written from scratch. Some of the nice features, like internal tunneling and proxying, are no longer open-source, though alternatives exist for reverse tunneling between different endpoints.
+
+Unexpected issues arose with Theia, particularly with its text editor and real-time debugging, which required rewriting by the team to make it fast enough for users. Every new version brought breaking changes, necessitating a rebuild from scratch for any plugin. However, as Theia gained more visibility in the Apache foundation and with pressure from Arduino, it became better supported. Despite this, changing the UI remained a significant challenge due to its highly opinionated design.
+
+Luca explored other options, such as Codemirror, which had a perfect API for building an editor. He also considered a system in Rust, which now has an advanced version that could be used for Processing. The UI in this system is GPU-based, and text is rendered as graphics, making it incredibly fast.
+
+Finally, Luca emphasized the importance of detaching the UI from the rest of the system, especially when working with Theia, and warned about the performance issues with Electron, particularly for fast-updating UIs or graphics.
+
+#### Completed Tasks & Progress
+
+I have resumed development of the Electron + CodeMirror build. I was running into a lot of issues with a build that used Vite to build both the Electron code and the React code, running into an error called `No sketchbook found` when I attempted to run `processing-java` from the NodeJs process. I returned to an older branch I had been working on where the `processing-java` process was running sketches successfully and created a new React app from there (so now Vite is only used to build the React app). This is a screenshot of the current progress of the app:
+
+![image](README_assets/Screenshot 2024-08-18 at 10.20.48 PM.png)
+
+When clicking “Play”, the app takes the content in the CodeMirror component and passes it to the backend, where a .pde folder and file are generated and processing-java runs the sketch with the path of that file (note: for a while I had run into a vague error Index 0 out of bounds for length 0 which I later discovered was caused by naming the file/folder with - ). The code for this build is in the electron branch of the repo.
+
+### Week 5 (August 5, 2024 - August 11, 2024)
+#### Completed Tasks and progress
+
+This week, we met as a cohort with their mentors. I presented my progress, along with my findings on using Theia versus a custom implementation with CodeMirror, to see if others had any experiences or issues with either. No one mentioned using Theia, but those who have used CodeMirror expressed that they hadn’t found any issues with development/maintaining/upgrading with it. I still plan to meet with Luca, to see what their thoughts are on Theia, before we make a final decision. For now, I have put further development on hold, except for one issue I am seeing with the Electron + CodeMirror + React prototype I have been working on. My current implementation is having issues running the `processing-java` process when I use Vite. My previous implementation without React + Vite was able to run the executable successfully, so I am concluding that it is an issue with paths and Vite. I’m working on finding the exact cause of this problem.
+
+Meanwhile, I have also been working on wireframes for the app UI. Here is a [Figma prototype](https://www.figma.com/proto/SxmAa94lAP37OLPpY1hgVf/Processing-Collaborative-Editor-(PCE)?page-id=0%3A1&node-id=104-264&viewport=4996%2C-858%2C0.88&t=tWxAKr0fDQwzdNGu-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=104%3A264) of the wireframes.
+
+![image](README_assets/Screenshot 2024-08-11 at 3.35.01 PM.png)
+
+In this iteration of the design, the app has a simple two-column layout:
+
+- The left column is dedicated for accessing previous sketches and joining rooms. It is collapsible to increase the editing area.
+- The right column is the main editing space, with a draggable section to open the logs. The “Play” button on the top right corner runs the code, opening the output window, and turns into a “Stop” button while the sketch is running. The sketch can then be stopped and re-run by clicking the button.
+- For a collaborative session, the user can join an existing session (note: should they be called “sessions” or “rooms”?) by entering the room ID and clicking “Join”:
+  ![image](README_assets/Screenshot 2024-08-11 at 3.39.36 PM.png)
+  Once the room is joined, the user will see the room name and ID, and the code. There will be color-coded highlights dedicated to each joined user to differentiate which user is highlighting what. There are still smaller details to work out for this part of the user flow (ie. adding a name/profile image before joining, etc.).
+
+- To create a new session/room, the user can click “Create a room” and the input field will switch to a field that says “Create a name”, which the session will be named and an ID will be generated, which would then open a new blank sketch.
+
+A feature I haven’t added to this iteration yet is how plugins/external libraries will be included. That will be worked on in the upcoming week.
+
+I’ve also met with Diya this week to discuss the LSP integration, which she has given me a good high-level description of how it works, and directed me to some good resources to look into. At a high-level, the language server is hosted locally, and is called upon certain actions (ie. hovering on a function, at a certain mouse position, etc.). For this project, I think that after the language server is running I can use an existing library (for either CodeMirror or Theia) which handles the logic/UI for calling the language server. Actually testing this will come in the upcoming weeks.
+
+
 ### Week 4 (July 29, 2024 - August 4, 2024)
 #### Completed tasks & progress
 This week, I met with Sinan and Raphael to discuss my current findings with the possible directions for implementation of this project. For more straightforward decision-making, I mostly focused on using either Theia or building a more custom build with CodeMirror. Below is a comparison chart of the two possible directions:
