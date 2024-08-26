@@ -22,7 +22,7 @@ Finally, Luca emphasized the importance of detaching the UI from the rest of the
 
 I have resumed development of the Electron + CodeMirror build. I was running into a lot of issues with a build that used Vite to build both the Electron code and the React code, running into an error called `No sketchbook found` when I attempted to run `processing-java` from the NodeJs process. I returned to an older branch I had been working on where the `processing-java` process was running sketches successfully and created a new React app from there (so now Vite is only used to build the React app). This is a screenshot of the current progress of the app:
 
-![image](README_assets/Screenshot 2024-08-18 at 10.20.48 PM.png)
+![image](https://github.com/doradocodes/processing-collab-editor/blob/main/README_assets/Screenshot%202024-08-18%20at%2010.20.48%20PM.png?raw=true)
 
 When clicking “Play”, the app takes the content in the CodeMirror component and passes it to the backend, where a .pde folder and file are generated and processing-java runs the sketch with the path of that file (note: for a while I had run into a vague error Index 0 out of bounds for length 0 which I later discovered was caused by naming the file/folder with - ). The code for this build is in the electron branch of the repo.
 
@@ -33,14 +33,14 @@ This week, we met as a cohort with their mentors. I presented my progress, along
 
 Meanwhile, I have also been working on wireframes for the app UI. Here is a [Figma prototype](https://www.figma.com/proto/SxmAa94lAP37OLPpY1hgVf/Processing-Collaborative-Editor-(PCE)?page-id=0%3A1&node-id=104-264&viewport=4996%2C-858%2C0.88&t=tWxAKr0fDQwzdNGu-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=104%3A264) of the wireframes.
 
-![image](README_assets/Screenshot 2024-08-11 at 3.35.01 PM.png)
+![image](https://github.com/doradocodes/processing-collab-editor/blob/main/README_assets/Screenshot%202024-08-11%20at%203.35.01%20PM.png?raw=true)
 
 In this iteration of the design, the app has a simple two-column layout:
 
 - The left column is dedicated for accessing previous sketches and joining rooms. It is collapsible to increase the editing area.
 - The right column is the main editing space, with a draggable section to open the logs. The “Play” button on the top right corner runs the code, opening the output window, and turns into a “Stop” button while the sketch is running. The sketch can then be stopped and re-run by clicking the button.
 - For a collaborative session, the user can join an existing session (note: should they be called “sessions” or “rooms”?) by entering the room ID and clicking “Join”:
-  ![image](README_assets/Screenshot 2024-08-11 at 3.39.36 PM.png)
+  ![image](https://github.com/doradocodes/processing-collab-editor/blob/main/README_assets/Screenshot%202024-08-11%20at%203.39.36%20PM.png?raw=true)
   Once the room is joined, the user will see the room name and ID, and the code. There will be color-coded highlights dedicated to each joined user to differentiate which user is highlighting what. There are still smaller details to work out for this part of the user flow (ie. adding a name/profile image before joining, etc.).
 
 - To create a new session/room, the user can click “Create a room” and the input field will switch to a field that says “Create a name”, which the session will be named and an ID will be generated, which would then open a new blank sketch.
