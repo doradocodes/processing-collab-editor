@@ -34,7 +34,7 @@ const Editor = () => {
         const userColor = userColors[random.uint32() % userColors.length]
 
         const ydoc = new Y.Doc()
-        const provider = new WebsocketProvider('ws://localhost:1234/', 'codemirror6-demo-room', ydoc)
+        const provider = new WebsocketProvider('ws://pce-server.glitch.me/1234', 'codemirror6-demo-room', ydoc)
         // const provider = new WebrtcProvider('codemirror6-demo-room', ydoc)
         const ytext = ydoc.getText('codemirror')
 
