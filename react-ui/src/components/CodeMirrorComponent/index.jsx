@@ -7,7 +7,7 @@ import styles from './index.module.css';
 import {useEditorStore} from "../../store/editorStore.js";
 import {collab, getSyncedVersion, receiveUpdates, sendableUpdates} from "@codemirror/collab";
 import {ChangeSet, EditorState, RangeSetBuilder} from '@codemirror/state';
-import {socket} from "../../socket.js";
+// import {socket} from "../../socket.js";
 
 const RemoteCursorWidget = () => {
     const span = document.createElement("span");
@@ -27,18 +27,18 @@ const CodeMirrorComponent = () => {
     useEffect(() => {
         console.log('CodeMirrorComponent loaded');
 
-        socket.on('update', (updateObj) => {
-            console.log('received update', updateObj);
-            // let received = updateObj.updates.slice(-1).map(json => ({
-            //     clientID: json.clientID,
-            //     changes: ChangeSet.fromJSON(json.changes)
-            // }))
-            // console.log('received', received);
-            // const viewUpdate = receiveUpdates(editorRef.current.view.state, received);
-            // editorRef.current.view.update([viewUpdate]);
-
-            setCursorPosition(updateObj.cursorPosition);
-        });
+        // socket.on('update', (updateObj) => {
+        //     console.log('received update', updateObj);
+        //     // let received = updateObj.updates.slice(-1).map(json => ({
+        //     //     clientID: json.clientID,
+        //     //     changes: ChangeSet.fromJSON(json.changes)
+        //     // }))
+        //     // console.log('received', received);
+        //     // const viewUpdate = receiveUpdates(editorRef.current.view.state, received);
+        //     // editorRef.current.view.update([viewUpdate]);
+        //
+        //     setCursorPosition(updateObj.cursorPosition);
+        // });
 
         setCursorPosition();
     }, []);

@@ -1,0 +1,33 @@
+.editor {
+    background: white;
+    position: relative;
+    height: 100%;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/*.editor:before {*/
+/*    content: "";*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: calc(2em - 2px);*/
+/*    height: 100%;*/
+/*    background-color: #f5f5f5;*/
+/*    color: #6c6c6c;*/
+/*    border-right: 1px solid #ddd;*/
+/*}*/
+
+.editor :global(.cm-editor) {
+    height: 100%;
+}
+
+.editor :global(.ͼ1 .cm-ySelectionInfo) {
+    font-size: 1em;
+    font-family: inherit;
+    opacity: 1;
+}
+
+/*.editor :global(.ͼ1 .cm-scroller) {*/
+/*    padding-top: 1em;*/
+/*}*/

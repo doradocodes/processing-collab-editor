@@ -10,10 +10,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/collab": "^6.1.1",
     "@codemirror/lang-java": "^6.0.1",
+    "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/state": "^6.4.1",
+    "@uiw/react-codemirror": "^4.23.0",
     "codemirror": "^6.0.1",
+    "lib0": "^0.2.97",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "y-codemirror.next": "^0.3.5",
+    "y-webrtc": "^10.3.0",
+    "y-websocket": "^2.0.4",
+    "yjs": "^13.6.18",
     "zustand": "^4.5.5"
   },
   "devDependencies": {

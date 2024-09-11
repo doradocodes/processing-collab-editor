@@ -1,0 +1,36 @@
+.wrapper {
+    /*margin: 10px 0px 20px 20px;*/
+}
+
+.sectionLabel {
+    font-size: 1rem;
+    font-weight: normal;
+    margin-top: 40px;
+    color: var(--text-color);
+}
+
+.list {
+    margin: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px;
+}
+
+.listItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background: #eee;
+    color: var(--secondary-text-color);
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.listItem:hover {
+    background: #ddd;
+}
+
