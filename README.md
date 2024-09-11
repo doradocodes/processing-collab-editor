@@ -5,6 +5,76 @@ Prototype for a new collaborative code editor for Processing (2024 pr05).
 
 ## Weekly Reports
 
+### Week 9 (September 2, 2024 - September 8, 2024)
+#### Current Progress
+This week, I met with Ted and Sinan to further discuss different ways to implement collaborative editing. In our meeting, we've identified WebRTC as a viable solution for small groups of 1-3 users, but noted scaling challenges for larger groups due to performance issues caused by slower connections. YJS has emerged as a promising framework for real-time collaboration, particularly in multiplayer scenarios, though its WebRTC support is limited. We're leaning towards websockets for text-based messaging due to their reliability and widespread support. On the server front, we're considering approaching Processing to host our websocket server, and but in the meantime, can use [Glitch.io](http://Glitch.io) to host a centralized server for this prototype.
+
+We're exploring YJS implementation options, including its integration with CodeMirror, y-codemirror.next, which offers the flexibility to switch between websocket and WebRTC providers. This adaptability could prove valuable as we refine our architecture. Additional features under consideration include optional Language Server Protocol (LSP) integration for code completion, and a streamlined room creation process with both auto-generated and custom naming options.
+
+Ted also gave some UI feedback, such as separating the "Create new sketch" option from the recent sketches list. We're also looking into implementing a URL-based app launch feature using Electron's capabilities.
+
+Since the meeting, I have be able to integrate the [y-codemirror.next](http://y-codemirror.next) library with my Electron app, and create a new Websocket server to use a the Provider. It seems to be working well, but the next week, I will be testing it further.
+
+#### Next steps
+
+- Further research on Processing's potential to host a websocket server
+- A thorough evaluation of the scalability of peer-to-peer versus centralized architectures
+- Prototype room creation and sharing functionality
+- Continue building functionality for creating locally saved sketches
+- Investigate LSP integration to enhance the coding experience
+
+---
+
+### Week 8 (August 26, 2024 - September 1, 2024)
+#### Completed Tasks & Progress
+This week, I continued to experiment with different implementations of the collaborative functionality. From last week’s feedback, Ted suggested trying to use an existing a [yjs-codemirror](https://github.com/yjs/y-codemirror.next?tab=readme-ov-file) library that uses WebRTC for peer-to-peer editing. This library even includes an implementation of showing cursor positions from other users. From my initial tests, the library works well with a hardcoded room ID, but will require a signaling server with WebSockets in order to manage users and their connections. The development signaling server used in this library is down, so I will have to create a new server in order to manage the connections, which I plan to host on Glitch for now. I will be meeting with Ted next week to discuss the collaborative feature implementation further.
+
+Alongside this, I worked on furthering the UI and managing different sketches locally. In the latest update, all local files are displayed in the column on the right and you can navigated between different saved sketches and update the local files when clicking the “Save” button:
+
+![Screenshot 2024-09-01 at 7.59.17 PM.png](README_assets%2FScreenshot%202024-09-01%20at%207.59.17%20PM.png)
+
+#### Action items
+
+- Meet with Ted next week to discuss collaboration implementation
+- Create the signaling server to manage multiple rooms
+- Continue building the UI for creating/updating local sketch files
+
+---
+
+### Week 7 (August 19, 2024 - August 25, 2024)
+#### Completed Tasks & Progress
+This week, since I was able to get a basic layout that displayed the CodeMirror editor and a basic console, I decided to put a pause on styling and focus on integrating the CodeMirror collaboration feature. CodeMirror has a [collaborative feature](https://codemirror.net/examples/collab/) as an extension already built, where the basic principles are:
+
+- A central system tracks change history.
+- Peers track synchronized versions and local changes.
+- Peers receive updates from the central system to:
+    - Remove their own changes from unconfirmed list.
+    - Apply remote changes locally.
+    - Use operational transformation for conflicting changes.
+    - Update document version.
+- Peers send unconfirmed changes to central system:
+    - If versions match, changes are accepted.
+    - Otherwise, server may reject or rebase changes.
+
+In our case, the central system will be a separately running server with web sockets (using Socket.io). The general idea would be that once a sketch has been created, the server will create a record of that sketch on the server (eventually, in a database), which will act the “central system”. 
+
+There are still a lot of things to fix (currently only able to send edits one way) and things to be added (cursor position, etc.). I’m still thinking about which is the right way to establish the connection (web sockets vs. WebRTC), but I think that can be changed and decided later. For now, the goal is to get things working completely with the local server.
+
+#### Thoughts about connection
+
+Currently, I’m deciding between two directions:
+
+1. Using a locally hosted intermediary server with web sockets
+
+   When a collaborative session is created, the “host” user’s application will start a local server where collaborative data will be sent to and shared among peers. Then using a tunnel service (ngrok), the server can be accessed by remote peers.
+
+2. Using peer-to-peer with WebRTC
+
+   Establish a peer-to-peer connection with WebRTC, that a way an intermediary server is not required. This is properly an easier implementation, but it has limitations on how many users can be connected to a session.
+
+
+---
+
 ### Week 6 (August 12, 2024 - August 18, 2024)
 #### Meeting summaries
 
@@ -25,6 +95,8 @@ I have resumed development of the Electron + CodeMirror build. I was running int
 ![image](https://github.com/doradocodes/processing-collab-editor/blob/main/README_assets/Screenshot%202024-08-18%20at%2010.20.48%20PM.png?raw=true)
 
 When clicking “Play”, the app takes the content in the CodeMirror component and passes it to the backend, where a .pde folder and file are generated and processing-java runs the sketch with the path of that file (note: for a while I had run into a vague error Index 0 out of bounds for length 0 which I later discovered was caused by naming the file/folder with - ). The code for this build is in the electron branch of the repo.
+
+---
 
 ### Week 5 (August 5, 2024 - August 11, 2024)
 #### Completed Tasks and progress
@@ -49,6 +121,7 @@ A feature I haven’t added to this iteration yet is how plugins/external librar
 
 I’ve also met with Diya this week to discuss the LSP integration, which she has given me a good high-level description of how it works, and directed me to some good resources to look into. At a high-level, the language server is hosted locally, and is called upon certain actions (ie. hovering on a function, at a certain mouse position, etc.). For this project, I think that after the language server is running I can use an existing library (for either CodeMirror or Theia) which handles the logic/UI for calling the language server. Actually testing this will come in the upcoming weeks.
 
+---
 
 ### Week 4 (July 29, 2024 - August 4, 2024)
 #### Completed tasks & progress
