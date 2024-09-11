@@ -31,7 +31,7 @@ This week, I continued to experiment with different implementations of the colla
 
 Alongside this, I worked on furthering the UI and managing different sketches locally. In the latest update, all local files are displayed in the column on the right and you can navigated between different saved sketches and update the local files when clicking the “Save” button:
 
-![Screenshot 2024-09-01 at 7.59.17 PM.png](README_assets%2FScreenshot%202024-09-01%20at%207.59.17%20PM.png)
+![Screenshot 2024-09-01 at 7.59.17 PM.png](https://github.com/doradocodes/processing-collab-editor/blob/main/README_assets/Screenshot%202024-09-01%20at%207.59.17%20PM.png?raw=true)
 
 #### Action items
 
