@@ -1,31 +1,15 @@
+
 #root {
     width: 100%;
     height: 100%;
-    background: var(--background-color);
-    /*color: var(--text-color);*/
     box-sizing: border-box;
 }
 
-
-
 .App {
-    display: grid;
-    grid-template-rows: 50px 1fr;
-    /*gap: 10px;*/
     width: 100%;
     height: 100%;
-}
-
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding-top: 15px;
-}
-
-.header.space-between {
-    justify-content: space-between;
+    min-height: 100vh;
+    max-height: 100vh;
 }
 
 .logo {
@@ -35,20 +19,10 @@
 
 .grid {
     display: grid;
-    grid-template-columns: max(250px, 20%) 1fr;
-    gap: 10px;
+    grid-template-columns: max(300px, 20%) 1fr;
+    grid-template-rows: 50px 1fr;
+    gap: var(--gap);
     height: 100vh;
-    padding: 0 10px;
-}
-
-.column {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    /*align-items: center;*/
-}
-
-.label {
-    color: var(--text-color);
-    margin: 0;
+    padding: var(--gap);
+    box-sizing: border-box;
 }

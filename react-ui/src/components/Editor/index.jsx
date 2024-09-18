@@ -11,6 +11,7 @@ import {java} from "@codemirror/lang-java";
 
 import styles from './index.module.css';
 import {useEditorStore} from "../../store/editorStore.js";
+import {materialLight, materialDark} from "@uiw/codemirror-theme-material";
 
 const userColors = [
     { color: '#30bced', light: '#30bced33' },
@@ -23,7 +24,7 @@ const userColors = [
     { color: '#1be7ff', light: '#1be7ff33' }
 ]
 
-const Editor = ({ sketch }) => {
+const Editor = ({ isDarkTheme }) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
 
@@ -31,10 +32,13 @@ const Editor = ({ sketch }) => {
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
     const renderEditor = () => {
+        editorRef.current.innerHTML = '';
+
         let provider = null;
 
         const extensions = [
             basicSetup,
+            isDarkTheme? materialDark : materialLight,
             EditorView.theme({
                 "&": {
                     backgroundColor: "white"
@@ -77,7 +81,10 @@ const Editor = ({ sketch }) => {
             extensions,
         })
 
-        const view = new EditorView({ state, parent: editorRef.current })
+        const view = new EditorView({
+            state,
+            parent: editorRef.current
+        });
         viewRef.current = view;
 
         return () => {
@@ -92,6 +99,10 @@ const Editor = ({ sketch }) => {
     //     }
     //
     // }, [currentSketch]);
+
+    useEffect(() => {
+        renderEditor();
+    }, [isDarkTheme]);
 
     useEffect(() => {
         renderEditor();

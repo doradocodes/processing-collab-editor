@@ -1,25 +1,12 @@
-
-
 .editor {
     background: white;
     position: relative;
     flex: 1;
-    border-radius: var(--border-radius);
     overflow: hidden;
     max-height: 65vh;
+    border-radius: var(--radius-3);
+    box-shadow: var(--box-shadow);
 }
-
-/*.editor:before {*/
-/*    content: "";*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    left: 0;*/
-/*    width: calc(2em - 2px);*/
-/*    height: 100%;*/
-/*    background-color: #f5f5f5;*/
-/*    color: #6c6c6c;*/
-/*    border-right: 1px solid #ddd;*/
-/*}*/
 
 .editor :global(.cm-editor) {
     height: 100%;
@@ -30,7 +17,3 @@
     font-family: inherit;
     opacity: 1;
 }
-
-/*.editor :global(.ͼ1 .cm-scroller) {*/
-/*    padding-top: 1em;*/
-/*}*/

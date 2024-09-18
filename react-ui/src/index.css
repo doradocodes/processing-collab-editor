@@ -1,9 +1,18 @@
 :root {
-    --background-color: #242A4F;
-    --text-color: white;
-    --primary-color: #0468FF;
-    --secondary-text-color: black;
-    --border-radius: 5px;
+    --gap: 20px;
+    --box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+:root, .light, .light-theme, .radix-themes {
+    --color-background: linear-gradient(45deg, #F1F2F4 0%, #f5f5f5 100%);
+}
+
+.dark, .dark-theme, :is(.dark, .dark-theme) :where(.radix-themes:not(.light, .light-theme)) {
+    --color-background: linear-gradient(45deg, #2e3235 0%, #1a1a1a 100%);
+}
+
+.radix-themes:where([data-has-background='true']) {
+    background: var(--color-background);
 }
 
 html, body {
@@ -16,30 +25,6 @@ html, body {
 
 hr {
     width: 100%;
-}
-
-input[type="text"] {
-    width: 100%;
-    box-sizing: border-box;
-    outline: none;
-    padding: 10px;
-    border-radius: var(--border-radius);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: transparent;
-    color: white;
-}
-
-button {
-    padding: 10px;
-    border-radius: var(--border-radius);
-    border: none;
-    background: var(--primary-color);
-    transition: opacity 0.3s;
-    cursor: pointer;
-}
-
-button:hover {
-    opacity: 0.5;
 }
 
 /* Custom title bar styles */
