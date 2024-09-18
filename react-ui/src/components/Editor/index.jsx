@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import * as Y from 'yjs'
 import { yCollab } from 'y-codemirror.next'
 import { WebsocketProvider } from 'y-websocket'
@@ -23,51 +23,58 @@ const userColors = [
     { color: '#1be7ff', light: '#1be7ff33' }
 ]
 
-const Editor = () => {
+const Editor = ({ sketch }) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
-    const editorContent = useEditorStore(state => state.editorContent);
-    const updateContent = useEditorStore(state => state.updateContent);
 
-    useEffect(() => {
-        // select a random color for this user
-        const userColor = userColors[random.uint32() % userColors.length]
+    const currentSketch = useEditorStore(state => state.currentSketch);
+    const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
-        const ydoc = new Y.Doc()
-        const provider = new WebsocketProvider('ws://pce-server.glitch.me/1234', 'codemirror6-demo-room', ydoc)
-        // const provider = new WebrtcProvider('codemirror6-demo-room', ydoc)
-        const ytext = ydoc.getText('codemirror')
+    const renderEditor = () => {
+        let provider = null;
 
-        const undoManager = new Y.UndoManager(ytext)
+        const extensions = [
+            basicSetup,
+            EditorView.theme({
+                "&": {
+                    backgroundColor: "white"
+                }
+            }),
+            java(),
+            EditorView.updateListener.of((update) => {
+                if (update.docChanged) {
+                    const content = update.state.doc.toString();
+                    console.log('Document content:', content);
+                    // You can perform any action with the content here
+                    setCurrentSketch({
+                        ...currentSketch,
+                        content,
+                    });
+                }
+            })
+        ]
 
-        provider.awareness.setLocalStateField('user', {
-            name: 'Anonymous ' + Math.floor(Math.random() * 100),
-            color: userColor.color,
-            colorLight: userColor.light
-        })
+        if (currentSketch.isCollab) {
+            const userColor = userColors[random.uint32() % userColors.length]
 
-        const theme = EditorView.theme({
-            "&": {
-                backgroundColor: "white"
-            }
-        })
+            const ydoc = new Y.Doc()
+            provider = new WebsocketProvider('ws://pce-server.glitch.me/1234', currentSketch.fileName, ydoc)
+            console.log('Connecting to', 'ws://pce-server.glitch.me/1234', currentSketch.fileName);
+            const ytext = ydoc.getText('codemirror')
+
+            const undoManager = new Y.UndoManager(ytext)
+
+            provider.awareness.setLocalStateField('user', {
+                name: 'Anonymous ' + Math.floor(Math.random() * 100),
+                color: userColor.color,
+                colorLight: userColor.light
+            });
+            extensions.push(yCollab(ytext, provider.awareness, { undoManager }));
+        }
 
         const state = EditorState.create({
-            doc: editorContent,
-            extensions: [
-                basicSetup,
-                theme,
-                java(),
-                yCollab(ytext, provider.awareness, { undoManager }),
-                EditorView.updateListener.of((update) => {
-                    if (update.docChanged) {
-                        const content = update.state.doc.toString();
-                        console.log('Document content:', content);
-                        // You can perform any action with the content here
-                        updateContent(content);
-                    }
-                })
-            ]
+            doc: currentSketch.content,
+            extensions,
         })
 
         const view = new EditorView({ state, parent: editorRef.current })
@@ -75,21 +82,31 @@ const Editor = () => {
 
         return () => {
             view.destroy();
-            provider.destroy();
+            provider?.destroy();
         };
+    }
+
+    // useEffect(() => {
+    //     if (currentSketch.isCollab) {
+    //         renderEditor();
+    //     }
+    //
+    // }, [currentSketch]);
+
+    useEffect(() => {
+        renderEditor();
     }, []);
 
     useEffect(() => {
-        console.log('Editor content updated:', editorContent);
         if (viewRef.current) {
             const currentContent = viewRef.current.state.doc.toString();
-            if (currentContent !== editorContent) {
+            if (currentContent !== currentSketch.content) {
                 viewRef.current.dispatch({
-                    changes: {from: 0, to: currentContent.length, insert: editorContent}
+                    changes: {from: 0, to: currentContent.length, insert: currentSketch.content}
                 });
             }
         }
-    }, [editorContent]);
+    }, [currentSketch]);
 
     return <div className={styles.editor} ref={editorRef} />;
 };

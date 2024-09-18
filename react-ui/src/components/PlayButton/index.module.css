@@ -26,6 +26,19 @@
     border-color: transparent transparent transparent var(--primary-color);
 }
 
+.playButton[data-is-loading="true"] {
+    cursor: not-allowed;
+}
+
+.playButton[data-is-loading="true"]:before {
+    border-color: #333;
+    margin-left: 0;
+}
+
+.playButton[data-is-loading="true"]:hover:before {
+    border-color: var(--primary-color);
+}
+
 .playButtonLoading {
     background-color: white;
     border: none;

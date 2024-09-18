@@ -11,7 +11,7 @@
 .layout > *:nth-child(1) {
     /*margin: 10px 20px;*/
     overflow: hidden;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
 }
 
 .layout > *:nth-child(2) {
@@ -23,7 +23,7 @@
 .draggableIndicator {
     width: 50px;
     height: 3px;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     background: white;
     text-align: center;
     cursor: pointer;

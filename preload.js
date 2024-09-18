@@ -3,7 +3,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 console.log('preload.js loaded');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    runProcessing: (fileName, content) => ipcRenderer.invoke('run-processing', fileName, content),
+    runProcessing: (fileName) => ipcRenderer.invoke('run-processing', fileName),
     onProcessingOutput: (callback) => ipcRenderer.on('processing-output', (event, data) => callback(data)),
     getSketchFolders: () => ipcRenderer.invoke('get-sketch-folders'),
     getSketchFile: (folderName) => ipcRenderer.invoke('get-sketch-file', folderName),

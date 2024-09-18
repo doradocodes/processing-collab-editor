@@ -8,7 +8,35 @@
     "build": "cd react-ui && npm run build",
     "dev": "concurrently \"npm run react-dev\" \"npm run electron-dev\"",
     "react-dev": "cd react-ui && npm run dev",
-    "electron-dev": "wait-on tcp:5173 && ELECTRON_START_URL=http://localhost:5173/ electron ."
+    "electron-dev": "wait-on tcp:5173 && ELECTRON_START_URL=http://localhost:5173/ electron .",
+    "build:electron": "electron-builder"
+  },
+  "build": {
+    "appId": "com.doradocodes.pce",
+    "files": [
+      "build/**/*",
+      "main.js",
+      "preload.js",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "tools/",
+        "to": "tools/",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   },
   "repository": {
     "type": "git",
@@ -28,6 +56,10 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "electron": "^31.2.0",
+    "electron-builder": "^25.0.5",
     "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "os": "^0.1.2"
   }
 }

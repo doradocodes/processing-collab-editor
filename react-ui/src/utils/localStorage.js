@@ -1,26 +1,13 @@
+
 export const getSketchFolders = async () => {
     const folders = await window.electronAPI.getSketchFolders();
     return folders;
 };
 
-export const createNewSketch = async () => {
-    const content = `
-void setup() {
-
-}
-
-void draw() {
-
-}
-        `;
-    const fileName = `sketch_${new Date().getTime()}`;
-    const folder = await window.electronAPI.createNewSketch(fileName, content);
-    return folder;
-};
-
-export const updateSketch = async (folder, content) => {
+export const updateSketch = async (fileName, content) => {
     try {
-        await window.electronAPI.createNewSketch(folder, content);
+        const folder = await window.electronAPI.createNewSketch(fileName, content);
+        return folder;
     } catch(error) {
         console.error('Error updating sketch:', error);
     }

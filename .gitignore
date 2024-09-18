@@ -132,3 +132,4 @@ dist
 
 # vite
 .vite
+/build

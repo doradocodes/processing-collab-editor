@@ -3,6 +3,7 @@
     --text-color: white;
     --primary-color: #0468FF;
     --secondary-text-color: black;
+    --border-radius: 5px;
 }
 
 html, body {
@@ -13,10 +14,38 @@ html, body {
     font-size: 12px;
 }
 
+hr {
+    width: 100%;
+}
+
+input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    padding: 10px;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: white;
+}
+
+button {
+    padding: 10px;
+    border-radius: var(--border-radius);
+    border: none;
+    background: var(--primary-color);
+    transition: opacity 0.3s;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.5;
+}
+
 /* Custom title bar styles */
 .window-titlebar {
     -webkit-app-region: drag;
-    height: 15px;
+    height: 30px;
     width: 100%;
     position: fixed;
     top: 0;

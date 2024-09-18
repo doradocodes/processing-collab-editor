@@ -35,7 +35,7 @@
 
 .grid {
     display: grid;
-    grid-template-columns: max(300px, 20%) 1fr;
+    grid-template-columns: max(250px, 20%) 1fr;
     gap: 10px;
     height: 100vh;
     padding: 0 10px;
@@ -48,7 +48,7 @@
     /*align-items: center;*/
 }
 
-.current_sketch_label {
+.label {
     color: var(--text-color);
     margin: 0;
 }

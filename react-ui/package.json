@@ -1,11 +1,12 @@
 {
   "name": "react-ui",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "homepage": "./",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --emptyOutDir",
     "lint": "eslint .",
     "preview": "vite preview"
   },
