@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@codemirror/collab": "^6.1.1",
+    "@codemirror/gutter": "^0.19.9",
     "@codemirror/lang-java": "^6.0.1",
     "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/state": "^6.4.1",

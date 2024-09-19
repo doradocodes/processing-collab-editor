@@ -1,11 +1,16 @@
+.editorWrapper {
+}
+
 .editor {
     background: white;
     position: relative;
-    flex: 1;
+    /*flex: 1;*/
     overflow: hidden;
-    max-height: 65vh;
     border-radius: var(--radius-3);
     box-shadow: var(--box-shadow);
+
+    height: calc(65vh - 60px);
+    margin-bottom: var(--gap);
 }
 
 .editor :global(.cm-editor) {

@@ -20,7 +20,8 @@
 .grid {
     display: grid;
     grid-template-columns: max(300px, 20%) 1fr;
-    grid-template-rows: 50px 1fr;
+    /*grid-template-columns: max(300px, 1fr) 2fr;*/
+    grid-template-rows: 40px 1fr;
     gap: var(--gap);
     height: 100vh;
     padding: var(--gap);

@@ -6,55 +6,15 @@
     gap: var(--gap);
 }
 
-.sectionLabel {
-    font-size: 1rem;
-    font-weight: normal;
-    color: var(--text-color);
-    margin: 0;
-}
-
-.list {
-    margin: 0;
-    list-style-type: none;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding: 5px;
-    flex: 1;
-    max-height: 50vh;
-    overflow-y: auto;
-}
-
-.listItem {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background: #eee;
-    color: var(--secondary-text-color);
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.listItem:hover {
-    background: #ddd;
-}
-
-.listItem[data-active="true"] {
-    outline: 2px solid var(--primary-color);
-}
-
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.input {
-    display: block;
-    width: 100%;
-}
-
 .active {
     border: 1px solid white;
+}
+
+.sketchList {
+    max-height: 50vh;
+    overflow: auto;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    font-size: 0.9em;
 }

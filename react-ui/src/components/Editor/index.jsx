@@ -36,14 +36,22 @@ const Editor = ({ isDarkTheme }) => {
 
         let provider = null;
 
+        const customTheme = EditorView.theme({
+            ".cm-content": {
+                fontSize: "0.8em" // Set your desired font size here
+            },
+            ".cm-gutters": {
+                fontSize: "0.8em" // Set your desired font size here
+            }
+        });
+
         const extensions = [
             basicSetup,
-            isDarkTheme? materialDark : materialLight,
-            EditorView.theme({
-                "&": {
-                    backgroundColor: "white"
-                }
-            }),
+            isDarkTheme ? materialDark : materialLight,
+            // EditorView.theme({
+            //     fontSize: 12,
+            // }),
+            customTheme,
             java(),
             EditorView.updateListener.of((update) => {
                 if (update.docChanged) {
@@ -73,7 +81,7 @@ const Editor = ({ isDarkTheme }) => {
                 color: userColor.color,
                 colorLight: userColor.light
             });
-            extensions.push(yCollab(ytext, provider.awareness, { undoManager }));
+            extensions.push(yCollab(ytext, provider.awareness, {undoManager}));
         }
 
         const state = EditorState.create({
@@ -119,7 +127,8 @@ const Editor = ({ isDarkTheme }) => {
         }
     }, [currentSketch]);
 
-    return <div className={styles.editor} ref={editorRef} />;
+    return <div className={styles.editor} ref={editorRef}/>
+
 };
 
 export default Editor;

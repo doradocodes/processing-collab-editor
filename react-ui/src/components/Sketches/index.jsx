@@ -2,7 +2,7 @@ import React, {createRef, useEffect, useState} from "react";
 import styles from "./index.module.css";
 import {useEditorStore} from "../../store/editorStore.js";
 import {getSketchFile, getSketchFolders} from "../../utils/localStorage.js";
-import {Button, Card, Flex, Heading, TextField} from "@radix-ui/themes";
+import {Button, Card, Flex, Heading, Text, TextField} from "@radix-ui/themes";
 import {FaceIcon, FileIcon, PersonIcon} from "@radix-ui/react-icons";
 
 const Sketches = () => {
@@ -58,29 +58,29 @@ const Sketches = () => {
 
     return <div className={styles.sketches}>
         <Flex gap="2" direction="column">
-            <Heading as="h6">Recent sketches</Heading>
-            <Flex direction="column" gap="3">
+            <Text as="h6">Recent sketches</Text>
+            <div className={styles.sketchList}>
                 {!activeSketch &&
-                    <Card className={!activeSketch && styles.active}>
-                        <span>[Untitled]</span>
+                    <Card size={"1"} className={!activeSketch && styles.active}>
+                        <Text size="1">[Untitled]</Text>
                     </Card>
                 }
-                {sketchList.map((fileName) => {
+                {sketchList.slice(0, 3).map((fileName) => {
                     return <Card
                         className={activeSketch === fileName && styles.active}
                         key={fileName}
                         onClick={(e) => onGetSketchFile(fileName)}
                     >
-                        <span>{fileName}</span>
+                        <Text size="1">{fileName}</Text>
                     </Card>
                 })}
-            </Flex>
+            </div>
         </Flex>
 
 
         <Flex direction="column" gap="3">
             <Flex direction="column" gap="3">
-                <Heading as="h6">Join a sketch</Heading>
+                <Text>Join a sketch</Text>
                 <TextField.Root placeholder="Enter your name" ref={userNameInput}>
                     <TextField.Slot>
                         <PersonIcon height="16" width="16" />

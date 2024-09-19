@@ -1,5 +1,5 @@
 .playButton {
-    background-color: white;
+    background-color: var(--accent-9);
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -23,7 +23,7 @@
 }
 
 .playButton:hover:before {
-    border-color: transparent transparent transparent var(--primary-color);
+    border-color: transparent transparent transparent white;
 }
 
 .playButton[data-is-loading="true"] {
@@ -36,7 +36,7 @@
 }
 
 .playButton[data-is-loading="true"]:hover:before {
-    border-color: var(--primary-color);
+    border-color: white;
 }
 
 .playButtonLoading {

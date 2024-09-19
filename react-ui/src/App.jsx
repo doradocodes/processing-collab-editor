@@ -8,7 +8,7 @@ import Console from "./components/Console/index.jsx";
 import {useEditorStore} from "./store/editorStore.js";
 import {updateSketch} from "./utils/localStorage.js";
 import {Button, Flex, Heading, Theme} from "@radix-ui/themes";
-import {MoonIcon} from "@radix-ui/react-icons";
+import {CheckIcon, FileIcon, MoonIcon, Share1Icon} from "@radix-ui/react-icons";
 
 function App() {
     const currentSketch = useEditorStore(state => state.currentSketch);
@@ -64,13 +64,13 @@ function App() {
                 </Flex>
 
                 <Flex justify="between" align="center">
-                    <Flex gap="2">
+                    <Flex gap="3" align="center">
                         <Heading as="h2">{activeSketch || '[Untitled]'}</Heading>
-                        {isSaving ? <span className="label">Saved!</span> : <Button onClick={onSave}>Save</Button>}
+                        {isSaving ? <CheckIcon /> : <FileIcon onClick={onSave}/>}
                         {isCollab ?
                             <span className="label">Collaborating</span>
                             :
-                            activeSketch && <Button onClick={onCollabToggle}>Collab</Button>
+                            activeSketch && <Share1Icon onClick={onCollabToggle}/>
                         }
                     </Flex>
                     <PlayButton/>
@@ -80,10 +80,15 @@ function App() {
                     <Sketches/>
                 </Flex>
 
-                <Flex direction="column" justify="between" gap="3">
+                {/*<Flex direction="column" justify="between" gap="3">*/}
+                {/*    <Editor isDarkTheme={isDarkMode}/>*/}
+                {/*    <Console isDarkTheme={isDarkMode} />*/}
+                {/*</Flex>*/}
+
+                <div>
                     <Editor isDarkTheme={isDarkMode}/>
-                    <Console />
-                </Flex>
+                    <Console isDarkTheme={isDarkMode} />
+                </div>
 
             </div>
         </div>
