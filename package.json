@@ -1,5 +1,6 @@
 {
-  "name": "pde-v2",
+  "name": "processing-collab-editor",
+  "productName": "Processing Collab Editor",
   "version": "1.0.0",
   "description": "Collaborative code editor for Processing",
   "main": "main.js",
@@ -9,7 +10,9 @@
     "dev": "concurrently \"npm run react-dev\" \"npm run electron-dev\"",
     "react-dev": "cd react-ui && npm run dev",
     "electron-dev": "wait-on tcp:5173 && ELECTRON_START_URL=http://localhost:5173/ electron .",
-    "build:electron": "electron-builder"
+    "build:electron": "cd react-ui && npm run build && cd .. && electron-builder",
+    "build:electron:windows": "cd react-ui && npm run build && cd .. && electron-builder --win --x64",
+    "build:electron:linux": "cd react-ui && npm run build && cd .. && electron-builder --linux"
   },
   "build": {
     "appId": "com.doradocodes.pce",
@@ -32,10 +35,28 @@
       "category": "public.app-category.utilities"
     },
     "win": {
-      "target": "nsis"
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.ico",
+      "publisherName": "YourPublisherName",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     },
     "linux": {
-      "target": "AppImage"
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ],
+      "category": "Development"
     }
   },
   "repository": {
