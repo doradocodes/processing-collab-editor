@@ -15,7 +15,7 @@ function App() {
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
     const [isDarkMode, setIsDarkMode] = useState(false);
-    const [activeSketch, setActiveSketch] = useState(null);
+    const [activeSketch, setActiveSketch] = useState(currentSketch);
     const [isSaving, setIsSaving] = useState(false);
     const [isCollab, setIsCollab] = useState(false);
 
@@ -23,13 +23,15 @@ function App() {
         setIsCollab(true);
         setCurrentSketch({
             ...currentSketch,
+            ...activeSketch,
             isCollab: true,
+            isHost: true,
         });
     };
 
     useEffect(() => {
-        if (currentSketch.fileName) {
-            setActiveSketch(currentSketch.fileName);
+        if (currentSketch) {
+            setActiveSketch(currentSketch);
         }
     }, [currentSketch]);
 
@@ -65,7 +67,7 @@ function App() {
 
                 <Flex justify="between" align="center">
                     <Flex gap="3" align="center">
-                        <Heading as="h2">{activeSketch || '[Untitled]'}</Heading>
+                        <Heading as="h2">{activeSketch?.fileName || '[Untitled]'}</Heading>
                         {isSaving ? <CheckIcon /> : <FileIcon onClick={onSave}/>}
                         {isCollab ?
                             <span className="label">Collaborating</span>
@@ -80,16 +82,19 @@ function App() {
                     <Sketches/>
                 </Flex>
 
-                {/*<Flex direction="column" justify="between" gap="3">*/}
-                {/*    <Editor isDarkTheme={isDarkMode}/>*/}
-                {/*    <Console isDarkTheme={isDarkMode} />*/}
-                {/*</Flex>*/}
-
                 <div>
-                    <Editor isDarkTheme={isDarkMode}/>
+                    <Editor
+                        isDarkTheme={isDarkMode}
+                        sketch={activeSketch}
+                        onChange={(content) => {
+                            // setCurrentSketch({
+                            //     ...activeSketch,
+                            //     content
+                            // });
+                        }}
+                    />
                     <Console isDarkTheme={isDarkMode} />
                 </div>
-
             </div>
         </div>
     </Theme>

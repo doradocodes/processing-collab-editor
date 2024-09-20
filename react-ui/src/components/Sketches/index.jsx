@@ -17,7 +17,6 @@ const Sketches = () => {
     useEffect(() => {
         getSketchFolders()
             .then((folders) => {
-                console.log('files', folders);
                 setSketchList(folders);
             });
     }, [currentSketch]);

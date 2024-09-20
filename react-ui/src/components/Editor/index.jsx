@@ -24,58 +24,48 @@ const userColors = [
     { color: '#1be7ff', light: '#1be7ff33' }
 ]
 
-const Editor = ({ isDarkTheme }) => {
+const websocketServer = 'ws://pce-server.glitch.me/1234';
+
+let provider;
+
+const Editor = ({ sketch, isDarkTheme, onChange }) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
 
-    const currentSketch = useEditorStore(state => state.currentSketch);
-    const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
-
-    const renderEditor = () => {
-        editorRef.current.innerHTML = '';
-
-        let provider = null;
-
-        const customTheme = EditorView.theme({
-            ".cm-content": {
-                fontSize: "0.8em" // Set your desired font size here
-            },
-            ".cm-gutters": {
-                fontSize: "0.8em" // Set your desired font size here
-            }
-        });
-
+    const getExtensions = () => {
         const extensions = [
             basicSetup,
             isDarkTheme ? materialDark : materialLight,
-            // EditorView.theme({
-            //     fontSize: 12,
-            // }),
-            customTheme,
+            EditorView.theme({
+                ".cm-content": {
+                    fontSize: "0.8em" // Set your desired font size here
+                },
+                ".cm-gutters": {
+                    fontSize: "0.8em" // Set your desired font size here
+                }
+            }),
             java(),
             EditorView.updateListener.of((update) => {
                 if (update.docChanged) {
                     const content = update.state.doc.toString();
-                    console.log('Document content:', content);
-                    // You can perform any action with the content here
-                    setCurrentSketch({
-                        ...currentSketch,
-                        content,
-                    });
+                    onChange(content);
                 }
             })
-        ]
+        ];
 
-        if (currentSketch.isCollab) {
-            const userColor = userColors[random.uint32() % userColors.length]
-
+        if (sketch.isCollab) {
             const ydoc = new Y.Doc()
-            provider = new WebsocketProvider('ws://pce-server.glitch.me/1234', currentSketch.fileName, ydoc)
-            console.log('Connecting to', 'ws://pce-server.glitch.me/1234', currentSketch.fileName);
-            const ytext = ydoc.getText('codemirror')
+            provider = new WebsocketProvider(websocketServer, sketch.fileName, ydoc)
+            console.log('Connecting to', websocketServer, sketch.fileName);
 
-            const undoManager = new Y.UndoManager(ytext)
+            const ytext = ydoc.getText('codemirror');
 
+            if (sketch.isHost) {
+                ytext.insert(0, sketch.content);
+            }
+
+            const undoManager = new Y.UndoManager(ytext);
+            const userColor = userColors[random.uint32() % userColors.length];
             provider.awareness.setLocalStateField('user', {
                 name: 'Anonymous ' + Math.floor(Math.random() * 100),
                 color: userColor.color,
@@ -84,9 +74,17 @@ const Editor = ({ isDarkTheme }) => {
             extensions.push(yCollab(ytext, provider.awareness, {undoManager}));
         }
 
+        return extensions;
+    }
+
+    const renderEditor = () => {
+        editorRef.current.innerHTML = '';
+
+        let provider = null;
+
         const state = EditorState.create({
-            doc: currentSketch.content,
-            extensions,
+            doc: sketch.content,
+            extensions: getExtensions(),
         })
 
         const view = new EditorView({
@@ -101,34 +99,15 @@ const Editor = ({ isDarkTheme }) => {
         };
     }
 
-    // useEffect(() => {
-    //     if (currentSketch.isCollab) {
-    //         renderEditor();
-    //     }
-    //
-    // }, [currentSketch]);
-
     useEffect(() => {
-        renderEditor();
-    }, [isDarkTheme]);
-
-    useEffect(() => {
-        renderEditor();
-    }, []);
-
-    useEffect(() => {
-        if (viewRef.current) {
-            const currentContent = viewRef.current.state.doc.toString();
-            if (currentContent !== currentSketch.content) {
-                viewRef.current.dispatch({
-                    changes: {from: 0, to: currentContent.length, insert: currentSketch.content}
-                });
-            }
+        console.log('Editor mounted', sketch);
+        if (sketch) {
+            renderEditor();
         }
-    }, [currentSketch]);
+
+    }, [sketch]);
 
     return <div className={styles.editor} ref={editorRef}/>
-
 };
 
 export default Editor;
