@@ -6,7 +6,10 @@ const fs = require('node:fs');
 const os = require('os');
 
 const isPackaged = app.isPackaged;
-const processingJavaPath = path.join(process.resourcesPath, 'tools', 'processing-java');
+const processingJavaPath = isPackaged
+    ? path.join(process.resourcesPath, 'tools', 'processing-java')
+    : path.join(__dirname, 'tools', 'processing-java');
+
 const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Sketches');
 
 if (!fs.existsSync(documentsFolderPath)) {
@@ -29,24 +32,21 @@ const createWindow = () => {
         ? process.env.ELECTRON_START_URL
         : `file://${path.join(__dirname, 'build', 'index.html')}`;
     mainWindow.loadURL(startUrl);
+    mainWindow.webContents.openDevTools();
 
-    if (!isPackaged) {
-        mainWindow.webContents.openDevTools();
-    }
+    const secondWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: true,
+            contextIsolation: true,
+        },
+        titleBarStyle: 'hidden',
+    });
 
-    // const secondWindow = new BrowserWindow({
-    //     width: 800,
-    //     height: 600,
-    //     webPreferences: {
-    //         preload: path.join(__dirname, 'preload.js'),
-    //         nodeIntegration: true,
-    //         contextIsolation: true,
-    //     },
-    //     titleBarStyle: 'hidden',
-    // });
-    //
-    // secondWindow.loadURL(startUrl);
-    // secondWindow.webContents.openDevTools();
+    secondWindow.loadURL(startUrl);
+    secondWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(() => {
@@ -59,10 +59,6 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
-});
-
-ipcMain.handle('is-packaged', () => {
-    return isPackaged;
 });
 
 const createSketchFile = (fileName, fileContent) => {
@@ -141,10 +137,10 @@ ipcMain.handle('create-new-sketch', async (event, fileName, content) => {
 
 ipcMain.handle('run-processing', (event, fileName) => {
     return new Promise(async (resolve, reject) => {
-        console.log('Running Processing sketch:', processingJavaPath, fileName);
+        console.log('Running Processing sketch:', fileName);
         const folderPath = path.join(documentsFolderPath, fileName);
 
-        const process = exec(`processing-java --sketch=${folderPath} --run`);
+        const process = exec(`${processingJavaPath} --sketch=${folderPath} --run`);
 
         process.stdout.on('data', (data) => {
             console.log('stdout:', data.toString());
