@@ -34,19 +34,19 @@ const createWindow = () => {
     mainWindow.loadURL(startUrl);
     mainWindow.webContents.openDevTools();
 
-    const secondWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
-            nodeIntegration: true,
-            contextIsolation: true,
-        },
-        titleBarStyle: 'hidden',
-    });
-
-    secondWindow.loadURL(startUrl);
-    secondWindow.webContents.openDevTools();
+    // const secondWindow = new BrowserWindow({
+    //     width: 800,
+    //     height: 600,
+    //     webPreferences: {
+    //         preload: path.join(__dirname, 'preload.js'),
+    //         nodeIntegration: true,
+    //         contextIsolation: true,
+    //     },
+    //     titleBarStyle: 'hidden',
+    // });
+    //
+    // secondWindow.loadURL(startUrl);
+    // secondWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(() => {
@@ -62,8 +62,14 @@ app.on('window-all-closed', () => {
 });
 
 const createSketchFile = (fileName, fileContent) => {
-    const folderPath = path.join(documentsFolderPath, fileName);  // Save in Documents
-    const filePath = path.join(folderPath, `${fileName}.pde`);
+    let fn = fileName;
+    let folderPath = path.join(documentsFolderPath, fileName);
+    if (!fileName) {
+        fn = `sketch_${new Date().getTime()}`;
+        folderPath = path.join(documentsFolderPath, 'temp', fn);
+    }
+
+    const filePath = path.join(folderPath, `${fn}.pde`);
 
     return new Promise((resolve, reject) => {
         try {

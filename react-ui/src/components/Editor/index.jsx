@@ -4,13 +4,17 @@ import { yCollab } from 'y-codemirror.next'
 import { WebsocketProvider } from 'y-websocket'
 
 import { EditorView, basicSetup } from "codemirror";
+import { keymap } from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
+import {indentWithTab} from "@codemirror/commands";
+
 
 import * as random from 'lib0/random'
 import {java} from "@codemirror/lang-java";
 
 import styles from './index.module.css';
 import {useEditorStore} from "../../store/editorStore.js";
+import {materialLight, materialDark} from "@uiw/codemirror-theme-material";
 
 const userColors = [
     { color: '#30bced', light: '#30bced33' },
@@ -23,61 +27,74 @@ const userColors = [
     { color: '#1be7ff', light: '#1be7ff33' }
 ]
 
-const Editor = ({ sketch }) => {
+const websocketServer = 'ws://pce-server.glitch.me/1234';
+
+let provider;
+
+const Editor = ({ sketchName, sketchContent, isCollab, isHost, isDarkTheme, onChange }) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
 
-    const currentSketch = useEditorStore(state => state.currentSketch);
-    const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
-
-    const renderEditor = () => {
-        let provider = null;
-
+    const getExtensions = () => {
         const extensions = [
             basicSetup,
+            isDarkTheme ? materialDark : materialLight,
             EditorView.theme({
-                "&": {
-                    backgroundColor: "white"
+                ".cm-content": {
+                    fontSize: "0.8em" // Set your desired font size here
+                },
+                ".cm-gutters": {
+                    fontSize: "0.8em" // Set your desired font size here
                 }
             }),
+            keymap.of([indentWithTab]),
             java(),
             EditorView.updateListener.of((update) => {
                 if (update.docChanged) {
                     const content = update.state.doc.toString();
-                    console.log('Document content:', content);
-                    // You can perform any action with the content here
-                    setCurrentSketch({
-                        ...currentSketch,
-                        content,
-                    });
+                    onChange(content);
                 }
             })
-        ]
+        ];
 
-        if (currentSketch.isCollab) {
-            const userColor = userColors[random.uint32() % userColors.length]
-
+        if (isCollab) {
             const ydoc = new Y.Doc()
-            provider = new WebsocketProvider('ws://pce-server.glitch.me/1234', currentSketch.fileName, ydoc)
-            console.log('Connecting to', 'ws://pce-server.glitch.me/1234', currentSketch.fileName);
-            const ytext = ydoc.getText('codemirror')
+            provider = new WebsocketProvider(websocketServer, sketchName, ydoc)
+            console.log('Connecting to', websocketServer, sketchName);
 
-            const undoManager = new Y.UndoManager(ytext)
+            const ytext = ydoc.getText('codemirror');
 
+            if (isHost) {
+                ytext.insert(0, sketchContent);
+            }
+
+            const undoManager = new Y.UndoManager(ytext);
+            const userColor = userColors[random.uint32() % userColors.length];
             provider.awareness.setLocalStateField('user', {
                 name: 'Anonymous ' + Math.floor(Math.random() * 100),
                 color: userColor.color,
                 colorLight: userColor.light
             });
-            extensions.push(yCollab(ytext, provider.awareness, { undoManager }));
+            extensions.push(yCollab(ytext, provider.awareness, {undoManager}));
         }
 
+        return extensions;
+    }
+
+    const renderEditor = () => {
+        editorRef.current.innerHTML = '';
+
+        let provider = null;
+
         const state = EditorState.create({
-            doc: currentSketch.content,
-            extensions,
+            doc: sketchContent,
+            extensions: getExtensions(),
         })
 
-        const view = new EditorView({ state, parent: editorRef.current })
+        const view = new EditorView({
+            state,
+            parent: editorRef.current
+        });
         viewRef.current = view;
 
         return () => {
@@ -86,29 +103,12 @@ const Editor = ({ sketch }) => {
         };
     }
 
-    // useEffect(() => {
-    //     if (currentSketch.isCollab) {
-    //         renderEditor();
-    //     }
-    //
-    // }, [currentSketch]);
-
     useEffect(() => {
+        console.log('Editor mounted');
         renderEditor();
-    }, []);
+    }, [sketchName]);
 
-    useEffect(() => {
-        if (viewRef.current) {
-            const currentContent = viewRef.current.state.doc.toString();
-            if (currentContent !== currentSketch.content) {
-                viewRef.current.dispatch({
-                    changes: {from: 0, to: currentContent.length, insert: currentSketch.content}
-                });
-            }
-        }
-    }, [currentSketch]);
-
-    return <div className={styles.editor} ref={editorRef} />;
+    return <div className={styles.editor} ref={editorRef}/>
 };
 
 export default Editor;

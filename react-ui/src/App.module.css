@@ -1,0 +1,5 @@
+.darkThemeButton {
+    position: absolute;
+    left: 0;
+    margin: var(--gap);
+}

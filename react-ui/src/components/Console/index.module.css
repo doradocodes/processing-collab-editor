@@ -1,13 +1,22 @@
+.console[data-theme="light"] {
+    background-color: #FAFAFA;
+    color: #90A4AE;
+}
+
+.console[data-theme="dark"] {
+    background-color: #2e3235;
+    color: #bdbdbd;
+}
+
 .console {
-    background: white;
-    border-radius: var(--border-radius);
+    font-size: 0.8em;
     overflow: auto;
-    margin: 10px 0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    height: 20%;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--radius-3);
+    height: calc(35vh - 60px);
 }
 
 .output {
-    padding: 10px;
-
+    padding: 5px;
+    font-family: monospace;
 }

@@ -6,8 +6,8 @@ export const getSketchFolders = async () => {
 
 export const updateSketch = async (fileName, content) => {
     try {
-        const folder = await window.electronAPI.createNewSketch(fileName, content);
-        return folder;
+        const folderPath = await window.electronAPI.createNewSketch(fileName, content);
+        return folderPath;
     } catch(error) {
         console.error('Error updating sketch:', error);
     }

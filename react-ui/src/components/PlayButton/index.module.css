@@ -1,5 +1,5 @@
 .playButton {
-    background-color: white;
+    background-color: var(--accent-9);
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -8,22 +8,25 @@
     justify-content: center;
     align-items: center;
     width: 40px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
 
+.playButton:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .playButton:before {
     content: "";
     border-style: solid;
     border-width: 8px 0 8px 15px;
-    border-color: transparent transparent transparent #333;
+    border-color: transparent transparent transparent white;
     vertical-align: middle;
     transition: all 0.3s ease;
     margin-left: 5px;
 }
 
 .playButton:hover:before {
-    border-color: transparent transparent transparent var(--primary-color);
+    border-color: transparent transparent transparent white;
 }
 
 .playButton[data-is-loading="true"] {
@@ -36,7 +39,7 @@
 }
 
 .playButton[data-is-loading="true"]:hover:before {
-    border-color: var(--primary-color);
+    border-color: white;
 }
 
 .playButtonLoading {

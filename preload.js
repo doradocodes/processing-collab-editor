@@ -7,7 +7,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onProcessingOutput: (callback) => ipcRenderer.on('processing-output', (event, data) => callback(data)),
     getSketchFolders: () => ipcRenderer.invoke('get-sketch-folders'),
     getSketchFile: (folderName) => ipcRenderer.invoke('get-sketch-file', folderName),
-    createNewSketch: (fileName, content) => ipcRenderer.invoke('create-new-sketch', fileName, content),
+    createNewSketch: (folderPath, content) => ipcRenderer.invoke('create-new-sketch', folderPath, content),
 });
 
 // All the Node.js APIs are available in the preload process.

@@ -1,4 +1,5 @@
-import './App.css'
+import './App.css';
+import styles from './App.module.css';
 import React, {useEffect, useState} from "react";
 import PlayButton from "./components/PlayButton/index.jsx";
 import Sketches from "./components/Sketches/index.jsx";
@@ -6,12 +7,15 @@ import Editor from "./components/Editor/index.jsx";
 import Console from "./components/Console/index.jsx";
 import {useEditorStore} from "./store/editorStore.js";
 import {updateSketch} from "./utils/localStorage.js";
+import {Button, Flex, Heading, Theme} from "@radix-ui/themes";
+import {CheckIcon, FileIcon, MoonIcon, Share1Icon} from "@radix-ui/react-icons";
 
 function App() {
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
-    const [activeSketch, setActiveSketch] = useState(null);
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [activeSketch, setActiveSketch] = useState(currentSketch);
     const [isSaving, setIsSaving] = useState(false);
     const [isCollab, setIsCollab] = useState(false);
 
@@ -19,13 +23,15 @@ function App() {
         setIsCollab(true);
         setCurrentSketch({
             ...currentSketch,
+            ...activeSketch,
             isCollab: true,
+            isHost: true,
         });
     };
 
     useEffect(() => {
-        if (currentSketch.fileName) {
-            setActiveSketch(currentSketch.fileName);
+        if (currentSketch) {
+            setActiveSketch(currentSketch);
         }
     }, [currentSketch]);
 
@@ -46,40 +52,53 @@ function App() {
         }, 1000);
     }
 
-    return <div className='App'>
-        <div className="grid">
-            <div className="column">
-                <div className="header">
+    return <Theme
+        appearance={isDarkMode ? 'dark' : 'light'}
+        accentColor="indigo"
+        panelBackground="translucent"
+        radius="medium"
+    >
+        <div className='App'>
+            <div className="grid">
+                <Flex justify="center" align="center">
                     <img className="logo" src="./Processing-logo.png" alt="logo"/>
-                </div>
-                <Sketches/>
-            </div>
+                    <MoonIcon className={styles.darkThemeButton} onClick={() => setIsDarkMode(!isDarkMode)}/>
+                </Flex>
 
-
-            <div className="column">
-                <div className="header space-between">
-                    <div className="header">
-                        <h2 className="label">{activeSketch || '[Untitled]'}</h2>
-                        {isSaving ? <span className="label">Saved!</span> : <button onClick={onSave}>Save</button>}
-                        {/*<button>Rename</button>*/}
+                <Flex justify="between" align="center">
+                    <Flex gap="3" align="center">
+                        <Heading as="h2">{activeSketch?.fileName || '[Untitled]'}</Heading>
+                        {isSaving ? <CheckIcon /> : <FileIcon onClick={onSave}/>}
                         {isCollab ?
                             <span className="label">Collaborating</span>
                             :
-                            activeSketch && <button onClick={onCollabToggle}>Collab</button>
+                            activeSketch && <Share1Icon onClick={onCollabToggle}/>
                         }
-                    </div>
-
+                    </Flex>
                     <PlayButton/>
-                </div>
-                <Editor />
-                {/*<div>*/}
-                {/*    <div className={styles.draggableIndicator} />*/}
-                {/*</div>*/}
-                <Console />
-            </div>
+                </Flex>
 
+                <Sketches/>
+
+                <div>
+                    <Editor
+                        isDarkTheme={isDarkMode}
+                        sketchName={activeSketch.fileName}
+                        sketchContent={activeSketch.content}
+                        isCollab={activeSketch.isCollab}
+                        isHost={activeSketch.isHost}
+                        onChange={(content) => {
+                            setCurrentSketch({
+                                ...activeSketch,
+                                content
+                            });
+                        }}
+                    />
+                    <Console isDarkTheme={isDarkMode} />
+                </div>
+            </div>
         </div>
-    </div>;
+    </Theme>
 }
 
 export default App
