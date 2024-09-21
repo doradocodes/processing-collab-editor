@@ -135,10 +135,9 @@ ipcMain.handle('create-new-sketch', async (event, fileName, content) => {
     }
 });
 
-ipcMain.handle('run-processing', (event, fileName) => {
+ipcMain.handle('run-processing', (event, folderPath) => {
     return new Promise(async (resolve, reject) => {
-        console.log('Running Processing sketch:', fileName);
-        const folderPath = path.join(documentsFolderPath, fileName);
+        console.log('Running Processing sketch:', folderPath);
 
         const process = exec(`${processingJavaPath} --sketch=${folderPath} --run`);
 
