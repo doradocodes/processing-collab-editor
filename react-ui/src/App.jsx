@@ -15,25 +15,16 @@ function App() {
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
     const [isDarkMode, setIsDarkMode] = useState(false);
-    const [activeSketch, setActiveSketch] = useState(currentSketch);
     const [isSaving, setIsSaving] = useState(false);
-    const [isCollab, setIsCollab] = useState(false);
 
     const onCollabToggle = () => {
-        setIsCollab(true);
         setCurrentSketch({
-            ...currentSketch,
-            ...activeSketch,
+            fileName: currentSketch.fileName,
+            content: currentSketch.content,
             isCollab: true,
             isHost: true,
         });
     };
-
-    useEffect(() => {
-        if (currentSketch) {
-            setActiveSketch(currentSketch);
-        }
-    }, [currentSketch]);
 
     const onSave = async () => {
         setIsSaving(true);
@@ -67,12 +58,12 @@ function App() {
 
                 <Flex justify="between" align="center">
                     <Flex gap="3" align="center">
-                        <Heading as="h2">{activeSketch?.fileName || '[Untitled]'}</Heading>
+                        <Heading as="h2">{currentSketch?.fileName || '[Untitled]'}</Heading>
                         {isSaving ? <CheckIcon /> : <FileIcon onClick={onSave}/>}
-                        {isCollab ?
+                        {currentSketch.isCollab ?
                             <span className="label">Collaborating</span>
                             :
-                            activeSketch && <Share1Icon onClick={onCollabToggle}/>
+                            currentSketch && <Share1Icon onClick={onCollabToggle}/>
                         }
                     </Flex>
                     <PlayButton/>
@@ -83,13 +74,13 @@ function App() {
                 <div>
                     <Editor
                         isDarkTheme={isDarkMode}
-                        sketchName={activeSketch.fileName}
-                        sketchContent={activeSketch.content}
-                        isCollab={activeSketch.isCollab}
-                        isHost={activeSketch.isHost}
+                        sketchName={currentSketch.fileName}
+                        sketchContent={currentSketch.content}
+                        isCollab={currentSketch.isCollab}
+                        isHost={currentSketch.isHost}
                         onChange={(content) => {
                             setCurrentSketch({
-                                ...activeSketch,
+                                ...currentSketch,
                                 content
                             });
                         }}

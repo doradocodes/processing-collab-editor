@@ -9,14 +9,13 @@ const Sketches = () => {
     const sketchNameInput = createRef();
     const userNameInput = createRef();
     const [sketchList, setSketchList] = useState([]);
-    const [activeSketch, setActiveSketch] = useState(null);
     const [error, setError] = useState(null);
 
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
     useEffect(() => {
-        if (!activeSketch) {
+        if (!currentSketch.fileName) {
             getSketchFolders()
                 .then(folders => {
                     const lastSavedSketch = folders[folders.length - 1];
@@ -42,12 +41,6 @@ const Sketches = () => {
         });
     }, [currentSketch]);
 
-    useEffect(() => {
-        if (currentSketch.fileName) {
-            setActiveSketch(currentSketch.fileName);
-        }
-    }, [currentSketch]);
-
     const onCreateSketch = async () => {
         const fileName = `sketch_${new Date().getTime()}`;
         setCurrentSketch({
@@ -67,6 +60,7 @@ const Sketches = () => {
             fileName,
             content,
             isCollab: false,
+            isHost: false,
         });
     }
 
@@ -114,8 +108,8 @@ const Sketches = () => {
         <div className={styles.sketchListWrapper}>
             <Text size="1" className={styles.subheader}>Unsaved sketches</Text>
             <div className={styles.sketchList}>
-                { !activeSketch &&
-                    <div className={styles.sketchItem} data-active={!activeSketch}>
+                { !currentSketch.fileName &&
+                    <div className={styles.sketchItem} data-active={!currentSketch.fileName}>
                         <Text size="1">[Unsaved sketch]</Text>
                     </div>
                 }
@@ -126,7 +120,7 @@ const Sketches = () => {
                     .map((fileName) => {
                         return <div
                             className={styles.sketchItem}
-                            data-active={activeSketch === fileName}
+                            data-active={currentSketch.fileName === fileName}
                             key={fileName}
                             onClick={(e) => onGetSketchFile(fileName)}
                         >
@@ -143,7 +137,7 @@ const Sketches = () => {
                     .map((fileName) => {
                         return <div
                             className={styles.sketchItem}
-                            data-active={activeSketch === fileName}
+                            data-active={currentSketch.fileName === fileName}
                             key={fileName}
                             onClick={(e) => onGetSketchFile(fileName)}
                         >

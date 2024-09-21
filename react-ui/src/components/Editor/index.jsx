@@ -106,7 +106,7 @@ const Editor = ({ sketchName, sketchContent, isCollab, isHost, isDarkTheme, onCh
     useEffect(() => {
         console.log('Editor mounted');
         renderEditor();
-    }, [sketchName]);
+    }, [sketchName, isCollab]);
 
     return <div className={styles.editor} ref={editorRef}/>
 };

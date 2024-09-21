@@ -33,24 +33,12 @@ const createWindow = () => {
         : `file://${path.join(__dirname, 'build', 'index.html')}`;
     mainWindow.loadURL(startUrl);
     mainWindow.webContents.openDevTools();
-
-    // const secondWindow = new BrowserWindow({
-    //     width: 800,
-    //     height: 600,
-    //     webPreferences: {
-    //         preload: path.join(__dirname, 'preload.js'),
-    //         nodeIntegration: true,
-    //         contextIsolation: true,
-    //     },
-    //     titleBarStyle: 'hidden',
-    // });
-    //
-    // secondWindow.loadURL(startUrl);
-    // secondWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(() => {
     createWindow();
+
+    createWindow(); // Secondary test window
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
