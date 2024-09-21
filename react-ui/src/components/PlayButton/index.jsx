@@ -17,7 +17,7 @@ const PlayButton = () => {
             fileName = `sketch_${new Date().getTime()}`;
             setCurrentSketch({
                 ...currentSketch,
-                fileName: fileName,
+                fileName,
             });
             folderPath = await updateSketch(fileName, currentSketch.content);
         } else {

@@ -1,7 +1,7 @@
 import React, {createRef, useEffect, useState} from "react";
 import styles from "./index.module.css";
 import {useEditorStore} from "../../store/editorStore.js";
-import {getSketchFile, getSketchFolders} from "../../utils/localStorage.js";
+import {getSketchFile, getSketchFolders, updateSketch} from "../../utils/localStorage.js";
 import {Button, Card, Flex, Heading, Separator, Text, TextField} from "@radix-ui/themes";
 import {FaceIcon, FileIcon, PersonIcon} from "@radix-ui/react-icons";
 
@@ -49,8 +49,16 @@ const Sketches = () => {
     }, [currentSketch]);
 
     const onCreateSketch = async () => {
-        // const folders = await getSketchFolders();
-        // setFolders(folders);
+        const fileName = `sketch_${new Date().getTime()}`;
+        setCurrentSketch({
+            fileName,
+            content: '',
+            isCollab: false,
+            isHost: false,
+        });
+        const folderPath = await updateSketch(fileName, currentSketch.content);
+        const folders = await getSketchFolders();
+        setSketchList(folders);
     }
 
     const onGetSketchFile = async (fileName) => {
@@ -74,6 +82,7 @@ const Sketches = () => {
             fileName,
             content: '',
             isCollab: true,
+            isHost: false,
         });
     };
 
