@@ -8,7 +8,7 @@ const os = require('os');
 const isPackaged = app.isPackaged;
 const processingJavaPath = isPackaged
     ? path.join(process.resourcesPath, 'tools', 'processing-java')
-    : path.join(__dirname, 'tools', 'processing-java');
+    : 'processing-java';
 
 const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Sketches');
 
@@ -32,13 +32,13 @@ const createWindow = () => {
         ? process.env.ELECTRON_START_URL
         : `file://${path.join(__dirname, 'build', 'index.html')}`;
     mainWindow.loadURL(startUrl);
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(() => {
     createWindow();
 
-    createWindow(); // Secondary test window
+    // createWindow(); // Secondary test window
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
