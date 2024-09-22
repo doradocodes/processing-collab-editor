@@ -15,11 +15,12 @@
 .logo {
     width: 35px;
     height: 35px;
+    user-select: none;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: max(300px, 20%) 1fr;
+    grid-template-columns: max(325px, 20%) 1fr;
     /*grid-template-columns: max(300px, 1fr) 2fr;*/
     grid-template-rows: 40px 1fr;
     column-gap: var(--gap);

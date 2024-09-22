@@ -11,7 +11,7 @@
 .console {
     font-size: 0.8em;
     overflow: auto;
-    box-shadow: var(--box-shadow);
+    box-shadow: var(--shadow-3);
     border-radius: var(--radius-3);
     height: calc(35vh - 60px);
 }

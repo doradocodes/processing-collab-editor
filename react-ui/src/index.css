@@ -24,6 +24,7 @@ html, body {
 }
 
 hr {
+    color: var(--mauve-6);
     width: 100%;
 }
 

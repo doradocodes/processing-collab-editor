@@ -7,41 +7,17 @@ import Editor from "./components/Editor/index.jsx";
 import Console from "./components/Console/index.jsx";
 import {useEditorStore} from "./store/editorStore.js";
 import {updateSketch} from "./utils/localStorage.js";
-import {Button, Flex, Heading, Theme} from "@radix-ui/themes";
-import {CheckIcon, FileIcon, MoonIcon, Share1Icon} from "@radix-ui/react-icons";
+import {Button, ChevronDownIcon, Flex, Heading, Theme} from "@radix-ui/themes";
+import {CheckIcon, FileIcon, MoonIcon, Pencil1Icon, Share1Icon} from "@radix-ui/react-icons";
+import JoinCollaborativeSketchDialog from "./components/JoinCollaborativeSketchDialog/index.jsx";
+import SketchDropdownMenu from "./components/SketchDropdownMenu/index.jsx";
 
 function App() {
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
     const [isDarkMode, setIsDarkMode] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
 
-    const onCollabToggle = () => {
-        setCurrentSketch({
-            fileName: currentSketch.fileName,
-            content: currentSketch.content,
-            isCollab: true,
-            isHost: true,
-        });
-    };
-
-    const onSave = async () => {
-        setIsSaving(true);
-        const fileName = currentSketch.fileName || `sketch_${new Date().getTime()}`;
-        if (!currentSketch.fileName) {
-            await setCurrentSketch({
-                ...currentSketch,
-                fileName,
-            });
-        }
-        await updateSketch(fileName, currentSketch.content || '');
-        console.log('saved sketch:', currentSketch);
-
-        setTimeout(() => {
-            setIsSaving(false);
-        }, 1000);
-    }
 
     return <Theme
         appearance={isDarkMode ? 'dark' : 'light'}
@@ -59,12 +35,10 @@ function App() {
                 <Flex justify="between" align="center">
                     <Flex gap="3" align="center">
                         <Heading as="h2">{currentSketch?.fileName || '[Untitled]'}</Heading>
-                        {isSaving ? <CheckIcon /> : <FileIcon onClick={onSave}/>}
-                        {currentSketch.isCollab ?
-                            <span className="label">Collaborating</span>
-                            :
-                            currentSketch && <Share1Icon onClick={onCollabToggle}/>
-                        }
+
+                        <SketchDropdownMenu trigger={<ChevronDownIcon />}/>
+
+                        {currentSketch.isCollab && <Share1Icon color={'green'}/>}
                     </Flex>
                     <PlayButton/>
                 </Flex>
@@ -78,6 +52,7 @@ function App() {
                         sketchContent={currentSketch.content}
                         isCollab={currentSketch.isCollab}
                         isHost={currentSketch.isHost}
+                        userName={currentSketch.userName}
                         onChange={(content) => {
                             setCurrentSketch({
                                 ...currentSketch,

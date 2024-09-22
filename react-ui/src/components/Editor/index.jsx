@@ -31,7 +31,7 @@ const websocketServer = 'ws://pce-server.glitch.me/1234';
 
 let provider;
 
-const Editor = ({ sketchName, sketchContent, isCollab, isHost, isDarkTheme, onChange }) => {
+const Editor = ({ sketchName, sketchContent, isCollab, isHost, userName, isDarkTheme, onChange }) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
 
@@ -58,9 +58,29 @@ const Editor = ({ sketchName, sketchContent, isCollab, isHost, isDarkTheme, onCh
         ];
 
         if (isCollab) {
+            let roomName = sketchName;
+            if (sketchName.indexOf('collab_') >= 0) {
+                roomName = sketchName.replace('collab_', '');
+            }
             const ydoc = new Y.Doc()
             provider = new WebsocketProvider(websocketServer, sketchName, ydoc)
             console.log('Connecting to', websocketServer, sketchName);
+
+            // Listen for messages (this is where you get the initial document state)
+            provider.onmessage = (event) => {
+                const data = event.data;
+
+                if (data instanceof ArrayBuffer) {
+                    // Decode the Yjs update sent from the server
+                    const update = new Uint8Array(data);
+
+                    // Apply the document update to the local Y.Doc
+                    // applyUpdate(yDoc, update);
+                    console.log('Applied document update:', update);
+                } else {
+                    console.error('Received unknown data format from WebSocket:', data);
+                }
+            };
 
             const ytext = ydoc.getText('codemirror');
 
@@ -71,7 +91,7 @@ const Editor = ({ sketchName, sketchContent, isCollab, isHost, isDarkTheme, onCh
             const undoManager = new Y.UndoManager(ytext);
             const userColor = userColors[random.uint32() % userColors.length];
             provider.awareness.setLocalStateField('user', {
-                name: 'Anonymous ' + Math.floor(Math.random() * 100),
+                name: isHost ? 'Host' : userName || 'Guest' ,
                 color: userColor.color,
                 colorLight: userColor.light
             });
@@ -106,7 +126,7 @@ const Editor = ({ sketchName, sketchContent, isCollab, isHost, isDarkTheme, onCh
     useEffect(() => {
         console.log('Editor mounted');
         renderEditor();
-    }, [sketchName, isCollab]);
+    }, [sketchName, isCollab, isDarkTheme]);
 
     return <div className={styles.editor} ref={editorRef}/>
 };

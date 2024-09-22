@@ -3,6 +3,7 @@
     flex-direction: column;
     gap: var(--gap);
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .sketchListWrapper {
@@ -34,16 +35,12 @@
     background: var(--mauve-1);
     border-radius: var(--radius-3);
     font-weight: bold;
+    box-shadow: var(--shadow-3);
 }
 
 .subheader {
     font-weight: bold;
     opacity: 0.25;
-}
-
-.wrapper {
-    border-bottom: 1px solid var(--mauve-6);
-    padding-bottom: 10px;
 }
 
 .error {

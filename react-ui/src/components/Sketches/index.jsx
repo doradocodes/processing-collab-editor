@@ -3,13 +3,13 @@ import styles from "./index.module.css";
 import {useEditorStore} from "../../store/editorStore.js";
 import {getSketchFile, getSketchFolders, updateSketch} from "../../utils/localStorage.js";
 import {Button, Card, Flex, Heading, Separator, Text, TextField} from "@radix-ui/themes";
-import {FaceIcon, FileIcon, PersonIcon} from "@radix-ui/react-icons";
+import {FaceIcon, FileIcon, GlobeIcon, PersonIcon, Share1Icon} from "@radix-ui/react-icons";
+import Index from "../JoinCollaborativeSketchDialog/index.jsx";
 
 const Sketches = () => {
     const sketchNameInput = createRef();
     const userNameInput = createRef();
     const [sketchList, setSketchList] = useState([]);
-    const [error, setError] = useState(null);
 
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
@@ -67,56 +67,49 @@ const Sketches = () => {
     const joinSketch = async () => {
         const fileName = sketchNameInput.current.value;
         if (!fileName) {
-            setError('Please enter a sketch name');
             return;
         }
         console.log('username:', userNameInput.current.value)
         console.log('Joining sketch:', fileName);
+
+        // create new local sketch -> mabye only after host disconnects?
+        const folderPath = await updateSketch(`collab_${fileName}`, '');
+
         setCurrentSketch({
             fileName,
             content: '',
+            userName: userNameInput.current.value,
             isCollab: true,
             isHost: false,
         });
+
+        const folders = await getSketchFolders();
+        setSketchList(folders);
     };
 
     const formatUnsavedFileName = (fileName) => {
-        const timestamp = fileName.slice(fileName.lastIndexOf('_') + 1);
-        return `[Unsaved sketch - ${new Date(parseInt(timestamp)).toLocaleString()}]`;
+        if (fileName.indexOf('sketch_') === 0) {
+            const timestamp = fileName.slice(fileName.lastIndexOf('_') + 1);
+            return <Text size="2" truncate={true}>Unsaved sketch - ${new Date(parseInt(timestamp)).toLocaleString()}</Text>;
+        }
+        if (fileName.indexOf('collab_') === 0) {
+            const formattedFileName = fileName.slice(fileName.indexOf('_') + 1);
+            return [
+                <Text size="2" truncate={true}>{formattedFileName}</Text>,
+                <Share1Icon
+                    height="16" width="16"
+                    color={currentSketch.isCollab && currentSketch.fileName === formattedFileName ? 'green' : 'black'}
+                />
+            ]
+        }
+        return <Text size="2" truncate={true}>{fileName}</Text>;
     }
 
     return <div className={styles.sketches}>
-        <Flex direction="column" gap="3">
-            <Flex direction="column" gap="3" className={styles.wrapper}>
-                <Text size="1" className={styles.subheader}>Join a sketch</Text>
-                <TextField.Root placeholder="Enter your name" ref={userNameInput}>
-                    <TextField.Slot>
-                        <PersonIcon height="16" width="16" />
-                    </TextField.Slot>
-                </TextField.Root>
-                <TextField.Root placeholder="Enter sketch name" ref={sketchNameInput}>
-                    <TextField.Slot>
-                        <FileIcon height="16" width="16" />
-                    </TextField.Slot>
-                </TextField.Root>
-                <Button onClick={joinSketch}>Join</Button>
-                {error && <Text size="1" className={styles.error}>{error}</Text>}
-            </Flex>
-            <Button variant="surface" onClick={onCreateSketch}>Create a new sketch</Button>
-        </Flex>
-
         <div className={styles.sketchListWrapper}>
-            <Text size="1" className={styles.subheader}>Unsaved sketches</Text>
+            <Text size="1" className={styles.subheader}>Sketches</Text>
             <div className={styles.sketchList}>
-                { !currentSketch.fileName &&
-                    <div className={styles.sketchItem} data-active={!currentSketch.fileName}>
-                        <Text size="1">[Unsaved sketch]</Text>
-                    </div>
-                }
                 {sketchList
-                    .filter(fileName => {
-                        return fileName.indexOf('sketch_') === 0;
-                    })
                     .map((fileName) => {
                         return <div
                             className={styles.sketchItem}
@@ -124,28 +117,23 @@ const Sketches = () => {
                             key={fileName}
                             onClick={(e) => onGetSketchFile(fileName)}
                         >
-                            <Text size="1">{formatUnsavedFileName(fileName)}</Text>
-                        </div>
-                    })}
-            </div>
-            <Text size="1" className={styles.subheader}>Saved sketches</Text>
-            <div className={styles.sketchList}>
-                {sketchList
-                    .filter(fileName => {
-                        return fileName.indexOf('sketch_') < 0;
-                    })
-                    .map((fileName) => {
-                        return <div
-                            className={styles.sketchItem}
-                            data-active={currentSketch.fileName === fileName}
-                            key={fileName}
-                            onClick={(e) => onGetSketchFile(fileName)}
-                        >
-                            <Text size="1">{fileName}</Text>
+                            <Flex align="center" gap="1">
+                                {formatUnsavedFileName(fileName)}
+                            </Flex>
                         </div>
                     })}
             </div>
         </div>
+        <Flex direction="column" gap="2">
+            <Flex direction="column" gap="3">
+                <Index
+                    trigger={<Button>Join a sketch</Button>}
+                    onClick={joinSketch}
+                />
+            </Flex>
+            <hr />
+            <Button variant="surface" onClick={onCreateSketch}>Create a new sketch</Button>
+        </Flex>
     </div>
 }
 
