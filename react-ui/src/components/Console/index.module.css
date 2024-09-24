@@ -13,10 +13,16 @@
     overflow: auto;
     box-shadow: var(--shadow-3);
     border-radius: var(--radius-3);
-    height: calc(35vh - 60px);
+    height: calc(25vh - 60px);
 }
 
 .output {
     padding: 5px;
     font-family: monospace;
+}
+
+.prompt {
+    font-size: 1em;
+    user-select: none;
+    opacity: 0.5;
 }

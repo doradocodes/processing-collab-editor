@@ -18,3 +18,11 @@ export const getSketchFile = async (folder) => {
     console.log('fileContent', fileContent);
     return fileContent;
 }
+
+export const renameSketch = async (oldName, newName) => {
+    try {
+        await window.electronAPI.renameSketch(oldName, newName);
+    } catch(error) {
+        console.error('Error renaming sketch:', error);
+    }
+}

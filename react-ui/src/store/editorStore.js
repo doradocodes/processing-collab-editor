@@ -1,6 +1,8 @@
 import { create } from 'zustand';
+import {devtools, redux} from 'zustand/middleware'
 
-export const useEditorStore = create((set) => ({
+
+export const useEditorStore = create(devtools((set) => ({
     currentSketch: {
         fileName: null,
         content: '',
@@ -10,4 +12,4 @@ export const useEditorStore = create((set) => ({
     isLoading: false,
     setCurrentSketch: (currentSketch) => set({ currentSketch }),
     setIsLoading: (isLoading) => set({ isLoading }),
-}));
+})));

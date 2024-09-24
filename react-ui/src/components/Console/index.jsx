@@ -23,6 +23,7 @@ const Console = ({ isDarkTheme = false }) => {
     return (
         <div className={styles.console} data-theme={isDarkTheme ? 'dark':'light'} ref={consoleRef}>
             <div className={styles.output}>
+                { output.length < 1 && <span className={styles.prompt}>Console</span> }
                 {output.map((line, index) => (
                     <div key={index}>{line}</div>
                 ))}

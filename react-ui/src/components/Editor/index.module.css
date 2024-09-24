@@ -9,7 +9,7 @@
     border-radius: var(--radius-3);
     box-shadow: var(--shadow-3);
 
-    height: calc(65vh - 60px);
+    height: calc(75vh - 50px);
     margin-bottom: var(--gap);
 }
 

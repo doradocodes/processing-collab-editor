@@ -10,7 +10,7 @@
     "dev": "concurrently \"npm run react-dev\" \"npm run electron-dev\"",
     "react-dev": "cd react-ui && npm run dev",
     "electron-dev": "wait-on tcp:5173 && ELECTRON_START_URL=http://localhost:5173/ electron .",
-    "build:electron": "electron-builder"
+    "build:electron": "electron-builder --icon ./assets/Processing-logo.icns"
   },
   "build": {
     "appId": "com.doradocodes.pce",
@@ -61,6 +61,7 @@
     "wait-on": "^7.2.0"
   },
   "dependencies": {
+    "electron-store": "^10.0.0",
     "os": "^0.1.2"
   }
 }

@@ -1,16 +1,14 @@
 import {useEditorStore} from "../../store/editorStore.js";
 import styles from './index.module.css';
 import {updateSketch} from "../../utils/localStorage.js";
+import {Button, IconButton} from "@radix-ui/themes";
+import {PlayIcon} from "@radix-ui/react-icons";
 
 const PlayButton = () => {
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
-    // const isLoading = useEditorStore(state => state.isLoading);
-    // const setIsLoading = useEditorStore(state => state.setIsLoading);
 
     const onClick = async () => {
-        // setIsLoading(true);
-
         let fileName = currentSketch.fileName;
         let folderPath = '';
         if (!currentSketch.fileName) {
@@ -25,17 +23,17 @@ const PlayButton = () => {
 
         }
 
-        // console.log('Running sketch:', folderPath);
         window.electronAPI.runProcessing(folderPath);
     };
 
     return (
-        <button
-            className={styles.playButton}
-            // data-is-loading={isLoading}
-            // disabled={isLoading}
+        <IconButton
+            size="3"
             onClick={onClick}
-        />
+            radius="full"
+        >
+            <PlayIcon width="24" height="24"/>
+        </IconButton>
     );
 }
 

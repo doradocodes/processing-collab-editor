@@ -4,11 +4,9 @@ import {useEditorStore} from "../../store/editorStore.js";
 import {getSketchFile, getSketchFolders, updateSketch} from "../../utils/localStorage.js";
 import {Button, Card, Flex, Heading, Separator, Text, TextField} from "@radix-ui/themes";
 import {FaceIcon, FileIcon, GlobeIcon, PersonIcon, Share1Icon} from "@radix-ui/react-icons";
-import Index from "../JoinCollaborativeSketchDialog/index.jsx";
+import JoinCollaborativeSketchDialog from "../JoinCollaborativeSketchDialog/index.jsx";
 
 const Sketches = () => {
-    const sketchNameInput = createRef();
-    const userNameInput = createRef();
     const [sketchList, setSketchList] = useState([]);
 
     const currentSketch = useEditorStore(state => state.currentSketch);
@@ -64,29 +62,6 @@ const Sketches = () => {
         });
     }
 
-    const joinSketch = async () => {
-        const fileName = sketchNameInput.current.value;
-        if (!fileName) {
-            return;
-        }
-        console.log('username:', userNameInput.current.value)
-        console.log('Joining sketch:', fileName);
-
-        // create new local sketch -> mabye only after host disconnects?
-        const folderPath = await updateSketch(`collab_${fileName}`, '');
-
-        setCurrentSketch({
-            fileName,
-            content: '',
-            userName: userNameInput.current.value,
-            isCollab: true,
-            isHost: false,
-        });
-
-        const folders = await getSketchFolders();
-        setSketchList(folders);
-    };
-
     const formatUnsavedFileName = (fileName) => {
         if (fileName.indexOf('sketch_') === 0) {
             const timestamp = fileName.slice(fileName.lastIndexOf('_') + 1);
@@ -110,14 +85,14 @@ const Sketches = () => {
             <Text size="1" className={styles.subheader}>Sketches</Text>
             <div className={styles.sketchList}>
                 {sketchList
-                    .map((fileName) => {
+                    .map((fileName, i) => {
                         return <div
                             className={styles.sketchItem}
                             data-active={currentSketch.fileName === fileName}
-                            key={fileName}
+                            key={`${fileName}-${i}`}
                             onClick={(e) => onGetSketchFile(fileName)}
                         >
-                            <Flex align="center" gap="1">
+                            <Flex align="center" gap="1" key={i}>
                                 {formatUnsavedFileName(fileName)}
                             </Flex>
                         </div>
@@ -126,9 +101,13 @@ const Sketches = () => {
         </div>
         <Flex direction="column" gap="2">
             <Flex direction="column" gap="3">
-                <Index
+                <JoinCollaborativeSketchDialog
                     trigger={<Button>Join a sketch</Button>}
-                    onClick={joinSketch}
+                    // onClick={joinSketch}
+                    onSubmit={async () => {
+                        const folders = await getSketchFolders();
+                        setSketchList(folders);
+                    }}
                 />
             </Flex>
             <hr />

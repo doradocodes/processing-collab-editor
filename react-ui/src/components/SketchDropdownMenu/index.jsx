@@ -1,16 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import {
-    HamburgerMenuIcon,
-    DotFilledIcon,
-    CheckIcon,
-    ChevronRightIcon, Pencil1Icon, Share1Icon,
+    Share1Icon,
 } from '@radix-ui/react-icons';
 import styles from './index.module.css';
 import {updateSketch} from "../../utils/localStorage.js";
 import {useEditorStore} from "../../store/editorStore.js";
+import RenameSketchDialog from "../RenameSketchDialog/index.jsx";
 
-const DropdownMenuDemo = ({ trigger }) => {
+const SketchDropdownMenu = ({ trigger, onRename }) => {
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
@@ -54,7 +52,13 @@ const DropdownMenuDemo = ({ trigger }) => {
                     <DropdownMenu.Item className={styles.Item} onClick={onSave}>
                         Save <div className={styles.RightSlot}>⌘+S</div>
                     </DropdownMenu.Item>
-                    <DropdownMenu.Item className={styles.Item}>
+                    <DropdownMenu.Item
+                        className={styles.Item}
+                        onClick={(e) => {
+                            console.log('Rename clicked', e)
+                            onRename()
+                        }}
+                    >
                         Rename
                     </DropdownMenu.Item>
 
@@ -76,4 +80,4 @@ const DropdownMenuDemo = ({ trigger }) => {
     );
 };
 
-export default DropdownMenuDemo;
+export default SketchDropdownMenu;
