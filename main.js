@@ -9,7 +9,7 @@ const os = require('os');
 const isPackaged = app.isPackaged;
 const processingJavaPath = isPackaged
     ? path.join(process.resourcesPath, 'tools', 'processing-java')
-    : 'processing-java';
+    : path.join(__dirname, 'tools', 'processing-java');
 
 const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing-Sketches');
 

@@ -1,6 +1,6 @@
 {
   "name": "Proccessing-Code-Editor",
-  "productName": "Processing Code Editor",
+  "productName": "Processing-Code-Editor",
   "version": "1.0.0",
   "description": "Collaborative code editor for Processing",
   "main": "main.js",
@@ -10,7 +10,7 @@
     "dev": "concurrently \"npm run react-dev\" \"npm run electron-dev\"",
     "react-dev": "cd react-ui && npm run dev",
     "electron-dev": "wait-on tcp:5173 && ELECTRON_START_URL=http://localhost:5173/ electron .",
-    "build:electron": "electron-builder --icon ./assets/Processing-logo.icns"
+    "build:electron": "electron-builder --mac"
   },
   "build": {
     "appId": "com.doradocodes.pce",
