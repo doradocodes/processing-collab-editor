@@ -6,7 +6,8 @@ export const getSketchFolders = async () => {
 
 export const updateSketch = async (fileName, content) => {
     try {
-        const folderPath = await window.electronAPI.createNewSketch(fileName, content);
+        const sanitizedFileName = fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        const folderPath = await window.electronAPI.createNewSketch(sanitizedFileName, content);
         return folderPath;
     } catch(error) {
         console.error('Error updating sketch:', error);
@@ -21,7 +22,8 @@ export const getSketchFile = async (folder) => {
 
 export const renameSketch = async (oldName, newName) => {
     try {
-        await window.electronAPI.renameSketch(oldName, newName);
+        const sanitizedFileName = newName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        await window.electronAPI.renameSketch(oldName, sanitizedFileName);
     } catch(error) {
         console.error('Error renaming sketch:', error);
     }

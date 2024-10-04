@@ -61,6 +61,10 @@ function Main({ isDarkMode, setIsDarkMode }) {
         setIsLeftPanelOpen(!isLeftPanelOpen);
     }
 
+    const formatName = (name) => {
+        return name.replaceAll('_', ' ');
+    }
+
     return <div className='App'>
         <div className={styles.grid} data-panel-open={isLeftPanelOpen}>
             <div className={styles.leftColumnHeader}>
@@ -85,7 +89,7 @@ function Main({ isDarkMode, setIsDarkMode }) {
                         </IconButton>
                     }
 
-                    <Heading as="h5">{currentSketch?.fileName || '[Untitled]'}</Heading>
+                    <Heading as="h5">{formatName(currentSketch?.fileName) || '[Untitled]'}</Heading>
 
                     <SketchDropdownMenu
                         onRename={onOpenRenameDialog}
