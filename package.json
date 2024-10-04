@@ -38,7 +38,8 @@
     },
     "linux": {
       "target": "AppImage"
-    }
+    },
+    "icon": "assets/Processing_2021_logo_512x512.png"
   },
   "repository": {
     "type": "git",
