@@ -9,9 +9,10 @@ const os = require('os');
 const isPackaged = app.isPackaged;
 const processingJavaPath = isPackaged
     ? path.join(process.resourcesPath, 'tools', 'processing-java')
-    : path.join(__dirname, 'tools', 'processing-java');
+    : 'processing-java';
 
-const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing-Sketches');
+// const documentsFolderPath = path.join(os.homedir(), 'Documents', 'processing_sketches');
+const documentsFolderPath = path.join(app.getPath('userData'), 'processing_sketches');
 
 if (!fs.existsSync(documentsFolderPath)) {
     fs.mkdirSync(documentsFolderPath, { recursive: true });
