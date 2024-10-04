@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import {
     Share1Icon,
 } from '@radix-ui/react-icons';
+import {ChevronDownIcon, DropdownMenu, IconButton} from "@radix-ui/themes";
 import styles from './index.module.css';
 import {updateSketch} from "../../utils/localStorage.js";
 import {useEditorStore} from "../../store/editorStore.js";
@@ -35,47 +35,44 @@ const SketchDropdownMenu = ({ trigger, onRename }) => {
 
     return (
         <DropdownMenu.Root>
-            <DropdownMenu.Trigger asChild>
-                {trigger}
+            <DropdownMenu.Trigger>
+                <IconButton variant="ghost" size="2" aria-label="Menu">
+                    <ChevronDownIcon/>
+                </IconButton>
             </DropdownMenu.Trigger>
 
-            <DropdownMenu.Portal
-                className="radix-themes light"
-                data-accent-color="indigo"
-                data-gray-color="slate"
-                data-has-background="true"
-                data-panel-background="translucent"
-                data-radius="medium"
-                data-scaling="100%"
-            >
-                <DropdownMenu.Content className={styles.Content} sideOffset={1}>
-                    <DropdownMenu.Item className={styles.Item} onClick={onSave}>
-                        Save <div className={styles.RightSlot}>⌘+S</div>
-                    </DropdownMenu.Item>
-                    <DropdownMenu.Item
-                        className={styles.Item}
-                        onClick={(e) => {
-                            console.log('Rename clicked', e)
-                            onRename()
-                        }}
-                    >
-                        Rename
-                    </DropdownMenu.Item>
+            <DropdownMenu.Content>
+                <DropdownMenu.Item onClick={onSave} shortcut="⌘ S">
+                    Save
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
+                    onClick={(e) => {
+                        console.log('Rename clicked', e)
+                        onRename()
+                    }}
+                >
+                    Rename
+                </DropdownMenu.Item>
 
-                    <DropdownMenu.Separator className={styles.Separator} />
+                <DropdownMenu.Separator />
 
-                    <DropdownMenu.CheckboxItem
-                        className={styles.CheckboxItem}
-                        checked={true}
-                        onClick={onCollabToggle}
-                    >
-                        <DropdownMenu.ItemIndicator className={styles.ItemIndicator}>
-                            <Share1Icon />
-                        </DropdownMenu.ItemIndicator>
-                        Collaborate
-                    </DropdownMenu.CheckboxItem>
-                </DropdownMenu.Content>
-            </DropdownMenu.Portal>
+                <DropdownMenu.Item
+                    onClick={onCollabToggle}
+                >
+                    Collaborate
+                </DropdownMenu.Item>
+
+                {/*<DropdownMenu.CheckboxItem*/}
+                {/*    className={styles.CheckboxItem}*/}
+                {/*    checked={true}*/}
+                {/*    onClick={onCollabToggle}*/}
+                {/*>*/}
+                {/*    <DropdownMenu.ItemIndicator>*/}
+                {/*        <Share1Icon />*/}
+                {/*    </DropdownMenu.ItemIndicator>*/}
+                {/*    Collaborate*/}
+                {/*</DropdownMenu.CheckboxItem>*/}
+            </DropdownMenu.Content>
         </DropdownMenu.Root>
     );
 };

@@ -49,14 +49,14 @@ const Editor = ({ sketchName, sketchContent, isCollab, isHost, userName, isDarkT
         window.addEventListener('keydown', handleKeyDown);
 
         // call save every minute
-        const interval = setInterval(() => {
-            onSave();
-        }, 60000);
+        // const interval = setInterval(() => {
+        //     onSave();
+        // }, 60000);
 
         // Cleanup the event listener on component unmount
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
-            clearInterval(interval);
+            // clearInterval(interval);
         };
     }, []);
 

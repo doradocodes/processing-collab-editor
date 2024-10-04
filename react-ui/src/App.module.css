@@ -1,5 +1,42 @@
+.grid {
+    display: grid;
+    grid-template-columns: max(300px, 20%) 1fr;
+    /*grid-template-columns: max(300px, 1fr) 2fr;*/
+    grid-template-rows: 40px 1fr;
+    column-gap: var(--gap);
+    row-gap: calc(var(--gap) / 2);
+    height: 100vh;
+    padding: var(--gap);
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.grid[data-panel-open="false"] {
+    grid-template-columns: 0px 1fr;
+    column-gap: 0;
+}
+
+.leftColumnHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+}
+
+.rightColumnHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.leftColumn {
+
+}
+
+.rightColumn {
+
+}
+
 .darkThemeButton {
-    position: absolute;
-    left: 0;
-    margin: var(--gap);
+    padding-left: 20px;
 }

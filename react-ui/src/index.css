@@ -4,7 +4,7 @@
 }
 
 :root, .light, .light-theme, .radix-themes {
-    --color-background: linear-gradient(45deg, #F1F2F4 0%, #d7d7d9 100%);
+    --color-background: linear-gradient(45deg, #F1F2F4 0%, #c5c5c5 100%);
 }
 
 .dark, .dark-theme, :is(.dark, .dark-theme) :where(.radix-themes:not(.light, .light-theme)) {
@@ -26,6 +26,10 @@ html, body {
 hr {
     color: var(--mauve-6);
     width: 100%;
+}
+
+button {
+    cursor: pointer !important;
 }
 
 /* Custom title bar styles */

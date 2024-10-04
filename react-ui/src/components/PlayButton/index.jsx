@@ -31,6 +31,7 @@ const PlayButton = () => {
             size="3"
             onClick={onClick}
             radius="full"
+            className={styles.playButton}
         >
             <PlayIcon width="24" height="24"/>
         </IconButton>

@@ -63,20 +63,20 @@ const Sketches = () => {
     }
 
     const formatUnsavedFileName = (fileName) => {
-        if (fileName.indexOf('sketch_') === 0) {
-            const timestamp = fileName.slice(fileName.lastIndexOf('_') + 1);
-            return <Text size="2" truncate={true}>Unsaved sketch - ${new Date(parseInt(timestamp)).toLocaleString()}</Text>;
-        }
-        if (fileName.indexOf('collab_') === 0) {
-            const formattedFileName = fileName.slice(fileName.indexOf('_') + 1);
-            return [
-                <Text size="2" truncate={true}>{formattedFileName}</Text>,
-                <Share1Icon
-                    height="16" width="16"
-                    color={currentSketch.isCollab && currentSketch.fileName === formattedFileName ? 'green' : 'black'}
-                />
-            ]
-        }
+        // if (fileName.indexOf('sketch_') === 0) {
+        //     const timestamp = fileName.slice(fileName.lastIndexOf('_') + 1);
+        //     return <Text size="2" truncate={true}>Unsaved sketch - ${new Date(parseInt(timestamp)).toLocaleString()}</Text>;
+        // }
+        // if (fileName.indexOf('collab_') === 0) {
+        //     const formattedFileName = fileName.slice(fileName.indexOf('_') + 1);
+        //     return [
+        //         <Text size="2" truncate={true}>{formattedFileName}</Text>,
+        //         <Share1Icon
+        //             height="16" width="16"
+        //             color={currentSketch.isCollab && currentSketch.fileName === formattedFileName ? 'green' : 'black'}
+        //         />
+        //     ]
+        // }
         return <Text size="2" truncate={true}>{fileName}</Text>;
     }
 
@@ -100,6 +100,8 @@ const Sketches = () => {
             </div>
         </div>
         <Flex direction="column" gap="2">
+            <Button variant="surface" onClick={onCreateSketch}>Create a new sketch</Button>
+            <hr/>
             <Flex direction="column" gap="3">
                 <JoinCollaborativeSketchDialog
                     trigger={<Button>Join a sketch</Button>}
@@ -110,8 +112,6 @@ const Sketches = () => {
                     }}
                 />
             </Flex>
-            <hr />
-            <Button variant="surface" onClick={onCreateSketch}>Create a new sketch</Button>
         </Flex>
     </div>
 }
