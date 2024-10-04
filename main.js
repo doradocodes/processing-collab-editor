@@ -1,4 +1,4 @@
-const { app, BrowserWindow, session, nativeImage } = require('electron')
+const { app, BrowserWindow, session, nativeImage, Menu} = require('electron')
 const path = require('node:path')
 const { exec } = require('child_process')
 const { ipcMain } = require('electron')
@@ -11,8 +11,8 @@ const processingJavaPath = isPackaged
     ? path.join(process.resourcesPath, 'tools', 'processing-java')
     : 'processing-java';
 
-// const documentsFolderPath = path.join(os.homedir(), 'Documents', 'processing_sketches');
-const documentsFolderPath = path.join(app.getPath('userData'), 'processing_sketches');
+const documentsFolderPath = path.join(os.homedir(), 'Documents', 'processing_sketches');
+// const documentsFolderPath = path.join(app.getPath('userData'), 'processing_sketches');
 
 if (!fs.existsSync(documentsFolderPath)) {
     fs.mkdirSync(documentsFolderPath, { recursive: true });
@@ -20,10 +20,13 @@ if (!fs.existsSync(documentsFolderPath)) {
 
 // const store = new Store();
 
+let mainWindow;
+let settingsWindow;
+
 const createWindow = () => {
     const appIcon = nativeImage.createFromPath(path.join(__dirname, 'Processing-logo.png'));
 
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         icon: appIcon,
@@ -58,6 +61,98 @@ const reduxDevToolsPath = path.join(
     os.homedir(),
     '/Library/Application Support/Google/Chrome/Default/Extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/3.2.6_0'
 );
+
+
+const isMac = process.platform === 'darwin'
+
+const template = [
+    {
+        label: app.name,  // This will appear as the app name on macOS
+        role: 'appMenu',  // Automatically adds default app menu items on macOS
+        submenu: [
+            {
+                label: 'About ' + app.name,  // Adds an About option
+                role: 'about'
+            },
+            { type: 'separator' },
+            {
+                label: 'Settings',
+                accelerator: 'CmdOrCtrl+,',  // Typical shortcut for settings
+                click: () => {
+                    openSettingsWindow();
+                }
+            },
+            { type: 'separator' },
+            {
+                role: 'quit'  // Adds a Quit option
+            }
+        ]
+    },
+    {
+        label: 'File',
+        submenu: [
+            // !isMac ? {
+            //     label: 'Settings',
+            //     accelerator: 'CmdOrCtrl+,',  // Shortcut for Settings
+            //     click: () => {
+            //         openSettingsWindow();
+            //     }
+            // } : {
+            //
+            // },
+            { label: 'Open', click: () => console.log('Open clicked') },
+            { label: 'Save', click: () => console.log('Save clicked') },
+            { type: 'separator' },
+            { label: 'Exit', role: 'quit' }
+        ]
+    },
+    {
+        label: 'Edit',
+        submenu: [
+            { label: 'Undo', role: 'undo' },
+            { label: 'Redo', role: 'redo' },
+            { type: 'separator' },
+            { label: 'Cut', role: 'cut' },
+            { label: 'Copy', role: 'copy' },
+            { label: 'Paste', role: 'paste' }
+        ]
+    },
+    {
+        label: 'View',
+        submenu: [
+            { role: 'reload' },
+            { role: 'toggledevtools' }
+        ]
+    }
+];
+
+const menu = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(menu);
+
+function openSettingsWindow() {
+    settingsWindow = new BrowserWindow({
+        width: 400,
+        height: 300,
+        parent: mainWindow, // Makes the settings window a child of the main window
+        modal: true, // Ensures focus is on the settings window
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: true,
+            contextIsolation: true,
+        }
+    });
+
+    // Load the settings content (your settings page)
+    settingsWindow.loadURL(process.env.ELECTRON_SETTINGS_URL); // or another URL for your settings page
+
+    // Handle when the window is closed
+    settingsWindow.on('closed', () => {
+        settingsWindow = null; // Dereference the window object when closed
+    });
+
+    // Show the settings window
+    settingsWindow.show();
+}
 
 app.whenReady().then(async () => {
     createWindow();
@@ -188,7 +283,7 @@ ipcMain.handle('run-processing', (event, folderPath) => {
     return new Promise(async (resolve, reject) => {
         console.log('Running Processing sketch:', folderPath);
 
-        const process = exec(`${processingJavaPath} --sketch=${folderPath} --run`);
+        const process = exec(`"${processingJavaPath}" --sketch="${folderPath}" --run`);
 
         process.stdout.on('data', (data) => {
             console.log('stdout:', data.toString());

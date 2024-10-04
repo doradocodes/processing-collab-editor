@@ -1,10 +1,10 @@
-import {Button, TextField, Text} from "@radix-ui/themes";
+import {Button, TextField, Text, Heading} from "@radix-ui/themes";
 import * as Label from '@radix-ui/react-label';
 
 function Settings() {
     return (
         <div>
-            <h1>Settings</h1>
+            <Heading>Settings</Heading>
             <div>
                 <span>Processing path</span>
                 <TextField.Root placeholder="Enter path"/>
