@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getSketchFile: (folderName) => ipcRenderer.invoke('get-sketch-file', folderName),
     createNewSketch: (folderPath, content) => ipcRenderer.invoke('create-new-sketch', folderPath, content),
     renameSketch: (oldName, newName) => ipcRenderer.invoke('rename-sketch', oldName, newName),
+    closeSettingsWindow: () => ipcRenderer.invoke('close-settings-window'),
 });
 
 // All the Node.js APIs are available in the preload process.

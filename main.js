@@ -304,3 +304,9 @@ ipcMain.handle('run-processing', (event, folderPath) => {
         });
     });
 });
+
+ipcMain.handle('close-settings-window', () => {
+    if (settingsWindow) {
+        settingsWindow.close();
+    }
+});
