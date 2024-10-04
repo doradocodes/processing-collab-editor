@@ -50,7 +50,8 @@ function App() {
         panelBackground="translucent"
         radius="medium"
     >
-        <RouterProvider router={router({ isDarkMode, setIsDarkMode })}/>
+        {/*<RouterProvider router={router({ isDarkMode, setIsDarkMode })} />*/}
+        <Main isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode}/>
     </Theme>
 }
 
