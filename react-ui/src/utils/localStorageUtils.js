@@ -1,4 +1,3 @@
-
 export const getSketchFolders = async () => {
     const folders = await window.electronAPI.getSketchFolders();
     return folders;

@@ -22,10 +22,9 @@ const Sketches = () => {
                         getSketchFile(lastSavedSketch)
                             .then(content => {
                                 setCurrentSketch({
+                                    ...currentSketch,
                                     fileName: lastSavedSketch,
                                     content,
-                                    isCollab: false,
-                                    isHost: false,
                                 });
                             });
                     }

@@ -7,7 +7,7 @@ import styles from './index.module.css';
 import {updateSketch} from "../../utils/localStorageUtils.js";
 import {useEditorStore} from "../../store/editorStore.js";
 import RenameSketchDialog from "../RenameSketchDialog/index.jsx";
-import {generateRoomName} from "../../utils/utils.js";
+import {generateroomID} from "../../utils/utils.js";
 
 const SketchDropdownMenu = ({ trigger, onRename }) => {
     const currentSketch = useEditorStore(state => state.currentSketch);
@@ -31,7 +31,7 @@ const SketchDropdownMenu = ({ trigger, onRename }) => {
             content: currentSketch.content,
             isCollab: true,
             isHost: true,
-            roomName: generateRoomName(),
+            roomID: generateroomID(),
         });
     };
 

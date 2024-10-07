@@ -36,6 +36,7 @@
     border-radius: var(--radius-3);
     font-weight: bold;
     box-shadow: var(--shadow-3);
+    border: 1px solid #eee;
 }
 
 .subheader {

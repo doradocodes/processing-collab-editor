@@ -1,11 +1,17 @@
 import React, {useState} from 'react';
 import {Button, Dialog, Flex, TextField, Text} from "@radix-ui/themes";
-import {sanitizeFileNameForFs} from "../../utils/utils.js";
+import {checkValidSketchName, sanitizeFileNameForFs} from "../../utils/utils.js";
 
 const RenameSketchDialog = ({onSave, isOpen = false, onClose}) => {
     const [name, setName] = useState("");
+    const [error, setError] = useState("");
 
     const onClick = () => {
+        const isValid = checkValidSketchName(name);
+        if (!isValid) {
+            setError('Invalid sketch name. The name should only contain letters, numbers, and underscores.');
+            return;
+        }
         const sanitizeName = sanitizeFileNameForFs(name);
         onSave(sanitizeName);
         onClose();
@@ -29,8 +35,10 @@ const RenameSketchDialog = ({onSave, isOpen = false, onClose}) => {
                     placeholder="Enter sketch name"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
+                    mb="1"
                 >
                 </TextField.Root>
+                {error && <Text as="div" size="1" color="red">{error}</Text>}
             </label>
 
             <Flex gap="3" mt="4" justify="end">

@@ -13,23 +13,24 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit }) => {
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
     const joinSketch = async (event) => {
-        const fileName = sketchNameInput.current.value;
-        if (!fileName) {
+        const roomID = sketchNameInput.current.value;
+        if (!roomID) {
             return;
         }
 
         const userName = userNameInput.current.value;
 
         console.log('username:', userName)
-        console.log('Joining sketch:', fileName);
+        console.log('Joining sketch:', roomID);
 
         // create new local sketch -> mabye only after host disconnects?
-        const folderPath = await updateSketch(`collab_${fileName}`, '');
+        const folderPath = await updateSketch(`collab_${roomID}`, '');
 
         setCurrentSketch({
-            fileName: `collab_${fileName}`,
+            fileName: `collab_${roomID}`,
             content: '',
             userName,
+            roomID,
             isCollab: true,
             isHost: false,
         });

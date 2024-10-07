@@ -1,4 +1,4 @@
-export function generateRoomName() {
+export function generateroomID() {
     const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     for (let i = 0; i < 6; i++) {
@@ -20,4 +20,8 @@ export function formatSketchName(name) {
         return `Untitled sketch (${formattedTimestamp})`;
     }
     return name.replaceAll('_', ' ');
+}
+
+export function checkValidSketchName(name) {
+    return name.match(/^[a-z0-9_]+$/i);
 }

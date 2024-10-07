@@ -31,7 +31,7 @@ const websocketServer = 'ws://pce-server.glitch.me/1234';
 
 let provider;
 
-const Editor = ({ sketchName, sketchContent, isCollab, roomName, isHost, userName, isDarkTheme, onChange, onSave }) => {
+const Editor = ({ sketchName, sketchContent, isCollab, roomID, isHost, userName, isDarkTheme, onChange, onSave }) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
 
@@ -46,14 +46,14 @@ const Editor = ({ sketchName, sketchContent, isCollab, roomName, isHost, userNam
         window.addEventListener('keydown', handleKeyDown);
 
         // call save every minute
-        // const interval = setInterval(() => {
-        //     onSave();
-        // }, 60000);
+        const interval = setInterval(() => {
+            onSave();
+        }, 60000);
 
         // Cleanup the event listener on component unmount
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
-            // clearInterval(interval);
+            clearInterval(interval);
         };
     }, []);
 
@@ -79,10 +79,10 @@ const Editor = ({ sketchName, sketchContent, isCollab, roomName, isHost, userNam
             })
         ];
 
-        if (isCollab && roomName) {
+        if (isCollab && roomID) {
             const ydoc = new Y.Doc()
-            provider = new WebsocketProvider(websocketServer, roomName, ydoc);
-            console.log('Connecting to', websocketServer, roomName);
+            provider = new WebsocketProvider(websocketServer, roomID, ydoc);
+            console.log('Connecting to', websocketServer, roomID);
 
             // Listen for messages (this is where you get the initial document state)
             provider.onmessage = (event) => {

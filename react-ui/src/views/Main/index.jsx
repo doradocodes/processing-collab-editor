@@ -63,7 +63,7 @@ function Main({ isDarkMode, setIsDarkMode }) {
     }
 
     const copyIDToClipboard = () => {
-        navigator.clipboard.writeText(currentSketch.roomName);
+        navigator.clipboard.writeText(currentSketch.roomID);
     }
 
     return <div className='App'>
@@ -103,12 +103,12 @@ function Main({ isDarkMode, setIsDarkMode }) {
                         onClose={() => setIsRenameDialogOpen(false)}
                     />
 
-                    {currentSketch.isCollab && currentSketch.roomName &&
+                    {currentSketch.isCollab && currentSketch.roomID &&
                         <Tooltip content="Copy ID" size="1">
                             <Button
                                 variant="soft" size="1" color="green"
                                 onClick={copyIDToClipboard}
-                            >{currentSketch.roomName}</Button>
+                            >{currentSketch.roomID}</Button>
                         </Tooltip>
                     }
 
@@ -127,7 +127,7 @@ function Main({ isDarkMode, setIsDarkMode }) {
                     isDarkTheme={isDarkMode}
                     sketchName={currentSketch.fileName}
                     sketchContent={currentSketch.content}
-                    roomName={currentSketch.roomName}
+                    roomID={currentSketch.roomID}
                     isCollab={currentSketch.isCollab}
                     isHost={currentSketch.isHost}
                     userName={currentSketch.userName}
