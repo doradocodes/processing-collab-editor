@@ -8,6 +8,7 @@ export const useEditorStore = create(devtools((set) => ({
         content: '',
         isCollab: false,
         isHost: false,
+        roomName: null,
     },
     isLoading: false,
     setCurrentSketch: (currentSketch) => set({ currentSketch }),

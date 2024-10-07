@@ -13,7 +13,7 @@ import {java} from "@codemirror/lang-java";
 
 import styles from './index.module.css';
 import {materialLight, materialDark} from "@uiw/codemirror-theme-material";
-import {updateSketch} from "../../utils/localStorage.js";
+import {updateSketch} from "../../utils/localStorageUtils.js";
 
 const userColors = [
     { color: '#30bced', light: '#30bced33' },
@@ -26,22 +26,19 @@ const userColors = [
     { color: '#1be7ff', light: '#1be7ff33' }
 ]
 
-// const websocketServer = 'ws://pce-server.glitch.me/1234';
-const websocketServer = 'ws://localhost:1234';
+const websocketServer = 'ws://pce-server.glitch.me/1234';
+// const websocketServer = 'ws://localhost:1234';
 
 let provider;
 
-const Editor = ({ sketchName, sketchContent, isCollab, isHost, userName, isDarkTheme, onChange, onSave }) => {
+const Editor = ({ sketchName, sketchContent, isCollab, roomName, isHost, userName, isDarkTheme, onChange, onSave }) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
-            // Check for CTRL + S (Windows/Linux) or CMD + S (macOS)
             if ((event.ctrlKey || event.metaKey) && event.key === 's') {
-                event.preventDefault(); // Prevent the default Save action
-                console.log('Save action triggered!');
-                // Add your save functionality here
+                event.preventDefault();
                 onSave();
             }
         };
@@ -82,15 +79,10 @@ const Editor = ({ sketchName, sketchContent, isCollab, isHost, userName, isDarkT
             })
         ];
 
-        if (isCollab) {
-            // let roomName = sketchName;
-            // if (sketchName.indexOf('collab_') >= 0) {
-            //     roomName = sketchName.replace('collab_', '');
-            // }
-
+        if (isCollab && roomName) {
             const ydoc = new Y.Doc()
-            provider = new WebsocketProvider(websocketServer, sketchName, ydoc);
-            console.log('Connecting to', websocketServer, sketchName);
+            provider = new WebsocketProvider(websocketServer, roomName, ydoc);
+            console.log('Connecting to', websocketServer, roomName);
 
             // Listen for messages (this is where you get the initial document state)
             provider.onmessage = (event) => {
@@ -162,3 +154,4 @@ const Editor = ({ sketchName, sketchContent, isCollab, isHost, userName, isDarkT
 };
 
 export default Editor;
+

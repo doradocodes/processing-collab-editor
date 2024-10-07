@@ -4,9 +4,10 @@ import {
 } from '@radix-ui/react-icons';
 import {ChevronDownIcon, DropdownMenu, IconButton} from "@radix-ui/themes";
 import styles from './index.module.css';
-import {updateSketch} from "../../utils/localStorage.js";
+import {updateSketch} from "../../utils/localStorageUtils.js";
 import {useEditorStore} from "../../store/editorStore.js";
 import RenameSketchDialog from "../RenameSketchDialog/index.jsx";
+import {generateRoomName} from "../../utils/utils.js";
 
 const SketchDropdownMenu = ({ trigger, onRename }) => {
     const currentSketch = useEditorStore(state => state.currentSketch);
@@ -30,6 +31,7 @@ const SketchDropdownMenu = ({ trigger, onRename }) => {
             content: currentSketch.content,
             isCollab: true,
             isHost: true,
+            roomName: generateRoomName(),
         });
     };
 
@@ -42,14 +44,17 @@ const SketchDropdownMenu = ({ trigger, onRename }) => {
             </DropdownMenu.Trigger>
 
             <DropdownMenu.Content>
-                <DropdownMenu.Item onClick={onSave} shortcut="⌘ S">
+                <DropdownMenu.Item
+                    onClick={onSave}
+                    shortcut="⌘ S / Ctrl-S"
+                >
                     Save
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
                     onClick={(e) => {
-                        console.log('Rename clicked', e)
                         onRename()
                     }}
+                    shortcut="⌘ R / Ctrl-R"
                 >
                     Rename
                 </DropdownMenu.Item>

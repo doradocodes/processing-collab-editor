@@ -1,10 +1,11 @@
 import React, {createRef, useEffect, useState} from "react";
 import styles from "./index.module.css";
 import {useEditorStore} from "../../store/editorStore.js";
-import {getSketchFile, getSketchFolders, updateSketch} from "../../utils/localStorage.js";
+import {getSketchFile, getSketchFolders, updateSketch} from "../../utils/localStorageUtils.js";
 import {Button, Card, Flex, Heading, Separator, Text, TextField} from "@radix-ui/themes";
 import {FaceIcon, FileIcon, GlobeIcon, PersonIcon, Share1Icon} from "@radix-ui/react-icons";
 import JoinCollaborativeSketchDialog from "../JoinCollaborativeSketchDialog/index.jsx";
+import {formatSketchName} from "../../utils/utils.js";
 
 const Sketches = () => {
     const [sketchList, setSketchList] = useState([]);
@@ -62,24 +63,6 @@ const Sketches = () => {
         });
     }
 
-    const formatUnsavedFileName = (fileName) => {
-        // if (fileName.indexOf('sketch_') === 0) {
-        //     const timestamp = fileName.slice(fileName.lastIndexOf('_') + 1);
-        //     return <Text size="2" truncate={true}>Unsaved sketch - ${new Date(parseInt(timestamp)).toLocaleString()}</Text>;
-        // }
-        // if (fileName.indexOf('collab_') === 0) {
-        //     const formattedFileName = fileName.slice(fileName.indexOf('_') + 1);
-        //     return [
-        //         <Text size="2" truncate={true}>{formattedFileName}</Text>,
-        //         <Share1Icon
-        //             height="16" width="16"
-        //             color={currentSketch.isCollab && currentSketch.fileName === formattedFileName ? 'green' : 'black'}
-        //         />
-        //     ]
-        // }
-        return <Text size="2" truncate={true}>{fileName}</Text>;
-    }
-
     return <div className={styles.sketches}>
         <div className={styles.sketchListWrapper}>
             <Text size="1" className={styles.subheader}>Sketches</Text>
@@ -93,7 +76,7 @@ const Sketches = () => {
                             onClick={(e) => onGetSketchFile(fileName)}
                         >
                             <Flex align="center" gap="1" key={i}>
-                                {formatUnsavedFileName(fileName)}
+                                <Text size="2" truncate={true}>{formatSketchName(fileName)}</Text>
                             </Flex>
                         </div>
                     })}
@@ -104,8 +87,7 @@ const Sketches = () => {
             <hr/>
             <Flex direction="column" gap="3">
                 <JoinCollaborativeSketchDialog
-                    trigger={<Button>Join a sketch</Button>}
-                    // onClick={joinSketch}
+                    trigger={<Button>Join a collaborative sketch</Button>}
                     onSubmit={async () => {
                         const folders = await getSketchFolders();
                         setSketchList(folders);

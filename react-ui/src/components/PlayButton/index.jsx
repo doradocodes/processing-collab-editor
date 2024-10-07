@@ -1,6 +1,6 @@
 import {useEditorStore} from "../../store/editorStore.js";
 import styles from './index.module.css';
-import {updateSketch} from "../../utils/localStorage.js";
+import {updateSketch} from "../../utils/localStorageUtils.js";
 import {Button, IconButton} from "@radix-ui/themes";
 import {PlayIcon} from "@radix-ui/react-icons";
 

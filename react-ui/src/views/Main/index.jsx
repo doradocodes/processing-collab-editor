@@ -1,7 +1,7 @@
 import {useEditorStore} from "../../store/editorStore.js";
 import React, {useEffect, useRef, useState} from "react";
-import {renameSketch, updateSketch} from "../../utils/localStorage.js";
-import {Flex, Heading, IconButton} from "@radix-ui/themes";
+import {renameSketch, updateSketch} from "../../utils/localStorageUtils.js";
+import {Button, Flex, Heading, IconButton, Text, Tooltip} from "@radix-ui/themes";
 import {MoonIcon, Share1Icon, ViewVerticalIcon} from "@radix-ui/react-icons";
 import styles from "../../App.module.css";
 import SketchDropdownMenu from "../../components/SketchDropdownMenu/index.jsx";
@@ -10,6 +10,7 @@ import PlayButton from "../../components/PlayButton/index.jsx";
 import Sketches from "../../components/Sketches/index.jsx";
 import Editor from "../../components/Editor/index.jsx";
 import Console from "../../components/Console/index.jsx";
+import {formatSketchName} from "../../utils/utils.js";
 
 function Main({ isDarkMode, setIsDarkMode }) {
     const currentSketch = useEditorStore(state => state.currentSketch);
@@ -61,8 +62,8 @@ function Main({ isDarkMode, setIsDarkMode }) {
         setIsLeftPanelOpen(!isLeftPanelOpen);
     }
 
-    const formatName = (name) => {
-        return name.replaceAll('_', ' ');
+    const copyIDToClipboard = () => {
+        navigator.clipboard.writeText(currentSketch.roomName);
     }
 
     return <div className='App'>
@@ -89,7 +90,7 @@ function Main({ isDarkMode, setIsDarkMode }) {
                         </IconButton>
                     }
 
-                    <Heading as="h5">{formatName(currentSketch?.fileName) || '[Untitled]'}</Heading>
+                    <Heading as="h5">{formatSketchName(currentSketch?.fileName)}</Heading>
 
                     <SketchDropdownMenu
                         onRename={onOpenRenameDialog}
@@ -102,7 +103,14 @@ function Main({ isDarkMode, setIsDarkMode }) {
                         onClose={() => setIsRenameDialogOpen(false)}
                     />
 
-                    {currentSketch.isCollab && <Share1Icon color={'green'}/>}
+                    {currentSketch.isCollab && currentSketch.roomName &&
+                        <Tooltip content="Copy ID" size="1">
+                            <Button
+                                variant="soft" size="1" color="green"
+                                onClick={copyIDToClipboard}
+                            >{currentSketch.roomName}</Button>
+                        </Tooltip>
+                    }
 
                     {hasSaved && <span>Saved!</span>}
                 </Flex>
@@ -119,6 +127,7 @@ function Main({ isDarkMode, setIsDarkMode }) {
                     isDarkTheme={isDarkMode}
                     sketchName={currentSketch.fileName}
                     sketchContent={currentSketch.content}
+                    roomName={currentSketch.roomName}
                     isCollab={currentSketch.isCollab}
                     isHost={currentSketch.isHost}
                     userName={currentSketch.userName}

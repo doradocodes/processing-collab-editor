@@ -2,7 +2,7 @@ import React, {createRef} from 'react';
 import {Cross2Icon, FileIcon, PersonIcon} from '@radix-ui/react-icons';
 import styles from './index.module.css';
 import {Button, Flex, Text, TextField, Dialog} from "@radix-ui/themes";
-import {getSketchFolders, updateSketch} from "../../utils/localStorage.js";
+import {getSketchFolders, updateSketch} from "../../utils/localStorageUtils.js";
 import {useEditorStore} from "../../store/editorStore.js";
 
 const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit }) => {
@@ -34,7 +34,6 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit }) => {
             isHost: false,
         });
 
-
         onSubmit();
     };
 
@@ -42,23 +41,40 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit }) => {
         <Dialog.Trigger asChild onClick={onClick}>
             {trigger}
         </Dialog.Trigger>
-        <Dialog.Content>
+        <Dialog.Content maxWidth="400px">
             <div>
                 <Dialog.Title>
                     Join a sketch
                 </Dialog.Title>
 
+                <Dialog.Description size="1" mb="4" color="gray">
+                    Join a collaborative sketch by entering the room ID and your name.
+                </Dialog.Description>
+
                 <Flex gap="3" direction="column">
-                    <TextField.Root placeholder="Enter your name" ref={userNameInput}>
-                        <TextField.Slot>
-                            <PersonIcon height="16" width="16"/>
-                        </TextField.Slot>
-                    </TextField.Root>
-                    <TextField.Root placeholder="Enter sketch name" ref={sketchNameInput}>
-                        <TextField.Slot>
-                            <FileIcon height="16" width="16"/>
-                        </TextField.Slot>
-                    </TextField.Root>
+                    <label>
+                        <Text as="div" size="2" mb="1" weight="bold">
+                            Your name
+                        </Text>
+                        <TextField.Root placeholder="Enter your name" ref={userNameInput}>
+                            <TextField.Slot>
+                                <PersonIcon height="16" width="16"/>
+                            </TextField.Slot>
+                        </TextField.Root>
+                    </label>
+
+                    <label>
+                        <Text as="div" size="2" mb="1" weight="bold">
+                            Room ID
+                        </Text>
+                        <TextField.Root placeholder="Enter room ID" ref={sketchNameInput}>
+                            <TextField.Slot>
+                                <FileIcon height="16" width="16"/>
+                            </TextField.Slot>
+                        </TextField.Root>
+                    </label>
+
+
                 </Flex>
 
                 {/*{error && <Text size="1" className={styles.error}>{error}</Text>}*/}
