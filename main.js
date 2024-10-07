@@ -15,6 +15,7 @@ const processingJavaPath = isPackaged
     : path.join(__dirname, 'tools', 'processing-java');
 const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
 // const documentsFolderPath = path.join(app.getPath('userData'), 'processing_sketches');
+
 const reactDevToolsPath = path.join(
     os.homedir(),
     '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/5.3.1_17');

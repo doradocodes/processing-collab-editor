@@ -3,6 +3,21 @@
 ## Description
 Prototype for a new collaborative code editor for Processing (2024 pr05).
 
+## Installation
+1. Clone the repository
+2. Run `npm install` to install dependencies
+3. Run `npm run start` to start the Electron app
+4. Create a .env file with your credentials by copying the .env.example file and filling in the necessary information
+
+## Scripts
+- `npm run start` - Start the Electron app
+- `npm run build` - Build the React app
+- `npm run package` - Package the Electron app
+- `npm run make` - Uses Electron Forge to package the app into /out folder
+- `npm run sign_processing` - Signs the Processing library for notarization (macOS builds only). You must run this before packaging the app for the first time.
+- 
+
+
 ## Weekly Reports
 
 ### Week 9 (September 2, 2024 - September 8, 2024)
