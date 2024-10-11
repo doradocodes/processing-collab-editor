@@ -1,20 +1,20 @@
-const { app, BrowserWindow, session, nativeImage, Menu} = require('electron')
+const { app, BrowserWindow, session, nativeImage, Menu, globalShortcut} = require('electron')
 const path = require('node:path')
 const { exec } = require('child_process')
 const { ipcMain } = require('electron')
 const fs = require('node:fs');
 const os = require('os');
-// const Store = require('electron-store');
 
 let mainWindow;
 let settingsWindow;
-const isMac = process.platform === 'darwin'
+let theme = 'light';
+const isMac = process.platform === 'darwin';
 const isPackaged = app.isPackaged;
 const processingJavaPath = isPackaged
     ? path.join(process.resourcesPath, 'tools', 'processing-java')
     : path.join(__dirname, 'tools', 'processing-java');
-const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
-// const documentsFolderPath = path.join(app.getPath('userData'), 'processing_sketches');
+// const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
+const documentsFolderPath = path.join(app.getPath('userData'), 'processing_sketches');
 
 const reactDevToolsPath = path.join(
     os.homedir(),
@@ -32,14 +32,6 @@ const template = [
             {
                 label: 'About ' + app.name,  // Adds an About option
                 role: 'about'
-            },
-            { type: 'separator' },
-            {
-                label: 'Settings',
-                accelerator: 'CmdOrCtrl+,',  // Typical shortcut for settings
-                click: () => {
-                    openSettingsWindow();
-                }
             },
             { type: 'separator' },
             {
@@ -79,6 +71,15 @@ const template = [
     {
         label: 'View',
         submenu: [
+            {
+                label: 'Enable Dark Mode',
+                type: 'checkbox',
+                checked: theme === 'dark',
+                click: () => {
+                    theme = theme === 'dark' ? 'light' : 'dark';
+                    mainWindow.webContents.send('set-theme', theme);
+                },
+            },
             { role: 'reload' },
             { role: 'toggledevtools' }
         ]
@@ -159,6 +160,7 @@ function openSettingsWindow() {
 app.whenReady().then(async () => {
     createSketchFolder();
     createMainWindow();
+    // createMainWindow();
 
     // React DevTools extension
     await session.defaultSession.loadExtension(reactDevToolsPath);
@@ -169,6 +171,29 @@ app.whenReady().then(async () => {
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
+});
+
+app.on('browser-window-focus', function () {
+    globalShortcut.register("CommandOrControl+R", () => {
+        console.log("CommandOrControl+R is pressed: Shortcut Disabled");
+    });
+    globalShortcut.register("F5", () => {
+        console.log("F5 is pressed: Shortcut Disabled");
+    });
+});
+
+app.on('browser-window-blur', function () {
+    globalShortcut.unregister('CommandOrControl+R');
+    globalShortcut.unregister('F5');
+});
+
+app.setAboutPanelOptions({
+    iconPath: '/assets/Processing-logo.png',
+    applicationName: "Processing Collaborative Editor",
+    applicationVersion: "App Version",
+    version: "1.0",
+    credits: "Dora Do",
+    copyright: "Copyright"
 });
 
 /* ICP Handlers */

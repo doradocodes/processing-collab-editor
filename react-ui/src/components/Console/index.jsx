@@ -2,7 +2,7 @@ import styles from "./index.module.css";
 import {useEffect, useRef, useState} from "react";
 import {useEditorStore} from "../../store/editorStore.js";
 
-const Console = ({ isDarkTheme = false }) => {
+const Console = ({ theme = 'light' }) => {
     const consoleRef = useRef(null);
     const [output, setOutput] = useState([]);
     // const setIsLoading = useEditorStore(state => state.setIsLoading);
@@ -21,7 +21,7 @@ const Console = ({ isDarkTheme = false }) => {
     }, [output]);
 
     return (
-        <div className={styles.console} data-theme={isDarkTheme ? 'dark':'light'} ref={consoleRef}>
+        <div className={styles.console} data-theme={theme} ref={consoleRef}>
             <div className={styles.output}>
                 { output.length < 1 && <span className={styles.prompt}>Console</span> }
                 {output.map((line, index) => (

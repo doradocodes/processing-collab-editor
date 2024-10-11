@@ -21,37 +21,26 @@ const router = ({ isDarkMode, setIsDarkMode }) => createBrowserRouter([
 ]);
 
 function App() {
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [theme, setTheme] = useState('light');
 
-    // useEffect(() => {
-    //     function onConnect() {
-    //         console.log('Connected to websocket server');
-    //     }
-    //
-    //     function onDisconnect() {
-    //         console.log('Disconnected from websocket server');
-    //     }
-    //
-    //     socket.on('connect', onConnect);
-    //     socket.on('disconnect', onDisconnect);
-    //     socket.on('all-rooms', (rooms) => {
-    //         console.log('Rooms:', rooms);
-    //     });
-    //
-    //     return () => {
-    //         socket.off('connect', onConnect);
-    //         socket.off('disconnect', onDisconnect);
-    //     };
-    // }, []);
+
+
+    useEffect(() => {
+        // Listening to the 'set-theme' event from Electron
+        window.electronAPI.onSetTheme((newTheme) => {
+            console.log('Theme:', newTheme)
+            setTheme(newTheme);
+        });
+    }, []);
 
     return <Theme
-        appearance={isDarkMode ? 'dark' : 'light'}
+        appearance={theme}
         accentColor="indigo"
         panelBackground="translucent"
         radius="medium"
     >
         {/*<RouterProvider router={router({ isDarkMode, setIsDarkMode })} />*/}
-        <Main isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode}/>
+        <Main theme={theme} />
     </Theme>
 }
 

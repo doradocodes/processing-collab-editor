@@ -31,7 +31,7 @@ const websocketServer = 'ws://pce-server.glitch.me/1234';
 
 let provider;
 
-const Editor = ({ sketchName, sketchContent, isCollab, roomID, isHost, userName, isDarkTheme, onChange, onSave }) => {
+const Editor = ({ sketchName, sketchContent, isCollab, roomID, isHost, userName, theme, onChange, onSave }) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
 
@@ -60,7 +60,7 @@ const Editor = ({ sketchName, sketchContent, isCollab, roomID, isHost, userName,
     const getExtensions = () => {
         const extensions = [
             basicSetup,
-            isDarkTheme ? materialDark : materialLight,
+            theme === 'dark' ? materialDark : materialLight,
             EditorView.theme({
                 ".cm-content": {
                     fontSize: "0.8em" // Set your desired font size here
@@ -146,9 +146,8 @@ const Editor = ({ sketchName, sketchContent, isCollab, roomID, isHost, userName,
     }
 
     useEffect(() => {
-        console.log('Editor mounted');
         renderEditor();
-    }, [sketchName, isCollab, isDarkTheme]);
+    }, [sketchName, isCollab, theme]);
 
     return <div className={styles.editor} ref={editorRef}/>
 };

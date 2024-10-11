@@ -12,7 +12,7 @@ import Editor from "../../components/Editor/index.jsx";
 import Console from "../../components/Console/index.jsx";
 import {formatSketchName} from "../../utils/utils.js";
 
-function Main({ isDarkMode, setIsDarkMode }) {
+function Main({ theme }) {
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
@@ -40,10 +40,10 @@ function Main({ isDarkMode, setIsDarkMode }) {
     //     };
     // }, []);
 
-    const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
-        // store.set('theme', isDarkMode ? 'dark' : 'light');
-    }
+    // const toggleTheme = () => {
+    //     setIsDarkMode(!isDarkMode);
+    //     // store.set('theme', isDarkMode ? 'dark' : 'light');
+    // }
 
     const onOpenRenameDialog = () => {
         setIsRenameDialogOpen(true);
@@ -75,9 +75,7 @@ function Main({ isDarkMode, setIsDarkMode }) {
                             <ViewVerticalIcon/>
                         </IconButton>,
                         <img className="logo" src="./Processing-logo.png" alt="logo"/>,
-                        <IconButton onClick={toggleTheme} variant="ghost">
-                            <MoonIcon/>
-                        </IconButton>
+                        <div></div>
                     ]
                 }
             </div>
@@ -124,7 +122,7 @@ function Main({ isDarkMode, setIsDarkMode }) {
 
             <div className={styles.rightColumn}>
                 <Editor
-                    isDarkTheme={isDarkMode}
+                    theme={theme}
                     sketchName={currentSketch.fileName}
                     sketchContent={currentSketch.content}
                     roomID={currentSketch.roomID}
@@ -146,7 +144,8 @@ function Main({ isDarkMode, setIsDarkMode }) {
                         }, 2000);
                     }}
                 />
-                <Console isDarkTheme={isDarkMode}/>
+
+                <Console theme={theme}/>
             </div>
         </div>
     </div>
