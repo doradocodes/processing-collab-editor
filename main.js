@@ -6,7 +6,6 @@ const fs = require('node:fs');
 const os = require('os');
 
 let mainWindow;
-let settingsWindow;
 let theme = 'light';
 const isMac = process.platform === 'darwin';
 const isPackaged = app.isPackaged;
@@ -42,15 +41,6 @@ const template = [
     {
         label: 'File',
         submenu: [
-            // !isMac ? {
-            //     label: 'Settings',
-            //     accelerator: 'CmdOrCtrl+,',  // Shortcut for Settings
-            //     click: () => {
-            //         openSettingsWindow();
-            //     }
-            // } : {
-            //
-            // },
             { label: 'Open', click: () => console.log('Open clicked') },
             { label: 'Save', click: () => console.log('Save clicked') },
             { type: 'separator' },
@@ -130,31 +120,6 @@ const createMainWindow = () => {
         mainWindow.loadURL(`file://${path.join(__dirname, 'build', 'index.html')}`);
     });
     // mainWindow.webContents.openDevTools();
-}
-
-function openSettingsWindow() {
-    settingsWindow = new BrowserWindow({
-        width: 400,
-        height: 300,
-        parent: mainWindow, // Makes the settings window a child of the main window
-        modal: true, // Ensures focus is on the settings window
-        webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
-            nodeIntegration: true,
-            contextIsolation: true,
-        }
-    });
-
-    // Load the settings content (your settings page)
-    settingsWindow.loadURL(process.env.ELECTRON_SETTINGS_URL); // or another URL for your settings page
-
-    // Handle when the window is closed
-    settingsWindow.on('closed', () => {
-        settingsWindow = null; // Dereference the window object when closed
-    });
-
-    // Show the settings window
-    settingsWindow.show();
 }
 
 app.whenReady().then(async () => {
@@ -278,12 +243,6 @@ ipcMain.handle('run-processing', (event, folderPath) => {
             reject(`error: ${error.message}`);
         });
     });
-});
-
-ipcMain.handle('close-settings-window', () => {
-    if (settingsWindow) {
-        settingsWindow.close();
-    }
 });
 
 /* Utility functions */
