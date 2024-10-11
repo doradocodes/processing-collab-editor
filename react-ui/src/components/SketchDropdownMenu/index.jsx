@@ -22,7 +22,6 @@ const SketchDropdownMenu = ({ trigger, onRename }) => {
             });
         }
         await updateSketch(fileName, currentSketch.content || '');
-        console.log('saved sketch:', currentSketch);
     }
 
     const onCollabToggle = () => {
@@ -54,7 +53,7 @@ const SketchDropdownMenu = ({ trigger, onRename }) => {
                     onClick={(e) => {
                         onRename()
                     }}
-                    shortcut="⌘ R / Ctrl-R"
+                    // shortcut="⌘ R / Ctrl-R"
                 >
                     Rename
                 </DropdownMenu.Item>
@@ -66,17 +65,6 @@ const SketchDropdownMenu = ({ trigger, onRename }) => {
                 >
                     Collaborate
                 </DropdownMenu.Item>
-
-                {/*<DropdownMenu.CheckboxItem*/}
-                {/*    className={styles.CheckboxItem}*/}
-                {/*    checked={true}*/}
-                {/*    onClick={onCollabToggle}*/}
-                {/*>*/}
-                {/*    <DropdownMenu.ItemIndicator>*/}
-                {/*        <Share1Icon />*/}
-                {/*    </DropdownMenu.ItemIndicator>*/}
-                {/*    Collaborate*/}
-                {/*</DropdownMenu.CheckboxItem>*/}
             </DropdownMenu.Content>
         </DropdownMenu.Root>
     );

@@ -19,6 +19,9 @@ export function formatSketchName(name) {
         const formattedTimestamp = new Date(parseInt(name.split('_')[1])).toLocaleString();
         return `Untitled sketch (${formattedTimestamp})`;
     }
+    if (name.indexOf('collab_') === 0) {
+        return name.replace('collab_', 'Collaborative sketch: ');
+    }
     return name.replaceAll('_', ' ');
 }
 

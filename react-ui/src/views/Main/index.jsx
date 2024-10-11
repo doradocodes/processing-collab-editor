@@ -26,7 +26,7 @@ function Main({ theme }) {
 
     const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-    const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(false);
+    const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
 
 
     // Listen for the theme message from the main process
@@ -54,7 +54,6 @@ function Main({ theme }) {
             ...currentSketch,
             fileName: newName,
         });
-        console.log("Rename", newName)
         renameSketch(currentSketch.fileName, newName);
     }
 
@@ -88,7 +87,7 @@ function Main({ theme }) {
                         </IconButton>
                     }
 
-                    <Heading as="h5">{formatSketchName(currentSketch?.fileName)}</Heading>
+                    <Heading as="h5" truncate={true} className={styles.sketchName}>{formatSketchName(currentSketch?.fileName)}</Heading>
 
                     <SketchDropdownMenu
                         onRename={onOpenRenameDialog}
@@ -106,7 +105,7 @@ function Main({ theme }) {
                             <Button
                                 variant="soft" size="1" color="green"
                                 onClick={copyIDToClipboard}
-                            >{currentSketch.roomID}</Button>
+                            >Room ID: {currentSketch.roomID}</Button>
                         </Tooltip>
                     }
 
@@ -136,7 +135,6 @@ function Main({ theme }) {
                         });
                     }}
                     onSave={() => {
-                        console.log('Saving sketch:', currentSketchRef.current);
                         updateSketch(currentSketchRef.current.fileName, currentSketchRef.current.content);
                         setHasSaved(true);
                         setTimeout(() => {

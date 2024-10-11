@@ -4,6 +4,7 @@
     gap: var(--gap);
     overflow-y: auto;
     overflow-x: hidden;
+    max-height: 85vh;
 }
 
 .sketchListWrapper {
@@ -33,7 +34,7 @@
 
 .sketchItem[data-active='true'] {
     background: var(--mauve-1);
-    border-radius: var(--radius-3);
+    clip-path: inset(0 0 0 0 round var(--radius-3));
     font-weight: bold;
     box-shadow: var(--shadow-3);
     border: 1px solid #eee;

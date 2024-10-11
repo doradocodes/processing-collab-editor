@@ -1,12 +1,11 @@
 .grid {
     display: grid;
-    grid-template-columns: max(300px, 20%) 1fr;
-    /*grid-template-columns: max(300px, 1fr) 2fr;*/
+    grid-template-columns: 20% calc(80% - var(--gap));
     grid-template-rows: 40px 1fr;
     column-gap: var(--gap);
-    row-gap: calc(var(--gap) / 2);
+    row-gap: var(--gap);
     height: 100vh;
-    padding: var(--gap);
+    padding:var(--gap);
     box-sizing: border-box;
     transition: all 0.2s ease;
 }
@@ -33,9 +32,17 @@
 }
 
 .rightColumn {
-
+    display: grid;
+    grid-template-rows: 3fr 1fr;
+    height: 100%;
+    overflow: hidden;
 }
 
 .darkThemeButton {
     padding-left: 20px;
 }
+
+.sketchName {
+    max-width: 300px;
+}
+

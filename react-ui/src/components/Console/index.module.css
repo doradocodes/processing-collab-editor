@@ -10,10 +10,9 @@
 
 .console {
     font-size: 0.8em;
-    overflow: auto;
     box-shadow: var(--shadow-3);
     border-radius: var(--radius-3);
-    height: calc(25vh - 60px);
+    overflow: hidden;
 }
 
 .output {

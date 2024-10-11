@@ -2,7 +2,7 @@
 .SubContent {
     min-width: 220px;
     background-color: white;
-    border-radius: 6px;
+    clip-path: inset(0 0 0 0 round var(--radius-3));
     padding: 5px;
     box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2);
     animation-duration: 400ms;
@@ -28,7 +28,7 @@
 .SubTrigger {
     font-size: 13px;
     line-height: 1;
-    border-radius: 3px;
+    clip-path: inset(0 0 0 0 round var(--radius-3));
     display: flex;
     align-items: center;
     height: 25px;
