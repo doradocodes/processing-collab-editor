@@ -14,6 +14,7 @@ import {java} from "@codemirror/lang-java";
 import styles from './index.module.css';
 import {materialLight, materialDark} from "@uiw/codemirror-theme-material";
 import {updateSketch} from "../../utils/localStorageUtils.js";
+import {WebrtcProvider} from "y-webrtc";
 
 const userColors = [
     { color: '#30bced', light: '#30bced33' },
@@ -81,29 +82,7 @@ const Editor = ({ sketchName, sketchContent, isCollab, roomID, isHost, userName,
 
         if (isCollab && roomID) {
             const ydoc = new Y.Doc()
-            provider = new WebsocketProvider(websocketServer, roomID, ydoc);
-            console.log('Connecting to', websocketServer, roomID);
-
-            // Listen for messages (this is where you get the initial document state)
-            provider.onmessage = (event) => {
-                const data = event.data;
-
-                if (data instanceof ArrayBuffer) {
-                    // Decode the Yjs update sent from the server
-                    const update = new Uint8Array(data);
-
-                    // Apply the document update to the local Y.Doc
-                    // applyUpdate(yDoc, update);
-                    console.log('Applied document update:', update);
-                } else {
-                    console.error('Received unknown data format from WebSocket:', data);
-                }
-            };
-
-            provider.on('status', event => {
-                console.log('Connection status:', event.status);
-            })
-
+            const provider = new WebrtcProvider(roomID, ydoc);
             const ytext = ydoc.getText('codemirror');
 
             if (isHost) {
