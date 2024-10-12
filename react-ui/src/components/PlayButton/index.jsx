@@ -2,7 +2,7 @@ import {useEditorStore} from "../../store/editorStore.js";
 import styles from './index.module.css';
 import {updateSketch} from "../../utils/localStorageUtils.js";
 import {Button, IconButton} from "@radix-ui/themes";
-import {PlayIcon} from "@radix-ui/react-icons";
+import PlayIcon from './../../assets/play_icon.png';
 
 const PlayButton = () => {
     const currentSketch = useEditorStore(state => state.currentSketch);
@@ -33,7 +33,8 @@ const PlayButton = () => {
             radius="full"
             className={styles.playButton}
         >
-            <PlayIcon width="24" height="24"/>
+            <img src={PlayIcon} alt="Play"/>
+            {/*<PlayIcon width="24" height="24"/>*/}
         </IconButton>
     );
 }

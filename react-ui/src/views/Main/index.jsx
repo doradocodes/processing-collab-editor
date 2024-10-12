@@ -27,7 +27,7 @@ function Main({theme}) {
     const [hasSaved, setHasSaved] = useState(false);
     const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
     const [isConsoleOpen, setIsConsoleOpen] = useState(true);
-    const [consoleHeight, setConsoleHeight] = useState(200);
+    const [consoleHeight, setConsoleHeight] = useState(100);
 
     const onOpenRenameDialog = () => {
         setIsRenameDialogOpen(true);
@@ -71,8 +71,13 @@ function Main({theme}) {
                         </IconButton>
                     }
 
-                    <Heading as="h5" truncate={true}
-                             className={styles.sketchName}>{formatSketchName(currentSketch?.fileName)}</Heading>
+                    <Heading
+                        size="4"
+                        truncate={true}
+                        className={styles.sketchName}
+                    >
+                        {formatSketchName(currentSketch?.fileName)}
+                    </Heading>
 
                     <SketchDropdownMenu
                         onRename={onOpenRenameDialog}

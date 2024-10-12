@@ -1,11 +1,11 @@
 .grid {
     display: grid;
-    grid-template-columns: 20% calc(80% - var(--gap));
+    grid-template-columns: 30% calc(70% - var(--gap));
     grid-template-rows: 40px 1fr;
     column-gap: var(--gap);
     row-gap: var(--gap);
     height: 100vh;
-    padding:var(--gap);
+    padding: calc(var(--gap) * 2) var(--gap) var(--gap);
     box-sizing: border-box;
     transition: all 0.2s ease;
 }
@@ -23,7 +23,7 @@
 
 .rightColumnHeader {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
 }
 

@@ -11,6 +11,13 @@
     cursor: pointer;
 }
 
+.playButton img {
+    height: 16px;
+    width: 16px;
+    transform: translateX(1px);
+}
+
+
 .playButton:hover {
     transition: all 1s ease;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
