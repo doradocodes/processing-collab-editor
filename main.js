@@ -11,7 +11,8 @@ const isMac = process.platform === 'darwin';
 const isPackaged = app.isPackaged;
 const processingJavaPath = isPackaged
     ? path.join(process.resourcesPath, 'tools', 'processing-java')
-    : path.join(__dirname, 'tools', 'processing-java');
+    : 'processing-java';
+    // : path.join(__dirname, 'tools', 'processing-java');
 // const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
 const documentsFolderPath = path.join(app.getPath('userData'), 'processing_sketches');
 
@@ -25,16 +26,16 @@ const reduxDevToolsPath = path.join(
 
 const template = [
     {
-        label: app.name,  // This will appear as the app name on macOS
-        role: 'appMenu',  // Automatically adds default app menu items on macOS
+        label: app.name,
+        role: 'appMenu',
         submenu: [
             {
-                label: 'About ' + app.name,  // Adds an About option
+                label: 'About ' + app.name,
                 role: 'about'
             },
             { type: 'separator' },
             {
-                role: 'quit'  // Adds a Quit option
+                role: 'quit'
             }
         ]
     },
@@ -96,6 +97,8 @@ const createMainWindow = () => {
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
+        minWidth: 800,
+        minHeight: 600,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
@@ -139,9 +142,9 @@ app.on('window-all-closed', () => {
 });
 
 app.on('browser-window-focus', function () {
-    globalShortcut.register("CommandOrControl+R", () => {
-        console.log("CommandOrControl+R is pressed: Shortcut Disabled");
-    });
+    // globalShortcut.register("CommandOrControl+R", () => {
+    //     console.log("CommandOrControl+R is pressed: Shortcut Disabled");
+    // });
     globalShortcut.register("F5", () => {
         console.log("F5 is pressed: Shortcut Disabled");
     });
@@ -219,31 +222,49 @@ ipcMain.handle('rename-sketch', async (event, oldName, newName) => {
     });
 });
 
+let processingProcess = null; // To store the reference to the process
+
 ipcMain.handle('run-processing', (event, folderPath) => {
     return new Promise(async (resolve, reject) => {
         console.log('Running Processing sketch:', processingJavaPath, folderPath);
 
-        const process = exec(`"${processingJavaPath}" --sketch="${folderPath}" --run`);
+        processingProcess = exec(`"${processingJavaPath}" --sketch="${folderPath}" --run`);
 
-        process.stdout.on('data', (data) => {
+        processingProcess.stdout.on('data', (data) => {
             console.log('stdout:', data.toString());
             event.sender.send('processing-output', data.toString());
         });
 
-        process.stderr.on('data', (data) => {
+        processingProcess.stderr.on('data', (data) => {
+            processingProcess = null;
             console.error('stderr:', data.toString());
-            event.sender.send('processing-output', data.toString());
+            event.sender.send('processing-output-error', data.toString());
         });
 
-        process.on('close', (code) => {
+        processingProcess.on('close', (code) => {
+            processingProcess = null;
             resolve(`Process exited with code ${code}`);
         });
 
-        process.on('error', (error) => {
+        processingProcess.on('error', (error) => {
+            processingProcess = null;
             reject(`error: ${error.message}`);
         });
     });
 });
+
+ipcMain.handle('stop-processing', () => {
+    return new Promise((resolve, reject) => {
+        if (processingProcess) {
+            processingProcess.kill(); // Terminate the process
+            resolve('Processing sketch stopped');
+            processingProcess = null; // Reset the reference after termination
+        } else {
+            reject('No running process to stop');
+        }
+    });
+});
+
 
 /* Utility functions */
 
