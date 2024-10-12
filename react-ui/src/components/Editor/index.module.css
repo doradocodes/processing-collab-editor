@@ -4,8 +4,6 @@
     border-radius: var(--radius-3);
     overflow: hidden;
     box-shadow: var(--shadow-3);
-    margin-bottom: var(--gap);
-    /*flex: 1;*/
 }
 
 .editor :global(.cm-editor) {

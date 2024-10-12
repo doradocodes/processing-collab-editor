@@ -1,0 +1,7 @@
+.draggableIndicator {
+    width: 50px;
+    height: 5px;
+    background: #c2c2c2;
+    cursor: ns-resize;
+    border-radius: 5px;
+}

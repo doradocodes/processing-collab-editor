@@ -1,8 +1,8 @@
 import {useEditorStore} from "../../store/editorStore.js";
 import React, {useEffect, useRef, useState} from "react";
 import {renameSketch, updateSketch} from "../../utils/localStorageUtils.js";
-import {Button, Flex, Heading, IconButton, Text, Tooltip} from "@radix-ui/themes";
-import {MoonIcon, Share1Icon, ViewVerticalIcon} from "@radix-ui/react-icons";
+import {Button, Flex, Heading, IconButton, Tooltip} from "@radix-ui/themes";
+import {ViewVerticalIcon} from "@radix-ui/react-icons";
 import styles from "../../App.module.css";
 import SketchDropdownMenu from "../../components/SketchDropdownMenu/index.jsx";
 import RenameSketchDialog from "../../components/RenameSketchDialog/index.jsx";
@@ -11,8 +11,9 @@ import Sketches from "../../components/Sketches/index.jsx";
 import Editor from "../../components/Editor/index.jsx";
 import Console from "../../components/Console/index.jsx";
 import {formatSketchName} from "../../utils/utils.js";
+import DraggableElement from "../../components/DraggableIndicator/index.jsx";
 
-function Main({ theme }) {
+function Main({theme}) {
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
@@ -22,28 +23,11 @@ function Main({ theme }) {
         currentSketchRef.current = currentSketch; // Update the ref whenever currentSketch changes
     }, [currentSketch]); // Ensure it runs on currentSketch updates
 
-
-
     const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
     const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
-
-
-    // Listen for the theme message from the main process
-    // useEffect(() => {
-    //     ipcRenderer.on('set-theme', (event, theme) => {
-    //         setIsDarkMode(theme === 'dark');
-    //     });
-    //
-    //     return () => {
-    //         ipcRenderer.removeAllListeners('set-theme');
-    //     };
-    // }, []);
-
-    // const toggleTheme = () => {
-    //     setIsDarkMode(!isDarkMode);
-    //     // store.set('theme', isDarkMode ? 'dark' : 'light');
-    // }
+    const [isConsoleOpen, setIsConsoleOpen] = useState(true);
+    const [consoleHeight, setConsoleHeight] = useState(200);
 
     const onOpenRenameDialog = () => {
         setIsRenameDialogOpen(true);
@@ -87,7 +71,8 @@ function Main({ theme }) {
                         </IconButton>
                     }
 
-                    <Heading as="h5" truncate={true} className={styles.sketchName}>{formatSketchName(currentSketch?.fileName)}</Heading>
+                    <Heading as="h5" truncate={true}
+                             className={styles.sketchName}>{formatSketchName(currentSketch?.fileName)}</Heading>
 
                     <SketchDropdownMenu
                         onRename={onOpenRenameDialog}
@@ -142,8 +127,14 @@ function Main({ theme }) {
                         }, 2000);
                     }}
                 />
-
-                <Console theme={theme}/>
+                <div className={styles.layoutResize}>
+                    <DraggableElement
+                        onDrag={(height) => {
+                            setConsoleHeight(height);
+                        }}
+                    />
+                </div>
+                {isConsoleOpen && <Console theme={theme} height={consoleHeight}/>}
             </div>
         </div>
     </div>

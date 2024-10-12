@@ -33,8 +33,7 @@
 
 .rightColumn {
     display: grid;
-    grid-template-rows: 3fr 1fr;
-    height: 100%;
+    grid-template-rows: 3fr auto auto;
     overflow: hidden;
 }
 
@@ -44,5 +43,11 @@
 
 .sketchName {
     max-width: 300px;
+}
+
+.layoutResize {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
 }
 

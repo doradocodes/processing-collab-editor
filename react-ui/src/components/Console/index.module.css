@@ -13,6 +13,7 @@
     box-shadow: var(--shadow-3);
     border-radius: var(--radius-3);
     overflow: hidden;
+    min-height: 5vh;
 }
 
 .output {
