@@ -4,12 +4,13 @@ import {useEffect, useRef, useState} from "react";
 const Console = ({theme = 'light', height}) => {
     const consoleRef = useRef(null);
     const [output, setOutput] = useState([]);
-    // const setIsLoading = useEditorStore(state => state.setIsLoading);
 
     useEffect(() => {
         window.electronAPI.onProcessingOutput((data) => {
             setOutput((prevOutput) => [...prevOutput, data]);
-            // setIsLoading(false);
+        });
+        window.electronAPI.onProcessingOutputError((data) => {
+            setOutput((prevOutput) => [...prevOutput, data]);
         });
     }, []);
 

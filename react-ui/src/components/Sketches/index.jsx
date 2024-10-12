@@ -81,12 +81,12 @@ const Sketches = () => {
                     })}
             </div>
         </div>
-        <Flex direction="column" gap="2">
-            <Button variant="surface" onClick={onCreateSketch}>Create a new sketch</Button>
+        <Flex direction="column" gap="1">
+            <Button radius="large" variant="surface" onClick={onCreateSketch}>Create a new sketch</Button>
             <hr/>
             <Flex direction="column" gap="3">
                 <JoinCollaborativeSketchDialog
-                    trigger={<Button>Join a collaborative sketch</Button>}
+                    trigger={<Button radius="large">Join a collaborative sketch</Button>}
                     onSubmit={async () => {
                         const folders = await getSketchFolders();
                         setSketchList(folders);

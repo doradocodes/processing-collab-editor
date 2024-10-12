@@ -23,3 +23,10 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     transform: rotate(360deg);
 }
+
+.stopButton {
+    height: 14px;
+    width: 14px;
+    background: white;
+    border-radius: 2px;
+}

@@ -34,11 +34,10 @@
 }
 
 .sketchItem[data-active='true'] {
-    background: var(--mauve-1);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-3);
-    /*font-weight: bold;*/
-    box-shadow: var(--shadow-3);
-    border: 1px solid #bbbbbb;
+    box-shadow: var(--box-shadow);
+    /*border: 1px solid rgba(255, 255, 255, 0.5);;*/
 }
 
 .subheader {

@@ -54,7 +54,7 @@ function Main({theme}) {
             <div className={styles.leftColumnHeader}>
                 {isLeftPanelOpen &&
                     [
-                        <IconButton onClick={toggleLeftPanel} variant="ghost">
+                        <IconButton onClick={toggleLeftPanel} variant="ghost" mb="1">
                             <ViewVerticalIcon/>
                         </IconButton>,
                         <img className="logo" src="./Processing-logo.png" alt="logo"/>,

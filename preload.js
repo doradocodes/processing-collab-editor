@@ -4,12 +4,13 @@ console.log('preload.js loaded');
 
 contextBridge.exposeInMainWorld('electronAPI', {
     runProcessing: (fileName) => ipcRenderer.invoke('run-processing', fileName),
+    stopProcessing: () => ipcRenderer.invoke('stop-processing'),
     onProcessingOutput: (callback) => ipcRenderer.on('processing-output', (event, data) => callback(data)),
+    onProcessingOutputError: (callback) => ipcRenderer.on('processing-output-error', (event, data) => callback(data)),
     getSketchFolders: () => ipcRenderer.invoke('get-sketch-folders'),
     getSketchFile: (folderName) => ipcRenderer.invoke('get-sketch-file', folderName),
     createNewSketch: (folderPath, content) => ipcRenderer.invoke('create-new-sketch', folderPath, content),
     renameSketch: (oldName, newName) => ipcRenderer.invoke('rename-sketch', oldName, newName),
-    closeSettingsWindow: () => ipcRenderer.invoke('close-settings-window'),
     onSetTheme: (callback) => ipcRenderer.on('set-theme', (event, theme) => callback(theme)),
 });
 

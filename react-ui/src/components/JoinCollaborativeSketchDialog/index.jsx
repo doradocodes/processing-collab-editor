@@ -23,7 +23,6 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit }) => {
         console.log('username:', userName)
         console.log('Joining sketch:', roomID);
 
-        // create new local sketch -> mabye only after host disconnects?
         const folderPath = await updateSketch(`collab_${roomID}`, '');
 
         setCurrentSketch({
@@ -74,19 +73,16 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit }) => {
                             </TextField.Slot>
                         </TextField.Root>
                     </label>
-
-
                 </Flex>
 
-                {/*{error && <Text size="1" className={styles.error}>{error}</Text>}*/}
-                <Flex gap="3" mt="4" justify="end">
+                <Flex gap="3" mt="4" justify="center">
                     <Dialog.Close>
-                        <Button variant="soft" color="gray">
+                        <Button radius="large" variant="soft" color="gray">
                             Cancel
                         </Button>
                     </Dialog.Close>
                     <Dialog.Close>
-                        <Button onClick={joinSketch}>Join</Button>
+                        <Button radius="large" onClick={joinSketch}>Join</Button>
                     </Dialog.Close>
                 </Flex>
             </div>
