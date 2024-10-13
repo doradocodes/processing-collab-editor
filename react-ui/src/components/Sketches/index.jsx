@@ -1,23 +1,24 @@
-import React, {createRef, useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import styles from "./index.module.css";
 import {useEditorStore} from "../../store/editorStore.js";
 import {getSketchFile, getSketchFolders, updateSketch} from "../../utils/localStorageUtils.js";
-import {Button, Card, Flex, Heading, Separator, Text, TextField} from "@radix-ui/themes";
-import {FaceIcon, FileIcon, GlobeIcon, PersonIcon, Share1Icon} from "@radix-ui/react-icons";
+import {Button, Flex, Text} from "@radix-ui/themes";
 import JoinCollaborativeSketchDialog from "../JoinCollaborativeSketchDialog/index.jsx";
 import {formatSketchName} from "../../utils/utils.js";
+import {useSketchesStore} from "../../store/sketchesStore.js";
 
 const Sketches = () => {
-    const [sketchList, setSketchList] = useState([]);
-
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
+    const files = useSketchesStore(state => state.files);
+    const updateFilesFromLocalStorage = useSketchesStore(state => state.updateFilesFromLocalStorage);
+
     useEffect(() => {
         if (!currentSketch.fileName) {
-            getSketchFolders()
-                .then(folders => {
-                    const lastSavedSketch = folders[folders.length - 1];
+            updateFilesFromLocalStorage()
+                .then((files) => {
+                    const lastSavedSketch = files[files.length - 1];
                     if (lastSavedSketch) {
                         getSketchFile(lastSavedSketch)
                             .then(content => {
@@ -28,16 +29,9 @@ const Sketches = () => {
                                 });
                             });
                     }
-                    return null;
                 });
         }
     }, []);
-
-    useEffect(() => {
-        getSketchFolders().then(folders => {
-            setSketchList(folders);
-        });
-    }, [currentSketch]);
 
     const onCreateSketch = async () => {
         const fileName = `sketch_${new Date().getTime()}`;
@@ -47,9 +41,8 @@ const Sketches = () => {
             isCollab: false,
             isHost: false,
         });
-        const folderPath = await updateSketch(fileName, currentSketch.content);
-        const folders = await getSketchFolders();
-        setSketchList(folders);
+        await updateSketch(fileName, currentSketch.content);
+        await updateFilesFromLocalStorage();
     }
 
     const onGetSketchFile = async (fileName) => {
@@ -66,7 +59,7 @@ const Sketches = () => {
         <div className={styles.sketchListWrapper}>
             <Text size="1" className={styles.subheader}>Sketches</Text>
             <div className={styles.sketchList}>
-                {sketchList
+                {files
                     .map((fileName, i) => {
                         return <div
                             className={styles.sketchItem}
@@ -88,8 +81,7 @@ const Sketches = () => {
                 <JoinCollaborativeSketchDialog
                     trigger={<Button radius="large">Join a collaborative sketch</Button>}
                     onSubmit={async () => {
-                        const folders = await getSketchFolders();
-                        setSketchList(folders);
+                        await updateFilesFromLocalStorage();
                     }}
                 />
             </Flex>

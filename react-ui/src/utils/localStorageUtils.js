@@ -1,3 +1,5 @@
+import {sanitizeFileNameForFs} from "./utils.js";
+
 export const getSketchFolders = async () => {
     const folders = await window.electronAPI.getSketchFolders();
     console.log('Sketch folders:', folders);
@@ -6,7 +8,7 @@ export const getSketchFolders = async () => {
 
 export const updateSketch = async (fileName, content) => {
     try {
-        const sanitizedFileName = fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        const sanitizedFileName = sanitizeFileNameForFs(fileName);
         const folderPath = await window.electronAPI.createNewSketch(sanitizedFileName, content);
         console.log('Saved sketch:', folderPath);
         return folderPath;
@@ -23,7 +25,7 @@ export const getSketchFile = async (folder) => {
 
 export const renameSketch = async (oldName, newName) => {
     try {
-        const sanitizedFileName = newName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        const sanitizedFileName = sanitizeFileNameForFs(newName);
         await window.electronAPI.renameSketch(oldName, sanitizedFileName);
         console.log('Renamed sketch:', oldName, '->', sanitizedFileName);
     } catch(error) {

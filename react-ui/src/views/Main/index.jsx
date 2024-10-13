@@ -12,10 +12,12 @@ import Editor from "../../components/Editor/index.jsx";
 import Console from "../../components/Console/index.jsx";
 import {formatSketchName} from "../../utils/utils.js";
 import DraggableElement from "../../components/DraggableIndicator/index.jsx";
+import {useSketchesStore} from "../../store/sketchesStore.js";
 
 function Main({theme}) {
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
+    const updateFilesFromLocalStorage = useSketchesStore(state => state.updateFilesFromLocalStorage)
 
     const currentSketchRef = useRef(currentSketch); // Create a ref
 
@@ -39,6 +41,7 @@ function Main({theme}) {
             fileName: newName,
         });
         renameSketch(currentSketch.fileName, newName);
+        updateFilesFromLocalStorage();
     }
 
     const toggleLeftPanel = () => {

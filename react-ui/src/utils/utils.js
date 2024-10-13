@@ -8,7 +8,7 @@ export function generateroomID() {
 }
 
 export function sanitizeFileNameForFs(fileName) {
-    return fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    return fileName.replace(/[^a-z0-9]/gi, '_');
 }
 
 export function formatSketchName(name) {
@@ -26,5 +26,6 @@ export function formatSketchName(name) {
 }
 
 export function checkValidSketchName(name) {
-    return name.match(/^[a-z0-9_]+$/i);
+    // allow only letters, numbers, and underscores and spaces
+    return /^[a-zA-Z0-9_ ]+$/.test(name);
 }
