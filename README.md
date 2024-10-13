@@ -13,7 +13,7 @@ Prototype for a new collaborative code editor for Processing (2024 pr05).
 - `npm run start` - Start the Electron app
 - `npm run build` - Build the React app
 - `npm run package` - Package the Electron app
-- `npm run make` - Uses Electron Forge to package the app into /out folder
+- `npm run make` - Uses Electron Forge to package the app into /out folder (Note: process takes a while--it takes a while to copy the Procesing library into the package).
 - `npm run sign_processing` - Signs the Processing library for notarization (macOS builds only). You must run this before packaging the app for the first time.
 - 
 

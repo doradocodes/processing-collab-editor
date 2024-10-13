@@ -22,12 +22,16 @@ module.exports = {
       'pre-auto-entitlements': true,
       'deep': true,
     },
+    extendInfo: {
+      "NSDocumentsFolderUsageDescription": "We need access to your Documents folder to store your files."
+    },
     osxNotarize: {
       appleId: process.env.APPLE_ID,
       appleIdPassword: process.env.APPLE_ID_PASSWORD,
       teamId: process.env.APPLE_TEAM_ID
     },
-    icon: path.resolve(__dirname, 'assets/Processing_2021_logo_512x512.icns')  // Path to your .icns file
+    appBundleId: "com.doradocodes.pce",
+    icon: path.resolve(__dirname, 'assets/Processing_2021_logo_512x512.icns')
   },
   makers: [
     // Maker for Windows (.exe)

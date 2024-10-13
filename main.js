@@ -1,7 +1,7 @@
-const { app, BrowserWindow, session, nativeImage, Menu, globalShortcut} = require('electron')
+const {app, BrowserWindow, session, nativeImage, Menu, globalShortcut} = require('electron')
 const path = require('node:path')
-const { exec } = require('child_process')
-const { ipcMain } = require('electron')
+const {exec} = require('child_process')
+const {ipcMain} = require('electron')
 const fs = require('node:fs');
 const os = require('os');
 
@@ -12,17 +12,13 @@ const isPackaged = app.isPackaged;
 const processingJavaPath = isPackaged
     ? path.join(process.resourcesPath, 'tools', 'processing-java')
     : 'processing-java';
-    // : path.join(__dirname, 'tools', 'processing-java');
-// const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
-const documentsFolderPath = path.join(app.getPath('userData'), 'processing_sketches');
-
-const reactDevToolsPath = path.join(
-    os.homedir(),
-    '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/5.3.1_17');
 const reduxDevToolsPath = path.join(
     os.homedir(),
     '/Library/Application Support/Google/Chrome/Default/Extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/3.2.6_0'
 );
+// : path.join(__dirname, 'tools', 'processing-java');
+const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
+// const documentsFolderPath = path.join(app.getPath('userData'), 'processing_sketches');
 
 const template = [
     {
@@ -33,7 +29,7 @@ const template = [
                 label: 'About ' + app.name,
                 role: 'about'
             },
-            { type: 'separator' },
+            {type: 'separator'},
             {
                 role: 'quit'
             }
@@ -42,21 +38,21 @@ const template = [
     {
         label: 'File',
         submenu: [
-            { label: 'Open', click: () => console.log('Open clicked') },
-            { label: 'Save', click: () => console.log('Save clicked') },
-            { type: 'separator' },
-            { label: 'Exit', role: 'quit' }
+            {label: 'Open', click: () => console.log('Open clicked')},
+            {label: 'Save', click: () => console.log('Save clicked')},
+            {type: 'separator'},
+            {label: 'Exit', role: 'quit'}
         ]
     },
     {
         label: 'Edit',
         submenu: [
-            { label: 'Undo', role: 'undo' },
-            { label: 'Redo', role: 'redo' },
-            { type: 'separator' },
-            { label: 'Cut', role: 'cut' },
-            { label: 'Copy', role: 'copy' },
-            { label: 'Paste', role: 'paste' }
+            {label: 'Undo', role: 'undo'},
+            {label: 'Redo', role: 'redo'},
+            {type: 'separator'},
+            {label: 'Cut', role: 'cut'},
+            {label: 'Copy', role: 'copy'},
+            {label: 'Paste', role: 'paste'}
         ]
     },
     {
@@ -71,8 +67,8 @@ const template = [
                     mainWindow.webContents.send('set-theme', theme);
                 },
             },
-            { role: 'reload' },
-            { role: 'toggledevtools' }
+            {role: 'reload'},
+            {role: 'toggledevtools'}
         ]
     }
 ];
@@ -81,7 +77,7 @@ function createSketchFolder() {
     // Attempt to write to the Documents folder
     try {
         if (!fs.existsSync(documentsFolderPath)) {
-            fs.mkdirSync(documentsFolderPath, { recursive: true });
+            fs.mkdirSync(documentsFolderPath, {recursive: true});
         }
         // fs.writeFileSync(testFilePath, 'Testing access to Documents folder');
         console.log('Access granted to Documents folder');
@@ -122,17 +118,11 @@ const createMainWindow = () => {
     mainWindow.webContents.on('did-fail-load', () => {
         mainWindow.loadURL(`file://${path.join(__dirname, 'build', 'index.html')}`);
     });
-    // mainWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(async () => {
     createSketchFolder();
     createMainWindow();
-    // createMainWindow();
-
-    // React DevTools extension
-    await session.defaultSession.loadExtension(reactDevToolsPath);
-
     // Redux DevTools extension
     await session.defaultSession.loadExtension(reduxDevToolsPath);
 });
@@ -280,8 +270,8 @@ const createSketchFile = (fileName, fileContent) => {
 
     return new Promise((resolve, reject) => {
         try {
-            fs.mkdirSync(folderPath, { recursive: true });
-            fs.writeFileSync(filePath, fileContent, { encoding: 'utf8' });
+            fs.mkdirSync(folderPath, {recursive: true});
+            fs.writeFileSync(filePath, fileContent, {encoding: 'utf8'});
             resolve(folderPath);
         } catch (error) {
             reject(error);
@@ -291,7 +281,7 @@ const createSketchFile = (fileName, fileContent) => {
 
 const getSketchFolders = async () => {
     try {
-        const entries = await fs.promises.readdir(documentsFolderPath, { withFileTypes: true });
+        const entries = await fs.promises.readdir(documentsFolderPath, {withFileTypes: true});
         const folders = entries
             .filter(entry => entry.isDirectory())
             .map(dir => dir.name);

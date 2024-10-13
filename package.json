@@ -1,7 +1,7 @@
 {
   "name": "Proccessing-Collaborative-Editor",
   "productName": "Processing Collaborative Editor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Collaborative code editor for Processing",
   "main": "main.js",
   "scripts": {
@@ -11,6 +11,9 @@
     "dev:electron": "wait-on tcp:5173 && ELECTRON_START_URL=http://localhost:5173/ ELECTRON_SETTINGS_URL=http://localhost:5173/settings electron-forge start",
     "package": "electron-forge package",
     "make": "npm run build && electron-forge make",
+    "make:win": "npm run build && electron-forge make --platform=win32",
+    "make:mac": "npm run build && electron-forge make --platform=darwin",
+    "make:linux": "npm run build && electron-forge make --platform=linux",
     "sign_processing": "node sign_jnilib_files.js tools"
   },
   "build": {
