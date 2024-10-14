@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./index.module.css";
 import {useEditorStore} from "../../store/editorStore.js";
 import {getSketchFile, getSketchFolders, updateSketch} from "../../utils/localStorageUtils.js";
@@ -8,6 +8,8 @@ import {formatSketchName} from "../../utils/utils.js";
 import {useSketchesStore} from "../../store/sketchesStore.js";
 
 const Sketches = () => {
+    const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
+
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
@@ -79,10 +81,12 @@ const Sketches = () => {
             <hr/>
             <Flex direction="column" gap="3">
                 <JoinCollaborativeSketchDialog
-                    trigger={<Button radius="large">Join a collaborative sketch</Button>}
+                    isOpen={isJoinDialogOpen}
+                    trigger={<Button radius="large" onClick={() => setIsJoinDialogOpen(true)}>Join a collaborative sketch</Button>}
                     onSubmit={async () => {
                         await updateFilesFromLocalStorage();
                     }}
+                    onClose={() => setIsJoinDialogOpen(false)}
                 />
             </Flex>
         </Flex>

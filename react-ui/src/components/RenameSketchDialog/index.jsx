@@ -43,14 +43,10 @@ const RenameSketchDialog = ({onSave, isOpen = false, onClose}) => {
             </label>
 
             <Flex gap="3" mt="4" justify="center">
-                <Dialog.Close>
-                    <Button radius="large" variant="soft" color="gray" onClick={onClose}>
-                        Cancel
-                    </Button>
-                </Dialog.Close>
-                <Dialog.Close>
-                    <Button radius="large" onClick={onClick}>Save</Button>
-                </Dialog.Close>
+                <Button radius="large" variant="soft" color="gray" onClick={onClose}>
+                    Cancel
+                </Button>
+                <Button radius="large" onClick={onClick}>Save</Button>
             </Flex>
         </Dialog.Content>
     </Dialog.Root>

@@ -1,16 +1,29 @@
-import React, {createRef} from 'react';
+import React, {createRef, useState} from 'react';
 import {Cross2Icon, FileIcon, PersonIcon} from '@radix-ui/react-icons';
 import styles from './index.module.css';
 import {Button, Flex, Text, TextField, Dialog} from "@radix-ui/themes";
 import {getSketchFolders, updateSketch} from "../../utils/localStorageUtils.js";
 import {useEditorStore} from "../../store/editorStore.js";
+import {WebsocketProvider} from "y-websocket";
+import {useWebsocketStore, websocketServer} from "../../store/websocketStore.js";
+import * as Y from "yjs";
 
-const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit }) => {
+const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit, isOpen, onClose }) => {
+    const [error, setError] = useState(null);
+
     const userNameInput = createRef();
     const sketchNameInput = createRef();
 
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
+
+    const setProvider = useWebsocketStore(state => state.setProvider);
+    const setYDoc = useWebsocketStore(state => state.setYDoc);
+
+    const onCloseDialog = () => {
+        setError(null);
+        onClose();
+    };
 
     const joinSketch = async (event) => {
         const roomID = sketchNameInput.current.value;
@@ -23,21 +36,38 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit }) => {
         console.log('username:', userName)
         console.log('Joining sketch:', roomID);
 
-        const folderPath = await updateSketch(`collab_${roomID}`, '');
+        const ydoc = new Y.Doc();
+        let provider = new WebsocketProvider(websocketServer, roomID  + "/peer", ydoc);
+        setProvider(provider);
+        setYDoc(ydoc);
 
-        setCurrentSketch({
-            fileName: `collab_${roomID}`,
-            content: '',
-            userName,
-            roomID,
-            isCollab: true,
-            isHost: false,
+        // listen for websocket errors
+        provider.on('connection-error', (error) => {
+            console.error('WebSocket error:', error);
+            setError('Error connecting to sketch.');
+            provider.disconnect();
         });
 
-        onSubmit();
+        provider.on('status', async (event) => {
+            if (event.status === 'connected') {
+                const folderPath = await updateSketch(`collab_${roomID}`, '');
+
+                setCurrentSketch({
+                    fileName: `collab_${roomID}`,
+                    content: '',
+                    userName,
+                    roomID,
+                    isCollab: true,
+                    isHost: false,
+                });
+
+                onSubmit();
+                onCloseDialog();
+            }
+        });
     };
 
-    return <Dialog.Root>
+    return <Dialog.Root open={isOpen}>
         <Dialog.Trigger asChild onClick={onClick}>
             {trigger}
         </Dialog.Trigger>
@@ -75,12 +105,12 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit }) => {
                     </label>
                 </Flex>
 
+                {error && <Text size="1" color="red" mt="2">{error}</Text>}
+
                 <Flex gap="3" mt="4" justify="center">
-                    <Dialog.Close>
-                        <Button radius="large" variant="soft" color="gray">
-                            Cancel
-                        </Button>
-                    </Dialog.Close>
+                    <Button radius="large" variant="soft" color="gray" onClick={onCloseDialog}>
+                        Cancel
+                    </Button>
                     <Dialog.Close>
                         <Button radius="large" onClick={joinSketch}>Join</Button>
                     </Dialog.Close>
