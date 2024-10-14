@@ -10,7 +10,7 @@
 
 .console {
     font-size: 0.8em;
-    box-shadow: var(--box-shadow);
+    /*box-shadow: var(--box-shadow);*/
     border-radius: var(--radius-3);
     overflow: hidden;
     min-height: 5vh;
