@@ -32,7 +32,15 @@ const SketchDropdownMenu = ({ trigger, onRename }) => {
     const onCollabToggle = () => {
         const roomID = generateroomID();
         const ydoc = new Y.Doc();
-        let provider = new WebsocketProvider(websocketServer, roomID  + "/host", ydoc);
+
+        // let provider = new WebsocketProvider(websocketServer, roomID  + "/host", ydoc);
+        const provider = new WebsocketProvider(websocketServer, roomID, ydoc);
+
+        provider.on('status', event => {
+            console.log(event.status) // logs "connected" or "disconnected"
+        })
+
+
         setProvider(provider);
         setYDoc(ydoc);
 

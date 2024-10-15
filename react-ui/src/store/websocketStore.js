@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 
-// const websocketServer = 'ws://pce-server.glitch.me/1234';
+// export const websocketServer = 'ws://pce-server.glitch.me/1234';
 export const websocketServer = 'ws://localhost:1234';
 
 export const useWebsocketStore = create((set) => ({

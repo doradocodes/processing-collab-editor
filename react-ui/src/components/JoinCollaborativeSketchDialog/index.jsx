@@ -37,7 +37,9 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit, isOpen, onC
         console.log('Joining sketch:', roomID);
 
         const ydoc = new Y.Doc();
-        let provider = new WebsocketProvider(websocketServer, roomID  + "/peer", ydoc);
+        // let provider = new WebsocketProvider(websocketServer, roomID  + "/peer", ydoc);
+        const provider = new WebsocketProvider(websocketServer, roomID, ydoc);
+
         setProvider(provider);
         setYDoc(ydoc);
 
