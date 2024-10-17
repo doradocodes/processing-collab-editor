@@ -6,9 +6,7 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
 module.exports = {
   packagerConfig: {
-    asar: {
-      unpack: '**/tools/**',  // Unpack the /tools directory
-    },
+    asar: true,
     extraResource: [
       "./tools",
     ],
@@ -31,7 +29,8 @@ module.exports = {
       teamId: process.env.APPLE_TEAM_ID
     },
     appBundleId: "com.doradocodes.pce",
-    icon: path.resolve(__dirname, 'assets/Processing_2021_logo_512x512.icns')
+    icon: path.resolve(__dirname, 'assets/Processing_2021_logo_512x512.icns'),
+    executableName: 'Processing-Collaborative-Editor',
   },
   makers: [
     // Maker for Windows (.exe)

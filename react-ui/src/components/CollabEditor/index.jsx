@@ -13,9 +13,14 @@ import {materialDark, materialLight} from "@uiw/codemirror-theme-material";
 import {useWebsocketStore} from "../../store/websocketStore.js";
 import {Spinner} from "@radix-ui/themes";
 
-const Editor = ({sketchName, sketchContent, isCollab, roomID, isHost, userName, theme, onChange, onSave}) => {
+const CollabEditor = ({sketchName, sketchContent, roomID, isHost, userName, theme, onChange, onSave}) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
+
+    const provider = useWebsocketStore(state => state.provider);
+    const yDoc = useWebsocketStore(state => state.yDoc);
+    const isDocLoading = useWebsocketStore(state => state.isDocLoading);
+    const setIsConnected = useWebsocketStore(state => state.setIsConnected);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -40,6 +45,8 @@ const Editor = ({sketchName, sketchContent, isCollab, roomID, isHost, userName, 
     }, []);
 
     const getExtensions = () => {
+        const ytext = yDoc.getText('codemirror');
+        const undoManager = new Y.UndoManager(ytext);
         const extensions = [
             basicSetup,
             theme === 'dark' ? materialDark : materialLight,
@@ -58,7 +65,8 @@ const Editor = ({sketchName, sketchContent, isCollab, roomID, isHost, userName, 
                     const content = update.state.doc.toString();
                     onChange(content);
                 }
-            })
+            }),
+            yCollab(ytext, provider.awareness, {undoManager})
         ];
         return extensions;
     }
@@ -79,12 +87,18 @@ const Editor = ({sketchName, sketchContent, isCollab, roomID, isHost, userName, 
 
         return () => {
             viewRef.current.destroy();
+            // provider?.disconnect();
+            provider?.destroy(); //TODO: runs when sketch is renamed
+            // setIsConnected(false);
             console.log('Editor destroyed');
         };
     }, [sketchName, isCollab, theme]);
 
-    return <div className={styles.editor} ref={editorRef} />;
+    return [
+        <div className={styles.editor} ref={editorRef} data-is-loading={isDocLoading}/>,
+        isDocLoading && <Spinner className={styles.spinner} size="20px" color="#1be7ff"/>
+    ];
 };
 
-export default Editor;
+export default CollabEditor;
 

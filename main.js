@@ -4,6 +4,7 @@ const {exec} = require('child_process')
 const {ipcMain} = require('electron')
 const fs = require('node:fs');
 const os = require('os');
+const isDev = require('electron-is-dev');
 
 let mainWindow;
 let theme = 'light';
@@ -38,6 +39,7 @@ const template = [
     {
         label: 'File',
         submenu: [
+            {label: 'New window', accelerator: 'CmdOrCtrl+N', click: () => createMainWindow()},
             {label: 'Open', click: () => console.log('Open clicked')},
             {label: 'Save', click: () => console.log('Save clicked')},
             {type: 'separator'},
@@ -103,16 +105,27 @@ const createMainWindow = () => {
         titleBarStyle: 'hidden',
     });
 
-    // Load the saved theme (light or dark) and send it to the renderer process
-    // const savedTheme = store.get('theme', 'light'); // Default to 'light'
-    // mainWindow.webContents.on('did-finish-load', () => {
-    //     mainWindow.webContents.send('set-theme', savedTheme);
-    // });
+    // const startUrl = !isPackaged
+    //     ? process.env.ELECTRON_START_URL
+    //     : `file://${path.join(__dirname, 'build', 'index.html')}`;
+    // mainWindow.loadURL(startUrl);
 
-    const startUrl = !isPackaged
-        ? process.env.ELECTRON_START_URL
-        : `file://${path.join(__dirname, 'build', 'index.html')}`;
-    mainWindow.loadURL(startUrl);
+    // In production, serve the built version of the React app
+    mainWindow.loadURL(
+        isDev
+            ? 'http://localhost:3000'
+            : url.format({
+                pathname: path.join(__dirname, 'index.html'),
+                protocol: 'file:',
+                slashes: true,
+            })
+    );
+
+    mainWindow.webContents.on('did-navigate', (event, url) => {
+        if (url !== 'about:blank' && url.startsWith('file://')) {
+            mainWindow.loadFile(path.join(__dirname, 'index.html'));
+        }
+    });
 
     // Intercept file requests and serve index.html for deep routes
     mainWindow.webContents.on('did-fail-load', () => {

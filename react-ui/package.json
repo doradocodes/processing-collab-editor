@@ -30,6 +30,7 @@
     "lib0": "^0.2.97",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^6.27.0",
     "y-codemirror.next": "^0.3.5",
     "y-webrtc": "^10.3.0",
     "y-websocket": "^2.0.4",
