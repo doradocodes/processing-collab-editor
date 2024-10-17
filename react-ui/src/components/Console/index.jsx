@@ -7,10 +7,16 @@ const Console = ({theme = 'light', height}) => {
 
     useEffect(() => {
         window.electronAPI.onProcessingOutput((data) => {
-            setOutput((prevOutput) => [...prevOutput, data]);
+            setOutput((prevOutput) => [
+                ...prevOutput,
+                <div className={styles.error}>{data}</div>,
+            ]);
         });
         window.electronAPI.onProcessingOutputError((data) => {
-            setOutput((prevOutput) => [...prevOutput, data]);
+            setOutput((prevOutput) => [
+                ...prevOutput,
+                <div className={styles.error}>{data}</div>
+            ]);
         });
     }, []);
 
@@ -28,10 +34,7 @@ const Console = ({theme = 'light', height}) => {
             style={{height: height}}
         >
             <div className={styles.output}>
-                {output.length < 1 && <span className={styles.prompt}>Console</span>}
-                {output.map((line, index) => (
-                    <div key={index}>{line}</div>
-                ))}
+                {output.length > 0 ? output : <span className={styles.prompt}>Console</span>}
             </div>
         </div>
 

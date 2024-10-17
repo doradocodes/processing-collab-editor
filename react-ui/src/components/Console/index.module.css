@@ -10,10 +10,9 @@
 
 .console {
     font-size: 0.8em;
-    /*box-shadow: var(--box-shadow);*/
     border-radius: var(--radius-3);
-    overflow: hidden;
     min-height: 5vh;
+    overflow: auto;
 }
 
 .output {
@@ -25,4 +24,8 @@
     font-size: 1em;
     user-select: none;
     opacity: 0.5;
+}
+
+.error {
+    color: #b22020;
 }

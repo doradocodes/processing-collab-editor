@@ -150,7 +150,7 @@ function Main({theme}) {
                         }}
                     />
                 </div>
-                {isConsoleOpen && <Console theme={theme} height={consoleHeight}/>}
+                {isConsoleOpen && <Console theme="dark" height={consoleHeight}/>}
             </div>
         </div>
 
