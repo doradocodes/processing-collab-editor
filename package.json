@@ -1,7 +1,7 @@
 {
   "name": "Proccessing-Collaborative-Editor",
   "productName": "Processing Collaborative Editor",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Collaborative code editor for Processing",
   "main": "main.js",
   "scripts": {
@@ -13,6 +13,7 @@
     "make": "npm run build && electron-forge make",
     "make:win": "npm run build && electron-forge make --platform=win32",
     "make:mac": "npm run build && electron-forge make --platform=darwin",
+    "make:mac64": "npm run build && electron-forge make --platform=darwin --arch=x64",
     "make:linux": "npm run build && electron-forge make --platform=linux",
     "sign_processing": "node sign_jnilib_files.js tools"
   },

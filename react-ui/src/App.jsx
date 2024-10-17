@@ -8,7 +8,6 @@ function App() {
 
     useEffect(() => {
         window.electronAPI.onSetTheme((newTheme) => {
-            console.log('Theme:', newTheme)
             setTheme(newTheme);
         });
     }, []);

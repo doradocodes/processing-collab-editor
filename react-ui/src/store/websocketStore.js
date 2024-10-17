@@ -1,11 +1,96 @@
 import {create} from 'zustand';
+import {WebsocketProvider} from "y-websocket";
+import {useEditorStore} from "./editorStore.js";
+import * as Y from "yjs";
 
 // export const websocketServer = 'ws://pce-server.glitch.me/1234';
-export const websocketServer = 'ws://localhost:1234';
+// export const websocketServer = 'ws://localhost:1234';
+export const websocketServer = 'ws://pce-server.onrender.com/1234';
 
-export const useWebsocketStore = create((set) => ({
+const userColors = [
+    { color: '#30bced', light: '#30bced33' },
+    { color: '#6eeb83', light: '#6eeb8333' },
+    { color: '#ffbc42', light: '#ffbc4233' },
+    { color: '#ecd444', light: '#ecd44433' },
+    { color: '#ee6352', light: '#ee635233' },
+    { color: '#9ac2c9', light: '#9ac2c933' },
+    { color: '#8acb88', light: '#8acb8833' },
+    { color: '#1be7ff', light: '#1be7ff33' }
+];
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+
+}
+
+export const useWebsocketStore = create((set, get) => ({
     provider: null,
     yDoc: null,
     setProvider: (provider) => set({provider}),
     setYDoc: (yDoc) => set({yDoc}),
+    isDocLoading: false,
+    isConnected: false,
+    setIsConnected: (isConnected) => {
+        const { provider } = get();
+        if (!isConnected && provider) {
+            provider.disconnect();
+        }
+        set({isConnected});
+    },
+    isDisconnectDialogOpen: false,
+    setIsDisconnectDialogOpen: (isOpen) => set({isDisconnectDialogOpen: isOpen}),
+    setupProvider: (roomID, isHost, currentSketch) => {
+        const ydoc = new Y.Doc();
+        const provider = new WebsocketProvider(websocketServer, roomID, ydoc);
+        if (isHost && currentSketch) {
+            const ytext = ydoc.getText('codemirror');
+            ytext.insert(0, currentSketch.content);
+        }
+
+        // provider.on('sync', (isSynced) => {
+        //     console.log('synced');
+        //     set({isDocLoading: !isSynced});
+        // });
+
+        // Listen for awareness updates (e.g., user presence or state changes)
+        // provider.awareness.on('update', (changes, origin) => {
+        //     console.log('Awareness update:', changes, 'from user:', origin);
+        // });
+
+        provider.on('status', event => {
+            if (event.status === 'connected') {
+                set({isConnected: true});
+            }
+            if (event.status === 'disconnected') {
+                set({isConnected: false});
+            }
+        })
+
+        // Listen for updates to the document
+        ydoc.on('update', (update, origin) => {
+            set({isDocLoading: false});
+            console.log('Document updated by:', origin);
+        });
+
+        set({provider});
+        set({yDoc: ydoc});
+
+        if (!isHost) {
+            set({isDocLoading: true});
+        }
+
+    },
+    addUser: (userName) => {
+        const { provider } = get(); // Access the provider from the state
+        if (!provider) {
+            console.error("Provider not initialized");
+            return;
+        }
+        const userColor = userColors[getRandomInt(0, userColors.length - 1)];
+        provider.awareness.setLocalStateField('user', {
+            name: userName,
+            color: userColor.color,
+            colorLight: userColor.light
+        });
+    }
 }));

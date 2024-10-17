@@ -17,8 +17,8 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit, isOpen, onC
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
-    const setProvider = useWebsocketStore(state => state.setProvider);
-    const setYDoc = useWebsocketStore(state => state.setYDoc);
+    const setupProvider = useWebsocketStore(state => state.setupProvider);
+    const addUser = useWebsocketStore(state => state.addUser);
 
     const onCloseDialog = () => {
         setError(null);
@@ -36,37 +36,22 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit, isOpen, onC
         console.log('username:', userName)
         console.log('Joining sketch:', roomID);
 
-        const ydoc = new Y.Doc();
-        // let provider = new WebsocketProvider(websocketServer, roomID  + "/peer", ydoc);
-        const provider = new WebsocketProvider(websocketServer, roomID, ydoc);
+        const folderPath = await updateSketch(`collab_${roomID}`, '');
 
-        setProvider(provider);
-        setYDoc(ydoc);
-
-        // listen for websocket errors
-        provider.on('connection-error', (error) => {
-            console.error('WebSocket error:', error);
-            setError('Error connecting to sketch.');
-            provider.disconnect();
+        setCurrentSketch({
+            fileName: `collab_${roomID}`,
+            content: '',
+            userName,
+            roomID,
+            isCollab: true,
+            isHost: false,
         });
 
-        provider.on('status', async (event) => {
-            if (event.status === 'connected') {
-                const folderPath = await updateSketch(`collab_${roomID}`, '');
+        setupProvider(roomID, false);
+        addUser(userName);
 
-                setCurrentSketch({
-                    fileName: `collab_${roomID}`,
-                    content: '',
-                    userName,
-                    roomID,
-                    isCollab: true,
-                    isHost: false,
-                });
-
-                onSubmit();
-                onCloseDialog();
-            }
-        });
+        onSubmit();
+        onCloseDialog();
     };
 
     return <Dialog.Root open={isOpen}>

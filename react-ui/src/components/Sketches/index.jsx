@@ -6,6 +6,7 @@ import {Button, Flex, Text} from "@radix-ui/themes";
 import JoinCollaborativeSketchDialog from "../JoinCollaborativeSketchDialog/index.jsx";
 import {formatSketchName} from "../../utils/utils.js";
 import {useSketchesStore} from "../../store/sketchesStore.js";
+import {useWebsocketStore} from "../../store/websocketStore.js";
 
 const Sketches = () => {
     const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
@@ -15,6 +16,8 @@ const Sketches = () => {
 
     const files = useSketchesStore(state => state.files);
     const updateFilesFromLocalStorage = useSketchesStore(state => state.updateFilesFromLocalStorage);
+
+    const isConnected = useWebsocketStore(state => state.isConnected);
 
     useEffect(() => {
         if (!currentSketch.fileName) {
@@ -66,6 +69,7 @@ const Sketches = () => {
                         return <div
                             className={styles.sketchItem}
                             data-active={currentSketch.fileName === fileName}
+                            data-is-connected={(currentSketch.fileName === fileName) && isConnected}
                             key={`${fileName}-${i}`}
                             onClick={(e) => onGetSketchFile(fileName)}
                         >

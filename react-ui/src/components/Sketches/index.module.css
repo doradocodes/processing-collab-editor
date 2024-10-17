@@ -31,6 +31,7 @@
     cursor: pointer;
     padding: 5px;
     transition: all 0.2s ease;
+    position: relative;
 }
 
 .sketchItem[data-active='true'] {
@@ -38,6 +39,30 @@
     border-radius: var(--radius-3);
     color: #222222;
 }
+
+.sketchItem[data-is-connected='true']:after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #00be00;
+    /*animation: blink 1s infinite;*/
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
 
 .subheader {
     font-weight: bold;

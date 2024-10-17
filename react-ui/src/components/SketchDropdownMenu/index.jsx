@@ -15,8 +15,8 @@ import {useWebsocketStore, websocketServer} from "../../store/websocketStore.js"
 const SketchDropdownMenu = ({ trigger, onRename }) => {
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
-    const setProvider = useWebsocketStore(state => state.setProvider);
-    const setYDoc = useWebsocketStore(state => state.setYDoc);
+    const setupProvider = useWebsocketStore(state => state.setupProvider);
+    const addUser = useWebsocketStore(state => state.addUser);
 
     const onSave = async () => {
         const fileName = currentSketch.fileName || `sketch_${new Date().getTime()}`;
@@ -31,19 +31,6 @@ const SketchDropdownMenu = ({ trigger, onRename }) => {
 
     const onCollabToggle = () => {
         const roomID = generateroomID();
-        const ydoc = new Y.Doc();
-
-        // let provider = new WebsocketProvider(websocketServer, roomID  + "/host", ydoc);
-        const provider = new WebsocketProvider(websocketServer, roomID, ydoc);
-
-        provider.on('status', event => {
-            console.log(event.status) // logs "connected" or "disconnected"
-        })
-
-
-        setProvider(provider);
-        setYDoc(ydoc);
-
         setCurrentSketch({
             fileName: currentSketch.fileName,
             content: currentSketch.content,
@@ -51,6 +38,8 @@ const SketchDropdownMenu = ({ trigger, onRename }) => {
             isHost: true,
             roomID,
         });
+        setupProvider(roomID, true, currentSketch);
+        addUser('host');
     };
 
     return (

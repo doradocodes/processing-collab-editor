@@ -13,11 +13,15 @@ import Console from "../../components/Console/index.jsx";
 import {formatSketchName} from "../../utils/utils.js";
 import DraggableElement from "../../components/DraggableIndicator/index.jsx";
 import {useSketchesStore} from "../../store/sketchesStore.js";
+import UserList from "../../components/UserList/index.jsx";
+import {useWebsocketStore} from "../../store/websocketStore.js";
+import DisconnectAlertDialog from "../../components/DisconnectAlertDialog/index.jsx";
 
 function Main({theme}) {
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
     const updateFilesFromLocalStorage = useSketchesStore(state => state.updateFilesFromLocalStorage)
+    const isDisconnectDialogOpen = useWebsocketStore(state => state.isDisconnectDialogOpen)
 
     const currentSketchRef = useRef(currentSketch); // Create a ref
 
@@ -30,6 +34,7 @@ function Main({theme}) {
     const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
     const [isConsoleOpen, setIsConsoleOpen] = useState(true);
     const [consoleHeight, setConsoleHeight] = useState(100);
+    const isConnected = useWebsocketStore(state => state.isConnected);
 
     const onOpenRenameDialog = () => {
         setIsRenameDialogOpen(true);
@@ -74,6 +79,8 @@ function Main({theme}) {
                         </IconButton>
                     }
 
+                    {isConnected && <span className={styles.connectionIndicator}></span>}
+
                     <Heading
                         size="4"
                         truncate={true}
@@ -103,6 +110,7 @@ function Main({theme}) {
                     }
 
                     {hasSaved && <span>Saved!</span>}
+
                 </Flex>
                 <PlayButton/>
             </div>
@@ -145,6 +153,8 @@ function Main({theme}) {
                 {isConsoleOpen && <Console theme={theme} height={consoleHeight}/>}
             </div>
         </div>
+
+        {isDisconnectDialogOpen && <DisconnectAlertDialog isOpen={true}/>}
     </div>
 }
 

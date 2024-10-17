@@ -6,13 +6,12 @@ import {basicSetup, EditorView} from "codemirror";
 import {keymap} from "@codemirror/view";
 import {EditorState} from "@codemirror/state";
 import {indentWithTab} from "@codemirror/commands";
-
-import * as random from 'lib0/random'
 import {java} from "@codemirror/lang-java";
 
 import styles from './index.module.css';
 import {materialDark, materialLight} from "@uiw/codemirror-theme-material";
 import {useWebsocketStore} from "../../store/websocketStore.js";
+import {Spinner} from "@radix-ui/themes";
 
 const userColors = [
     {color: '#30bced', light: '#30bced33'},
@@ -29,9 +28,11 @@ const Editor = ({sketchName, sketchContent, isCollab, roomID, isHost, userName, 
     const editorRef = useRef(null);
     const viewRef = useRef(null);
 
+    const setProvider = useWebsocketStore(state => state.setProvider);
     const provider = useWebsocketStore(state => state.provider);
-    const ydoc = useWebsocketStore(state => state.yDoc);
-
+    const yDoc = useWebsocketStore(state => state.yDoc);
+    const isDocLoading = useWebsocketStore(state => state.isDocLoading);
+    const setIsConnected = useWebsocketStore(state => state.setIsConnected);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -44,14 +45,14 @@ const Editor = ({sketchName, sketchContent, isCollab, roomID, isHost, userName, 
         window.addEventListener('keydown', handleKeyDown);
 
         // call save every minute
-        const interval = setInterval(() => {
-            onSave();
-        }, 60000);
+        // const interval = setInterval(() => {
+        //     onSave();
+        // }, 60000);
 
         // Cleanup the event listener on component unmount
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
-            clearInterval(interval);
+            // clearInterval(interval);
         };
     }, []);
 
@@ -77,20 +78,10 @@ const Editor = ({sketchName, sketchContent, isCollab, roomID, isHost, userName, 
             })
         ];
 
-        if (isCollab && roomID) {
-            const ytext = ydoc.getText('codemirror');
-
-            if (isHost) {
-                ytext.insert(0, sketchContent);
-            }
-
+        if (isCollab && roomID && yDoc) {
+            const ytext = yDoc.getText('codemirror');
             const undoManager = new Y.UndoManager(ytext);
-            const userColor = userColors[random.uint32() % userColors.length];
-            provider.awareness.setLocalStateField('user', {
-                name: isHost ? 'Host' : userName || 'Guest',
-                color: userColor.color,
-                colorLight: userColor.light
-            });
+
             extensions.push(yCollab(ytext, provider.awareness, {undoManager}));
         }
 
@@ -99,8 +90,6 @@ const Editor = ({sketchName, sketchContent, isCollab, roomID, isHost, userName, 
 
     const renderEditor = () => {
         editorRef.current.innerHTML = '';
-
-        let provider = null;
 
         const state = EditorState.create({
             doc: sketchContent,
@@ -112,18 +101,24 @@ const Editor = ({sketchName, sketchContent, isCollab, roomID, isHost, userName, 
             parent: editorRef.current
         });
         viewRef.current = view;
-
-        return () => {
-            view.destroy();
-            provider?.destroy();
-        };
     }
 
     useEffect(() => {
         renderEditor();
+
+        return () => {
+            viewRef.current.destroy();
+            // provider?.disconnect();
+            provider?.destroy(); //TODO: runs when sketch is renamed
+            // setIsConnected(false);
+            console.log('Editor destroyed');
+        };
     }, [sketchName, isCollab, theme]);
 
-    return <div className={styles.editor} ref={editorRef}/>
+    return [
+        <div className={styles.editor} ref={editorRef} data-is-loading={isDocLoading}/>,
+        isDocLoading && <Spinner className={styles.spinner} size="20px" color="#1be7ff"/>
+    ];
 };
 
 export default Editor;
