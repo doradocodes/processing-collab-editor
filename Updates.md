@@ -1,28 +1,3 @@
-# Processing Collaborative Code Editor
-
-## Description
-Prototype for a new collaborative code editor for Processing (2024 pr05).
-
-## Installation
-1. Clone the repository
-2. Run `npm install` to install dependencies
-3. Run `npm run start` to start the Electron app
-4. Create a .env file with your credentials by copying the .env.example file and filling in the necessary information
-
-## Scripts
-- `npm run build` - Builds the front-end React app
-- `npm run dev` - Starts the Electron and React app in development mode
-- `npm run dev:react` - Starts the React app in development mode (used for `npm run dev`)
-- `npm run dev:electron` - Starts the Electron app in development mode (used for `npm run dev`)
-- `npm run package` - Package the Electron app
-- `npm run make` - Uses Electron Forge to package the app (in your default OS) into /out folder (Note: process takes a while--it takes a while to copy the Processing library into the package).
-- `npm run make:win` - Uses Electron Forge to package the app for Windows
-- `npm run make:mac` - Uses Electron Forge to package the app for macOS
-- `npm run make:mac64` - Uses Electron Forge to package the app for macOS 64-bit
-- `npm run make:linux` - Uses Electron Forge to package the app for Linux
-- `npm run sign_processing` - Signs the Processing library for notarization (macOS builds only). You must run this before packaging the app for the first time. 
-
-
 ## Weekly Reports
 ### Week 13 (September 30, 2024 - October 6, 2024)
 #### Progress
@@ -54,7 +29,7 @@ In my last update, I mentioned my issue with running Processing sketches since w
 #### Progress
 Over the past week, I continued refining the basic functionality of the app, with a particular focus on addressing issues we encountered during testing. While working with Sinan to test the build on his computer, we ran into problems running Processing sketches. Upon closer examination of how `processing-java` works, we discovered that the executable has a hardcoded path to the Processing Java library and JDK. We attempted to resolve the issue by updating `processing-java` to look for local versions of both, but unfortunately, it still resulted in errors:
 
-```jsx
+```
 Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 1 out of bounds for length 1
         at processing.app.Sketch.getCode(Sketch.java:1769)
         at processing.mode.java.Commander.statusError(Commander.java:299)
