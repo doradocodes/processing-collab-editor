@@ -4,22 +4,18 @@ const {exec} = require('child_process')
 const {ipcMain} = require('electron')
 const fs = require('node:fs');
 const os = require('os');
-const isDev = require('electron-is-dev');
 
-let mainWindow;
+const isDev = process.env.NODE_ENV === 'development';
+
+const windows = [];
 let theme = 'light';
 const isMac = process.platform === 'darwin';
 const isPackaged = app.isPackaged;
 const processingJavaPath = isPackaged
     ? path.join(process.resourcesPath, 'tools', 'processing-java')
     : 'processing-java';
-const reduxDevToolsPath = path.join(
-    os.homedir(),
-    '/Library/Application Support/Google/Chrome/Default/Extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/3.2.6_0'
-);
-// : path.join(__dirname, 'tools', 'processing-java');
+
 const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
-// const documentsFolderPath = path.join(app.getPath('userData'), 'processing_sketches');
 
 const template = [
     {
@@ -66,7 +62,9 @@ const template = [
                 checked: theme === 'dark',
                 click: () => {
                     theme = theme === 'dark' ? 'light' : 'dark';
-                    mainWindow.webContents.send('set-theme', theme);
+                    windows.forEach(window => {
+                        window.webContents.send('set-theme', theme);
+                    });
                 },
             },
             {role: 'reload'},
@@ -88,11 +86,8 @@ function createSketchFolder() {
     }
 }
 
-const createMainWindow = () => {
-    const menu = Menu.buildFromTemplate(template)
-    Menu.setApplicationMenu(menu);
-
-    mainWindow = new BrowserWindow({
+const createWindow = (urlPath) => {
+    let options = {
         width: 800,
         height: 600,
         minWidth: 800,
@@ -103,41 +98,32 @@ const createMainWindow = () => {
             contextIsolation: true,
         },
         titleBarStyle: 'hidden',
-    });
-
-    // const startUrl = !isPackaged
-    //     ? process.env.ELECTRON_START_URL
-    //     : `file://${path.join(__dirname, 'build', 'index.html')}`;
-    // mainWindow.loadURL(startUrl);
-
-    // In production, serve the built version of the React app
-    mainWindow.loadURL(
-        isDev
-            ? 'http://localhost:3000'
-            : url.format({
-                pathname: path.join(__dirname, 'index.html'),
-                protocol: 'file:',
-                slashes: true,
-            })
-    );
-
-    mainWindow.webContents.on('did-navigate', (event, url) => {
-        if (url !== 'about:blank' && url.startsWith('file://')) {
-            mainWindow.loadFile(path.join(__dirname, 'index.html'));
+    };
+    if (BrowserWindow.getFocusedWindow()) {
+        const focusedWindow = BrowserWindow.getFocusedWindow();
+        const pos = focusedWindow.getPosition();
+        options = {
+            ...options,
+            x: pos[0] + 20,
+            y: pos[1] + 20,
         }
-    });
-
-    // Intercept file requests and serve index.html for deep routes
-    mainWindow.webContents.on('did-fail-load', () => {
-        mainWindow.loadURL(`file://${path.join(__dirname, 'build', 'index.html')}`);
-    });
+    }
+    const newWindow = new BrowserWindow(options);
+    windows.push(newWindow);
+    const windowUrl = isDev ?
+        'http://localhost:5173#/' + urlPath
+        :
+        `file://${path.join(__dirname, 'build', 'index.html')}#/${urlPath}`;
+    newWindow.loadURL(windowUrl);
 }
 
 app.whenReady().then(async () => {
     createSketchFolder();
-    createMainWindow();
-    // Redux DevTools extension
-    await session.defaultSession.loadExtension(reduxDevToolsPath);
+
+    const menu = Menu.buildFromTemplate(template)
+    Menu.setApplicationMenu(menu);
+
+    createWindow('');
 });
 
 app.on('window-all-closed', () => {
@@ -266,6 +252,10 @@ ipcMain.handle('stop-processing', () => {
             reject('No running process to stop');
         }
     });
+});
+
+ipcMain.handle('open-new-window', (event, urlPath) => {
+    createWindow(urlPath);
 });
 
 
