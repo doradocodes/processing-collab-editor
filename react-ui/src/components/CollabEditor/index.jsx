@@ -45,7 +45,8 @@ const CollabEditor = ({sketchName, sketchContent, roomID, isHost, userName, them
     }, []);
 
     const getExtensions = () => {
-        const ytext = yDoc.getText('codemirror');
+        const doc = yDoc || new Y.Doc();
+        const ytext = doc.getText('codemirror');
         const undoManager = new Y.UndoManager(ytext);
         const extensions = [
             basicSetup,
@@ -86,17 +87,17 @@ const CollabEditor = ({sketchName, sketchContent, roomID, isHost, userName, them
         viewRef.current = view;
 
         return () => {
-            viewRef.current.destroy();
+            viewRef?.current?.destroy();
             // provider?.disconnect();
             provider?.destroy(); //TODO: runs when sketch is renamed
             // setIsConnected(false);
             console.log('Editor destroyed');
         };
-    }, [sketchName, isCollab, theme]);
+    }, [sketchName, theme]);
 
     return [
         <div className={styles.editor} ref={editorRef} data-is-loading={isDocLoading}/>,
-        isDocLoading && <Spinner className={styles.spinner} size="20px" color="#1be7ff"/>
+        (!yDoc || isDocLoading) && <Spinner className={styles.spinner} size="20px" color="#1be7ff"/>
     ];
 };
 

@@ -1,6 +1,6 @@
 .grid {
     display: grid;
-    grid-template-columns: 30% calc(70% - var(--gap));
+    /*grid-template-columns: 30% calc(70% - var(--gap));*/
     grid-template-rows: 40px 1fr;
     column-gap: var(--gap);
     row-gap: var(--gap);
@@ -15,20 +15,10 @@
     column-gap: 0;
 }
 
-.leftColumnHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-}
-
 .rightColumnHeader {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-}
-
-.leftColumn {
-
 }
 
 .rightColumn {

@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import Main from "./views/Main/index.jsx";
 import './App.css';
 import {Theme} from "@radix-ui/themes";
-import { HashRouter as Router, Route, Switch } from 'react-router-dom';
-import CollabView from "./views/CollabView/CollabView.jsx";
+import {HashRouter, Route, Routes} from 'react-router-dom';
+import CollabView from "./views/CollabView/index.jsx";
 
 
 function App() {
@@ -21,12 +21,12 @@ function App() {
         panelBackground="translucent"
         radius="medium"
     >
-        <Router>
-            <Switch>
-                <Route exact path="/" component={Main} />
-                <Route path="/collab" component={CollabView} />
-            </Switch>
-        </Router>
+        <HashRouter>
+            <Routes>
+                <Route exact path="/" element={<Main theme={theme}/>} />
+                <Route path="/collab" element={<CollabView theme={theme}/>} />
+            </Routes>
+        </HashRouter>
     </Theme>
 }
 

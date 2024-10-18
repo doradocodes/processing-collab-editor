@@ -21,6 +21,7 @@
 }
 
 .spinner {
+    margin: 20px;
     position: absolute !important;
     top: 0;
     left: 50%;

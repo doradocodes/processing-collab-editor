@@ -1,22 +1,22 @@
 import {useEditorStore} from "../../store/editorStore.js";
-import React, {useEffect, useRef, useState} from "react";
+import {useSketchesStore} from "../../store/sketchesStore.js";
+import {useWebsocketStore} from "../../store/websocketStore.js";
+import {useEffect, useRef, useState} from "react";
 import {renameSketch, updateSketch} from "../../utils/localStorageUtils.js";
-import {Button, Flex, Heading, IconButton, Tooltip} from "@radix-ui/themes";
+import styles from "./index.module.css";
+import {Badge, Button, Flex, Heading, IconButton, Tooltip} from "@radix-ui/themes";
 import {ViewVerticalIcon} from "@radix-ui/react-icons";
-import styles from "../../App.module.css";
+import {formatSketchName} from "../../utils/utils.js";
 import SketchDropdownMenu from "../../components/SketchDropdownMenu/index.jsx";
 import RenameSketchDialog from "../../components/RenameSketchDialog/index.jsx";
 import PlayButton from "../../components/PlayButton/index.jsx";
-import Sketches from "../../components/Sketches/index.jsx";
 import Editor from "../../components/Editor/index.jsx";
-import Console from "../../components/Console/index.jsx";
-import {formatSketchName} from "../../utils/utils.js";
 import DraggableElement from "../../components/DraggableIndicator/index.jsx";
-import {useSketchesStore} from "../../store/sketchesStore.js";
-import {useWebsocketStore} from "../../store/websocketStore.js";
+import Console from "../../components/Console/index.jsx";
 import DisconnectAlertDialog from "../../components/DisconnectAlertDialog/index.jsx";
+import CollabEditor from "../../components/CollabEditor/index.jsx";
 
-function Main({theme}) {
+function CollabView({theme}) {
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
     const updateFilesFromLocalStorage = useSketchesStore(state => state.updateFilesFromLocalStorage)
@@ -55,24 +55,8 @@ function Main({theme}) {
         navigator.clipboard.writeText(currentSketch.roomID);
     }
 
-    const openCollabWindow = () => {
-        window.electronAPI.openNewWindow('collab');
-    }
-
     return <div className='App'>
         <div className={styles.grid} data-panel-open={isLeftPanelOpen}>
-            <div className={styles.leftColumnHeader}>
-                {isLeftPanelOpen &&
-                    [
-                        <IconButton onClick={toggleLeftPanel} variant="ghost" mb="1">
-                            <ViewVerticalIcon/>
-                        </IconButton>,
-                        <img className="logo" src="./Processing-logo.png" alt="logo"/>,
-                        <div></div>
-                    ]
-                }
-            </div>
-
             <div className={styles.rightColumnHeader}>
                 <Flex gap="3" align="center">
                     {!isLeftPanelOpen &&
@@ -86,9 +70,10 @@ function Main({theme}) {
                     <Heading
                         size="4"
                         truncate={true}
+                        verticalAlign="text-top"
                         className={styles.sketchName}
                     >
-                        {formatSketchName(currentSketch?.fileName)}
+                        <Badge color="green">Collaborative</Badge> {formatSketchName(currentSketch?.fileName)}
                     </Heading>
 
                     <SketchDropdownMenu
@@ -104,10 +89,9 @@ function Main({theme}) {
 
                     {currentSketch.isCollab && currentSketch.roomID &&
                         <Tooltip content="Copy ID" size="1">
-                            <Button
-                                variant="soft" size="1" color="green"
+                            <Badge color="green"
                                 onClick={copyIDToClipboard}
-                            >Room ID: {currentSketch.roomID}</Button>
+                            >Room ID: {currentSketch.roomID}</Badge>
                         </Tooltip>
                     }
 
@@ -116,12 +100,6 @@ function Main({theme}) {
                 </Flex>
                 <PlayButton/>
             </div>
-
-            <div className={styles.leftColumn}>
-                <Sketches/>
-                <Button onClick={openCollabWindow}>Open new window</Button>
-            </div>
-
 
             <div className={styles.rightColumn}>
                 <Editor
@@ -161,4 +139,4 @@ function Main({theme}) {
     </div>
 }
 
-export default Main;
+export default CollabView;
