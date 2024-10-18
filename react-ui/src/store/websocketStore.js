@@ -3,9 +3,9 @@ import {WebsocketProvider} from "y-websocket";
 import {useEditorStore} from "./editorStore.js";
 import * as Y from "yjs";
 
-// export const websocketServer = 'ws://pce-server.glitch.me/1234';
+export const websocketServer = 'ws://pce-server.glitch.me/1234';
 // export const websocketServer = 'ws://localhost:1234';
-export const websocketServer = 'ws://pce-server.onrender.com/1234';
+// export const websocketServer = 'ws://pce-server.onrender.com/1234';
 
 const userColors = [
     { color: '#30bced', light: '#30bced33' },
@@ -39,9 +39,9 @@ export const useWebsocketStore = create((set, get) => ({
     },
     isDisconnectDialogOpen: false,
     setIsDisconnectDialogOpen: (isOpen) => set({isDisconnectDialogOpen: isOpen}),
-    setupProvider: (roomID, isHost, currentSketch) => {
+    setupProvider: (roomID, isHost, currentSketch, userName) => {
         const ydoc = new Y.Doc();
-        const provider = new WebsocketProvider(websocketServer, roomID, ydoc);
+        const provider = new WebsocketProvider(websocketServer, roomID.toLowerCase(), ydoc);
         if (isHost && currentSketch) {
             const ytext = ydoc.getText('codemirror');
             ytext.insert(0, currentSketch.content);
@@ -59,9 +59,11 @@ export const useWebsocketStore = create((set, get) => ({
 
         provider.on('status', event => {
             if (event.status === 'connected') {
+                console.log('Connected to server')
                 set({isConnected: true});
             }
             if (event.status === 'disconnected') {
+                console.log('Disconnected from server')
                 set({isConnected: false});
             }
         })
@@ -72,6 +74,17 @@ export const useWebsocketStore = create((set, get) => ({
             console.log('Document updated by:', origin);
         });
 
+        provider.awareness.on('change', () => {
+            set({isDocLoading: false});
+        })
+
+        const userColor = userColors[getRandomInt(0, userColors.length - 1)];
+        provider.awareness.setLocalStateField('user', {
+            name: userName,
+            color: userColor.color,
+            colorLight: userColor.light
+        });
+
         set({provider});
         set({yDoc: ydoc});
 
@@ -80,17 +93,4 @@ export const useWebsocketStore = create((set, get) => ({
         }
 
     },
-    addUser: (userName) => {
-        const { provider } = get(); // Access the provider from the state
-        if (!provider) {
-            console.error("Provider not initialized");
-            return;
-        }
-        const userColor = userColors[getRandomInt(0, userColors.length - 1)];
-        provider.awareness.setLocalStateField('user', {
-            name: userName,
-            color: userColor.color,
-            colorLight: userColor.light
-        });
-    }
 }));

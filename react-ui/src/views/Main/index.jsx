@@ -32,19 +32,18 @@ function Main({theme}) {
     const [hasSaved, setHasSaved] = useState(false);
     const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
     const [consoleHeight, setConsoleHeight] = useState(100);
-    const isConnected = useWebsocketStore(state => state.isConnected);
 
     const onOpenRenameDialog = () => {
         setIsRenameDialogOpen(true);
     }
 
-    const onRename = (newName) => {
+    const onRename = async (newName) => {
         setCurrentSketch({
             ...currentSketch,
             fileName: newName,
         });
-        renameSketch(currentSketch.fileName, newName);
-        updateFilesFromLocalStorage();
+        await renameSketch(currentSketch.fileName, newName);
+        await updateFilesFromLocalStorage();
     }
 
     const toggleLeftPanel = () => {
@@ -53,10 +52,6 @@ function Main({theme}) {
 
     const copyIDToClipboard = () => {
         navigator.clipboard.writeText(currentSketch.roomID);
-    }
-
-    const openCollabWindow = () => {
-        window.electronAPI.openNewWindow('collab');
     }
 
     return <div className='App'>
@@ -81,8 +76,6 @@ function Main({theme}) {
                         </IconButton>
                     }
 
-                    {isConnected && <span className={styles.connectionIndicator}></span>}
-
                     <Heading
                         size="4"
                         truncate={true}
@@ -93,6 +86,7 @@ function Main({theme}) {
 
                     <SketchDropdownMenu
                         onRename={onOpenRenameDialog}
+                        hasCollab={true}
                     />
 
                     <RenameSketchDialog
@@ -119,7 +113,6 @@ function Main({theme}) {
 
             <div className={styles.leftColumn}>
                 <Sketches/>
-                <Button onClick={openCollabWindow}>Open new window</Button>
             </div>
 
 

@@ -3,7 +3,7 @@
     position: relative;
     border-radius: var(--radius-3);
     overflow: hidden;
-    /*box-shadow: var(--box-shadow);*/
+    border: 2px solid var(--green-a7);
 }
 
 .editor[data-is-loading='true'] {

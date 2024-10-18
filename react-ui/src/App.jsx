@@ -24,7 +24,10 @@ function App() {
         <HashRouter>
             <Routes>
                 <Route exact path="/" element={<Main theme={theme}/>} />
-                <Route path="/collab" element={<CollabView theme={theme}/>} />
+                <Route path="/collab" element={<CollabView theme={theme}/>}>
+                    <Route path=":roomID/user/:userName" element={<CollabView theme={theme}/>}/>
+                    <Route path=":roomID/user/:userName/sketch/:sketchFolder" element={<CollabView theme={theme}/>}/>
+                </Route>
             </Routes>
         </HashRouter>
     </Theme>

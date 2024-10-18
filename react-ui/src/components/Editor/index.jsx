@@ -1,6 +1,4 @@
 import React, {useEffect, useRef} from 'react';
-import * as Y from 'yjs'
-import {yCollab} from 'y-codemirror.next'
 
 import {basicSetup, EditorView} from "codemirror";
 import {keymap} from "@codemirror/view";
@@ -10,10 +8,8 @@ import {java} from "@codemirror/lang-java";
 
 import styles from './index.module.css';
 import {materialDark, materialLight} from "@uiw/codemirror-theme-material";
-import {useWebsocketStore} from "../../store/websocketStore.js";
-import {Spinner} from "@radix-ui/themes";
 
-const Editor = ({sketchName, sketchContent, isCollab, roomID, isHost, userName, theme, onChange, onSave}) => {
+const Editor = ({sketchName, sketchContent, theme, onChange, onSave}) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
 
@@ -81,9 +77,9 @@ const Editor = ({sketchName, sketchContent, isCollab, roomID, isHost, userName, 
             viewRef.current.destroy();
             console.log('Editor destroyed');
         };
-    }, [sketchName, isCollab, theme]);
+    }, [sketchName, theme]);
 
-    return <div className={styles.editor} ref={editorRef} />;
+    return <div className={styles.editor} ref={editorRef}/>;
 };
 
 export default Editor;

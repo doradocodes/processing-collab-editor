@@ -1,8 +1,12 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useWebsocketStore} from "../../store/websocketStore.js";
+import {Flex, Text} from "@radix-ui/themes";
+import * as Avatar from "@radix-ui/react-avatar";
+import styles from "./index.module.css";
+
 
 function UserList() {
-    const [users, setUsers] = useState(new Map());
+    const [users, setUsers] = useState({});
     const provider = useWebsocketStore(state => state.provider);
 
     useEffect(() => {
@@ -16,17 +20,26 @@ function UserList() {
         if (provider) {
             provider.awareness.on('change', (changes, origin) => {
                 console.log('Awareness updated:', provider.awareness.getStates());
-                setUsers(provider.awareness.getStates());
+                setUsers(Object.fromEntries(provider.awareness.getStates()));
             });
         }
 
 
     }, [provider]);
-    return provider && <div>
-        {users.values().map((obj) => {
-            return <div>{obj.user.name}</div>
-        })}
+
+    console.log('users', users)
+    return <div>
+        <Text size="1" className={styles.subheader}>Collaborating with</Text>
+        {provider && <Flex gap="1" wrap="wrap" mt="2">
+            {Object.values(users).map((user, i) => {
+                return <Avatar.Root key={i} className={styles.Root} style={{ borderColor: user.user.color, backgroundColor: user.user.colorLight }}>
+                    <Avatar.Fallback className={styles.Fallback}>{user.user.name.slice(0, 1)}</Avatar.Fallback>
+                </Avatar.Root>
+            })}
+        </Flex>
+        }
     </div>
+
 }
 
 export default UserList;

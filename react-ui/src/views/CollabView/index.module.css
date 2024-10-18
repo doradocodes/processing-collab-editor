@@ -1,6 +1,6 @@
 .grid {
     display: grid;
-    /*grid-template-columns: 30% calc(70% - var(--gap));*/
+    grid-template-columns: 20% calc(80% - var(--gap));
     grid-template-rows: 40px 1fr;
     column-gap: var(--gap);
     row-gap: var(--gap);
@@ -13,6 +13,12 @@
 .grid[data-panel-open="false"] {
     grid-template-columns: 0px 1fr;
     column-gap: 0;
+}
+
+.leftColumnHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
 }
 
 .rightColumnHeader {
@@ -53,4 +59,9 @@
     50% {
         opacity: 0;
     }
+}
+
+.subheader {
+    font-weight: bold;
+    opacity: 0.25;
 }

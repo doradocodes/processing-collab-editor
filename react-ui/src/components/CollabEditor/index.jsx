@@ -10,17 +10,11 @@ import {java} from "@codemirror/lang-java";
 
 import styles from './index.module.css';
 import {materialDark, materialLight} from "@uiw/codemirror-theme-material";
-import {useWebsocketStore} from "../../store/websocketStore.js";
 import {Spinner} from "@radix-ui/themes";
 
-const CollabEditor = ({sketchName, sketchContent, roomID, isHost, userName, theme, onChange, onSave}) => {
+const CollabEditor = ({theme, sketchContent, yDoc, provider, onChange, onSave, isDocLoading}) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
-
-    const provider = useWebsocketStore(state => state.provider);
-    const yDoc = useWebsocketStore(state => state.yDoc);
-    const isDocLoading = useWebsocketStore(state => state.isDocLoading);
-    const setIsConnected = useWebsocketStore(state => state.setIsConnected);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -67,7 +61,7 @@ const CollabEditor = ({sketchName, sketchContent, roomID, isHost, userName, them
                     onChange(content);
                 }
             }),
-            yCollab(ytext, provider.awareness, {undoManager})
+            provider && yCollab(ytext, provider.awareness, {undoManager})
         ];
         return extensions;
     }
@@ -76,28 +70,26 @@ const CollabEditor = ({sketchName, sketchContent, roomID, isHost, userName, them
         editorRef.current.innerHTML = '';
 
         const state = EditorState.create({
-            doc: sketchContent,
             extensions: getExtensions(),
+            doc: sketchContent,
         })
 
         const view = new EditorView({
             state,
+
             parent: editorRef.current
         });
         viewRef.current = view;
 
         return () => {
             viewRef?.current?.destroy();
-            // provider?.disconnect();
-            provider?.destroy(); //TODO: runs when sketch is renamed
-            // setIsConnected(false);
             console.log('Editor destroyed');
         };
-    }, [sketchName, theme]);
+    }, [theme]);
 
     return [
         <div className={styles.editor} ref={editorRef} data-is-loading={isDocLoading}/>,
-        (!yDoc || isDocLoading) && <Spinner className={styles.spinner} size="20px" color="#1be7ff"/>
+        isDocLoading && <Spinner className={styles.spinner} size="20px" color="#1be7ff"/>
     ];
 };
 

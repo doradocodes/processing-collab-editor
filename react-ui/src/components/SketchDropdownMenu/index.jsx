@@ -1,22 +1,14 @@
-import React, {useState} from 'react';
-import {
-    Share1Icon,
-} from '@radix-ui/react-icons';
+import React from 'react';
 import {ChevronDownIcon, DropdownMenu, IconButton} from "@radix-ui/themes";
-import styles from './index.module.css';
 import {updateSketch} from "../../utils/localStorageUtils.js";
 import {useEditorStore} from "../../store/editorStore.js";
-import RenameSketchDialog from "../RenameSketchDialog/index.jsx";
 import {generateroomID} from "../../utils/utils.js";
-import * as Y from "yjs";
-import {WebsocketProvider} from "y-websocket";
-import {useWebsocketStore, websocketServer} from "../../store/websocketStore.js";
+import {useWebsocketStore} from "../../store/websocketStore.js";
 
-const SketchDropdownMenu = ({ trigger, onRename }) => {
+const SketchDropdownMenu = ({onRename, hasCollab}) => {
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
     const setupProvider = useWebsocketStore(state => state.setupProvider);
-    const addUser = useWebsocketStore(state => state.addUser);
 
     const onSave = async () => {
         const fileName = currentSketch.fileName || `sketch_${new Date().getTime()}`;
@@ -29,17 +21,10 @@ const SketchDropdownMenu = ({ trigger, onRename }) => {
         await updateSketch(fileName, currentSketch.content || '');
     }
 
-    const onCollabToggle = () => {
+    const onCollabToggle = async () => {
         const roomID = generateroomID();
-        setCurrentSketch({
-            fileName: currentSketch.fileName,
-            content: currentSketch.content,
-            isCollab: true,
-            isHost: true,
-            roomID,
-        });
-        setupProvider(roomID, true, currentSketch);
-        addUser('host');
+        await updateSketch(currentSketch.fileName, currentSketch.content);
+        window.electronAPI.openNewWindow(`collab/${roomID}/user/Host/sketch/${currentSketch.fileName}`);
     };
 
     return (
@@ -66,13 +51,15 @@ const SketchDropdownMenu = ({ trigger, onRename }) => {
                     Rename
                 </DropdownMenu.Item>
 
-                <DropdownMenu.Separator />
+                <DropdownMenu.Separator/>
 
-                <DropdownMenu.Item
-                    onClick={onCollabToggle}
-                >
-                    Collaborate
-                </DropdownMenu.Item>
+                {hasCollab &&
+                    <DropdownMenu.Item
+                        onClick={onCollabToggle}
+                    >
+                        Collaborate
+                    </DropdownMenu.Item>
+                }
             </DropdownMenu.Content>
         </DropdownMenu.Root>
     );

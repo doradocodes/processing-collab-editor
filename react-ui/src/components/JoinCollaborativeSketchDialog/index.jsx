@@ -14,18 +14,12 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit, isOpen, onC
     const userNameInput = createRef();
     const sketchNameInput = createRef();
 
-    const currentSketch = useEditorStore(state => state.currentSketch);
-    const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
-
-    const setupProvider = useWebsocketStore(state => state.setupProvider);
-    const addUser = useWebsocketStore(state => state.addUser);
-
     const onCloseDialog = () => {
         setError(null);
         onClose();
     };
 
-    const joinSketch = async (event) => {
+    const joinSketch = async () => {
         const roomID = sketchNameInput.current.value;
         if (!roomID) {
             return;
@@ -36,19 +30,7 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit, isOpen, onC
         console.log('username:', userName)
         console.log('Joining sketch:', roomID);
 
-        const folderPath = await updateSketch(`collab_${roomID}`, '');
-
-        setCurrentSketch({
-            fileName: `collab_${roomID}`,
-            content: '',
-            userName,
-            roomID,
-            isCollab: true,
-            isHost: false,
-        });
-
-        setupProvider(roomID, false);
-        addUser(userName);
+        window.electronAPI.openNewWindow(`collab/${roomID}/user/${userName}`);
 
         onSubmit();
         onCloseDialog();

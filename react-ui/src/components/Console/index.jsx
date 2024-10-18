@@ -9,7 +9,7 @@ const Console = ({theme = 'light', height}) => {
         window.electronAPI.onProcessingOutput((data) => {
             setOutput((prevOutput) => [
                 ...prevOutput,
-                <div className={styles.error}>{data}</div>,
+                <div>{data}</div>,
             ]);
         });
         window.electronAPI.onProcessingOutputError((data) => {
