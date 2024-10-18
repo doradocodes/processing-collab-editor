@@ -80,7 +80,7 @@ const Sketches = () => {
                     })}
             </div>
         </div>
-        <Flex direction="column" gap="1">
+        <Flex direction="column" gap="1" className={styles.buttonWrapper}>
             <Button radius="large" variant="surface" onClick={onCreateSketch}>Create a new sketch</Button>
             <hr/>
             <Flex direction="column" gap="3">
