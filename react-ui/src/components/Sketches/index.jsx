@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import styles from "./index.module.css";
 import {useEditorStore} from "../../store/editorStore.js";
-import {getSketchFile, getSketchFolders, updateSketch} from "../../utils/localStorageUtils.js";
-import {Button, Flex, Text} from "@radix-ui/themes";
+import {getSketchFile, updateSketch} from "../../utils/localStorageUtils.js";
+import {Badge, Button, Flex, Text} from "@radix-ui/themes";
 import JoinCollaborativeSketchDialog from "../JoinCollaborativeSketchDialog/index.jsx";
-import {formatSketchName} from "../../utils/utils.js";
 import {useSketchesStore} from "../../store/sketchesStore.js";
 import {useWebsocketStore} from "../../store/websocketStore.js";
+import SketchDropdownMenu from "../SketchDropdownMenu/index.jsx";
 
 const Sketches = () => {
     const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
@@ -23,7 +23,7 @@ const Sketches = () => {
         if (!currentSketch.fileName) {
             updateFilesFromLocalStorage()
                 .then((files) => {
-                    const lastSavedSketch = files[files.length - 1];
+                    const lastSavedSketch = files[0];
                     if (lastSavedSketch) {
                         getSketchFile(lastSavedSketch)
                             .then(content => {
@@ -60,6 +60,24 @@ const Sketches = () => {
         });
     }
 
+    function formatSketchName(name) {
+        if (!name) {
+            return 'Untitled sketch';
+        }
+        if (name.indexOf('sketch_') === 0) {
+            const formattedTimestamp = new Date(parseInt(name.split('_')[1])).toLocaleString();
+            return `Untitled sketch (${formattedTimestamp})`;
+        }
+        if (name.indexOf('collab_') === 0) {
+            // return [
+            //     <Badge color="green" size="1" mr="1">Collab</Badge>,
+            //     name.replace('collab_', '')
+            // ]
+            return name.replace('collab_', '') + ' (Copy)';
+        }
+        return name.replaceAll('_', ' ');
+    }
+
     return <div className={styles.sketches}>
         <div className={styles.sketchListWrapper}>
             <Text size="1" className={styles.subheader}>Sketches</Text>
@@ -74,19 +92,23 @@ const Sketches = () => {
                             onClick={(e) => onGetSketchFile(fileName)}
                         >
                             <Flex align="center" gap="1" key={i}>
-                                <Text size="2" truncate={true}>{formatSketchName(fileName)}</Text>
+                                <Text size="2" truncate={true} mr="1">{formatSketchName(fileName)}</Text>
+                                <SketchDropdownMenu
+                                    // onRename={onOpenRenameDialog}
+                                    hasCollab={true}
+                                />
                             </Flex>
                         </div>
                     })}
             </div>
         </div>
         <Flex direction="column" gap="1" className={styles.buttonWrapper}>
-            <Button radius="large" variant="surface" onClick={onCreateSketch}>Create a new sketch</Button>
+            <Button radius="large" variant="surface" onClick={onCreateSketch}>Create new sketch</Button>
             <hr/>
             <Flex direction="column" gap="3">
                 <JoinCollaborativeSketchDialog
                     isOpen={isJoinDialogOpen}
-                    trigger={<Button radius="large" onClick={() => setIsJoinDialogOpen(true)}>Join a collaborative sketch</Button>}
+                    trigger={<Button radius="large" onClick={() => setIsJoinDialogOpen(true)}>Join collaborative sketch</Button>}
                     onSubmit={async () => {
                         await updateFilesFromLocalStorage();
                     }}

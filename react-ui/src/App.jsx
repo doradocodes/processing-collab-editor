@@ -12,6 +12,7 @@ function App() {
     useEffect(() => {
         window.electronAPI.onSetTheme((newTheme) => {
             setTheme(newTheme);
+            console.log('Theme set to:', newTheme)
         });
     }, []);
 
@@ -23,7 +24,8 @@ function App() {
     >
         <HashRouter>
             <Routes>
-                <Route exact path="/" element={<Main theme={theme}/>} />
+                <Route exact path="/" element={<Main theme={theme}/>}/>
+                {/*<Route path="/theme/:theme" element={<Main />} />*/}
                 <Route path="/collab" element={<CollabView theme={theme}/>}>
                     <Route path=":roomID/user/:userName" element={<CollabView theme={theme}/>}/>
                     <Route path=":roomID/user/:userName/sketch/:sketchFolder" element={<CollabView theme={theme}/>}/>

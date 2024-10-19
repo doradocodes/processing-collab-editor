@@ -1,16 +1,15 @@
 import {useEditorStore} from "../../store/editorStore.js";
 import {useSketchesStore} from "../../store/sketchesStore.js";
 import {useWebsocketStore} from "../../store/websocketStore.js";
-import React, {useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {getSketchFile, renameSketch, updateSketch} from "../../utils/localStorageUtils.js";
 import styles from "./index.module.css";
-import {Badge, Text, Flex, Heading, IconButton, Tooltip} from "@radix-ui/themes";
+import {Badge, Flex, Heading, IconButton, Tooltip} from "@radix-ui/themes";
 import {ViewVerticalIcon} from "@radix-ui/react-icons";
 import {formatSketchName} from "../../utils/utils.js";
 import SketchDropdownMenu from "../../components/SketchDropdownMenu/index.jsx";
 import RenameSketchDialog from "../../components/RenameSketchDialog/index.jsx";
 import PlayButton from "../../components/PlayButton/index.jsx";
-import Editor from "../../components/Editor/index.jsx";
 import DraggableElement from "../../components/DraggableIndicator/index.jsx";
 import Console from "../../components/Console/index.jsx";
 import DisconnectAlertDialog from "../../components/DisconnectAlertDialog/index.jsx";
@@ -35,14 +34,11 @@ function CollabView({theme}) {
     const yDoc = useWebsocketStore(state => state.yDoc);
     const isDocLoading = useWebsocketStore(state => state.isDocLoading);
 
-    // console.log('ydoc', yDoc);
-    // console.log('provider', provider);
-
     const currentSketchRef = useRef(currentSketch); // Create a ref
 
     useEffect(() => {
-        currentSketchRef.current = currentSketch; // Update the ref whenever currentSketch changes
-    }, [currentSketch]); // Ensure it runs on currentSketch updates
+        currentSketchRef.current = currentSketch;
+    }, [currentSketch]);
 
     useEffect(() => {
         if (sketchFolder) {
@@ -83,13 +79,13 @@ function CollabView({theme}) {
         setIsRenameDialogOpen(true);
     }
 
-    const onRename = (newName) => {
+    const onRename = async (newName) => {
         setCurrentSketch({
             ...currentSketch,
             fileName: newName,
         });
-        renameSketch(currentSketch.fileName, newName);
-        updateFilesFromLocalStorage();
+        await renameSketch(currentSketch.fileName, newName);
+        await updateFilesFromLocalStorage();
     }
 
     const toggleLeftPanel = () => {

@@ -35,7 +35,7 @@ const template = [
     {
         label: 'File',
         submenu: [
-            {label: 'New window', accelerator: 'CmdOrCtrl+N', click: () => createMainWindow()},
+            {label: 'New window', accelerator: 'CmdOrCtrl+N', click: () => createWindow('')},
             {label: 'Open', click: () => console.log('Open clicked')},
             {label: 'Save', click: () => console.log('Save clicked')},
             {type: 'separator'},
@@ -86,7 +86,7 @@ function createSketchFolder() {
     }
 }
 
-const createWindow = (urlPath) => {
+const createWindow = (urlPath = '') => {
     let options = {
         width: 800,
         height: 600,
@@ -115,6 +115,10 @@ const createWindow = (urlPath) => {
         :
         `file://${path.join(__dirname, 'build', 'index.html')}#/${urlPath}`;
     newWindow.loadURL(windowUrl);
+
+    windows.forEach(window => {
+        window.webContents.send('set-theme', theme);
+    });
 }
 
 app.whenReady().then(async () => {
@@ -123,8 +127,11 @@ app.whenReady().then(async () => {
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu);
 
-    createWindow('');
+    createWindow();
 });
+
+app.on('browser-window-created', () => {
+})
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
@@ -134,6 +141,7 @@ app.on('browser-window-focus', function () {
     // globalShortcut.register("CommandOrControl+R", () => {
     //     console.log("CommandOrControl+R is pressed: Shortcut Disabled");
     // });
+
     globalShortcut.register("F5", () => {
         console.log("F5 is pressed: Shortcut Disabled");
     });
@@ -211,6 +219,17 @@ ipcMain.handle('rename-sketch', async (event, oldName, newName) => {
     });
 });
 
+ipcMain.handle('delete-sketch', async (event, folderName) => {
+    try {
+        const deletedFolder = await deleteSketchFile(folderName);
+        console.log('Sketch deleted successfully:', deletedFolder);
+        return deletedFolder;
+    } catch (error) {
+        console.error('Error deleting sketch:', error);
+        throw error;
+    }
+});
+
 let processingProcess = null; // To store the reference to the process
 
 ipcMain.handle('run-processing', (event, folderPath) => {
@@ -282,12 +301,28 @@ const createSketchFile = (fileName, fileContent) => {
     });
 };
 
+const deleteSketchFile = (folderName) => {
+    const folderPath = path.join(documentsFolderPath, folderName);
+
+    return new Promise((resolve, reject) => {
+        fs.rmdir(folderPath, {recursive: true}, (error) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            resolve(folderName);
+        });
+    });
+
+}
+
 const getSketchFolders = async () => {
     try {
         const entries = await fs.promises.readdir(documentsFolderPath, {withFileTypes: true});
         const folders = entries
             .filter(entry => entry.isDirectory())
-            .map(dir => dir.name);
+            .map(dir => dir.name)
+            .reverse();
         return folders;
     } catch (error) {
         console.error('Error getting sketch folders:', error);

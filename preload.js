@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getSketchFile: (folderName) => ipcRenderer.invoke('get-sketch-file', folderName),
     createNewSketch: (folderPath, content) => ipcRenderer.invoke('create-new-sketch', folderPath, content),
     renameSketch: (oldName, newName) => ipcRenderer.invoke('rename-sketch', oldName, newName),
+    deleteSketch: (folderName) => ipcRenderer.invoke('delete-sketch', folderName),
     onSetTheme: (callback) => ipcRenderer.on('set-theme', (event, theme) => callback(theme)),
     openNewWindow: (path) => ipcRenderer.invoke('open-new-window', path),
 });

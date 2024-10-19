@@ -1,14 +1,11 @@
-import React from 'react';
 import {ChevronDownIcon, DropdownMenu, IconButton} from "@radix-ui/themes";
-import {updateSketch} from "../../utils/localStorageUtils.js";
+import {deleteSketch, updateSketch} from "../../utils/localStorageUtils.js";
 import {useEditorStore} from "../../store/editorStore.js";
 import {generateroomID} from "../../utils/utils.js";
-import {useWebsocketStore} from "../../store/websocketStore.js";
 
 const SketchDropdownMenu = ({onRename, hasCollab}) => {
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
-    const setupProvider = useWebsocketStore(state => state.setupProvider);
 
     const onSave = async () => {
         const fileName = currentSketch.fileName || `sketch_${new Date().getTime()}`;
@@ -27,6 +24,12 @@ const SketchDropdownMenu = ({onRename, hasCollab}) => {
         window.electronAPI.openNewWindow(`collab/${roomID}/user/Host/sketch/${currentSketch.fileName}`);
     };
 
+    const onDelete = async () => {
+        await deleteSketch(currentSketch.fileName);
+
+        window.location.reload();
+    }
+
     return (
         <DropdownMenu.Root>
             <DropdownMenu.Trigger>
@@ -43,23 +46,24 @@ const SketchDropdownMenu = ({onRename, hasCollab}) => {
                     Save
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
-                    onClick={(e) => {
-                        onRename()
-                    }}
-                    // shortcut="⌘ R / Ctrl-R"
+                    onClick={() => onRename()}
                 >
                     Rename
                 </DropdownMenu.Item>
+                <DropdownMenu.Item
+                    onClick={() => onDelete()}
+                >
+                    Delete
+                </DropdownMenu.Item>
 
-                <DropdownMenu.Separator/>
-
-                {hasCollab &&
+                {hasCollab && [
+                    <DropdownMenu.Separator/>,
                     <DropdownMenu.Item
                         onClick={onCollabToggle}
                     >
                         Collaborate
                     </DropdownMenu.Item>
-                }
+                ]}
             </DropdownMenu.Content>
         </DropdownMenu.Root>
     );

@@ -4,7 +4,8 @@
 }
 
 :root, .light, .light-theme, .radix-themes {
-    --color-background: linear-gradient(45deg, #d8dadc 0%, #d8dadc 100%);
+    /*--color-background: linear-gradient(45deg, #d8dadc 0%, #d8dadc 100%);*/
+    --color-background: linear-gradient(45deg, #e3e2e2 0%, #e3e2e2 100%);
     /*--color-background: #d8dadc;*/
     --color-text: #222222;
 }

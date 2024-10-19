@@ -17,6 +17,15 @@ export const updateSketch = async (fileName, content) => {
     }
 }
 
+export const deleteSketch = async (folderName) => {
+    try {
+        await window.electronAPI.deleteSketch(folderName);
+        // console.info('Deleted sketch:', folderName);
+    } catch (error) {
+        console.error('Error deleting sketch:', error);
+    }
+}
+
 export const getSketchFile = async (folder) => {
     const fileContent = await window.electronAPI.getSketchFile(folder);
     // console.info('File content of ', folder, ':\n', fileContent);

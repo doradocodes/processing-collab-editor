@@ -15,8 +15,11 @@ import DraggableElement from "../../components/DraggableIndicator/index.jsx";
 import {useSketchesStore} from "../../store/sketchesStore.js";
 import {useWebsocketStore} from "../../store/websocketStore.js";
 import DisconnectAlertDialog from "../../components/DisconnectAlertDialog/index.jsx";
+import {useParams} from "react-router-dom";
 
-function Main({theme}) {
+function Main() {
+    const { theme } = useParams();
+
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
     const updateFilesFromLocalStorage = useSketchesStore(state => state.updateFilesFromLocalStorage)
@@ -112,7 +115,7 @@ function Main({theme}) {
             </div>
 
             <div className={styles.leftColumn}>
-                <Sketches/>
+                <Sketches />
             </div>
 
 
