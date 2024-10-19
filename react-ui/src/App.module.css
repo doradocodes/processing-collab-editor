@@ -1,6 +1,6 @@
 .grid {
     display: grid;
-    grid-template-columns: 30% calc(70% - var(--gap));
+    grid-template-columns: min(30%, 300px) 1fr;
     grid-template-rows: 40px 1fr;
     column-gap: var(--gap);
     row-gap: var(--gap);
@@ -45,19 +45,7 @@
     padding: 5px;
 }
 
-.connectionIndicator {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #00be00;
-    animation: blink 1s infinite;
-}
-
-@keyframes blink {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0;
-    }
+.subheader {
+    font-weight: bold;
+    opacity: 0.25;
 }

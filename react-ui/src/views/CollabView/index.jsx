@@ -3,7 +3,6 @@ import {useSketchesStore} from "../../store/sketchesStore.js";
 import {useWebsocketStore} from "../../store/websocketStore.js";
 import {useEffect, useRef, useState} from "react";
 import {getSketchFile, renameSketch, updateSketch} from "../../utils/localStorageUtils.js";
-import styles from "./index.module.css";
 import {Badge, Flex, Heading, IconButton, Theme, Tooltip} from "@radix-ui/themes";
 import {ViewVerticalIcon} from "@radix-ui/react-icons";
 import {formatSketchName} from "../../utils/utils.js";
@@ -16,6 +15,7 @@ import DisconnectAlertDialog from "../../components/DisconnectAlertDialog/index.
 import UserList from "../../components/UserList/index.jsx";
 import {useParams} from "react-router-dom";
 import CollabEditor from "../../components/CollabEditor/index.jsx";
+import styles from './../../App.module.css';
 
 // eslint-disable-next-line react/prop-types
 function CollabView() {
