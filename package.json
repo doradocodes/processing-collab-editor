@@ -15,7 +15,7 @@
     "make:mac": "npm run build && electron-forge make --platform=darwin",
     "make:mac64": "npm run build && electron-forge make --platform=darwin --arch=x64",
     "make:linux": "npm run build && electron-forge make --platform=linux",
-    "sign_processing": "node sign_jnilib_files.js tools"
+    "sign_processing": "node tools/sign_jnilib_files.js tools"
   },
   "build": {
     "appId": "com.doradocodes.pce",

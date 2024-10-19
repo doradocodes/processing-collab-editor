@@ -1,12 +1,11 @@
 const {app, BrowserWindow, session, nativeImage, Menu, globalShortcut} = require('electron')
 const path = require('node:path')
-const {exec} = require('child_process')
 const {ipcMain} = require('electron')
 const fs = require('node:fs');
 const os = require('os');
-const {loadPreferences, savePreferences} = require("./preferences");
+const {loadPreferences, savePreferences} = require("./electronUtils/preferences");
 
-const {loadIpcFunctions} = require("./ipcUtils");
+const {loadIpcFunctions} = require("./electronUtils/ipcUtils");
 
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -98,7 +97,7 @@ const createWindow = (urlPath = '') => {
         minWidth: 800,
         minHeight: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
+            preload: path.join(__dirname, 'electronUtils/preload.js'),
             nodeIntegration: true,
             contextIsolation: true,
         },

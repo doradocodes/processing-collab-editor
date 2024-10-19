@@ -1,7 +1,7 @@
 # Processing Collaborative Code Editor
 
 ## Description
-Prototype for a new collaborative code editor for Processing (2024 pr05).
+Prototype for a new collaborative code editor for Processing Foundation (2024 pr05).
 
 ## Installation
 1. Clone the repository.
