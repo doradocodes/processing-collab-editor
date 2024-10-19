@@ -1,9 +1,9 @@
 import {useEditorStore} from "../../store/editorStore.js";
 import {useSketchesStore} from "../../store/sketchesStore.js";
 import {useWebsocketStore} from "../../store/websocketStore.js";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {getSketchFile, renameSketch, updateSketch} from "../../utils/localStorageUtils.js";
-import {Badge, Flex, Heading, IconButton, Theme, Tooltip} from "@radix-ui/themes";
+import {Badge, Button, Flex, Heading, IconButton, Text, Theme, Tooltip} from "@radix-ui/themes";
 import {ViewVerticalIcon} from "@radix-ui/react-icons";
 import {formatSketchName} from "../../utils/utils.js";
 import SketchDropdownMenu from "../../components/SketchDropdownMenu/index.jsx";
@@ -142,14 +142,6 @@ function CollabView() {
                             onClose={() => setIsRenameDialogOpen(false)}
                         />
 
-                        {currentSketch.roomID &&
-                            <Tooltip content="Copy ID" size="1">
-                                <Badge color="green"
-                                       onClick={copyIDToClipboard}
-                                >Room ID: {currentSketch.roomID}</Badge>
-                            </Tooltip>
-                        }
-
                         {hasSaved && <span>Saved!</span>}
 
                     </Flex>
@@ -157,6 +149,28 @@ function CollabView() {
                 </div>
 
                 <div className={styles.leftColumn}>
+                    <Flex align="start" direction="column" gap="1" mb="3">
+                        <Text size="1" className={styles.subheader}>Room ID</Text>
+
+                        {currentSketch.roomID &&
+                            <Tooltip content="Copy ID">
+                                <Button
+                                    color="green"
+                                    size="1"
+                                    onClick={copyIDToClipboard}
+                                >
+                                    {currentSketch.roomID}
+                                </Button>
+                                {/*<Badge*/}
+                                {/*    color="green"*/}
+                                {/*    onClick={copyIDToClipboard}*/}
+                                {/*    size="2"*/}
+                                {/*>{currentSketch.roomID}</Badge>*/}
+                            </Tooltip>
+                        }
+                    </Flex>
+
+                    <hr/>
                     <UserList/>
                 </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './index.module.css';
 
 function DraggableIndicator({ onDrag, initialHeight = 100 }) {
@@ -6,6 +6,8 @@ function DraggableIndicator({ onDrag, initialHeight = 100 }) {
     const dragStartY = useRef(0);
 
     const handleDragStart = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         dragStartY.current = e.clientY;
 
         const handleDrag = (e) => {

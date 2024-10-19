@@ -1,11 +1,15 @@
-const {ipcMain} = require('electron');
+const {ipcMain, app} = require('electron');
 const fs = require('fs');
 const path = require('path');
 const {exec} = require('child_process');
 const {createSketchFile, deleteSketchFile, getSketchFile, getSketchFolders} = require("./fsUtils");
 const os = require("os");
+const isPackaged = app.isPackaged;
 
 const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
+const processingJavaPath = isPackaged
+    ? path.join(process.resourcesPath, 'tools', 'processing-java')
+    : 'processing-java';
 
 function loadIpcFunctions() {
     ipcMain.handle('get-sketch-folders', async (event) => {

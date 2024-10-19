@@ -15,15 +15,11 @@ const windows = [];
 let splashWindow = null;
 
 const isMac = process.platform === 'darwin';
-const isPackaged = app.isPackaged;
-const processingJavaPath = isPackaged
-    ? path.join(process.resourcesPath, 'tools', 'processing-java')
-    : 'processing-java';
+
 const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
 
 // Load initial preferences
 const userPreferences = loadPreferences();
-console.log('User Preferences:', userPreferences);
 
 const template = [
     {
@@ -44,23 +40,23 @@ const template = [
         label: 'File',
         submenu: [
             {label: 'New window', accelerator: 'CmdOrCtrl+N', click: () => createWindow('')},
-            {label: 'Open', click: () => console.log('Open clicked')},
-            {label: 'Save', click: () => console.log('Save clicked')},
+            // {label: 'Open', click: () => console.log('Open clicked')},
+            // {label: 'Save', click: () => console.log('Save clicked')},
             {type: 'separator'},
             {label: 'Exit', role: 'quit'}
         ]
     },
-    {
-        label: 'Edit',
-        submenu: [
-            {label: 'Undo', role: 'undo'},
-            {label: 'Redo', role: 'redo'},
-            {type: 'separator'},
-            {label: 'Cut', role: 'cut'},
-            {label: 'Copy', role: 'copy'},
-            {label: 'Paste', role: 'paste'}
-        ]
-    },
+    // {
+    //     label: 'Edit',
+    //     submenu: [
+    //         {label: 'Undo', role: 'undo'},
+    //         {label: 'Redo', role: 'redo'},
+    //         {type: 'separator'},
+    //         {label: 'Cut', role: 'cut'},
+    //         {label: 'Copy', role: 'copy'},
+    //         {label: 'Paste', role: 'paste'}
+    //     ]
+    // },
     {
         label: 'View',
         submenu: [

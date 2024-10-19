@@ -105,15 +105,6 @@ function Main() {
                             onClose={() => setIsRenameDialogOpen(false)}
                         />
 
-                        {currentSketch.isCollab && currentSketch.roomID &&
-                            <Tooltip content="Copy ID" size="1">
-                                <Button
-                                    variant="soft" size="1" color="green"
-                                    onClick={copyIDToClipboard}
-                                >Room ID: {currentSketch.roomID}</Button>
-                            </Tooltip>
-                        }
-
                         {hasSaved && <span>Saved!</span>}
 
                     </Flex>
