@@ -6,10 +6,6 @@
     /*box-shadow: var(--box-shadow);*/
 }
 
-.editor[data-is-loading='true'] {
-    visibility: hidden;
-}
-
 .editor :global(.cm-editor) {
     height: 100%;
 }
@@ -18,6 +14,17 @@
     font-size: 1em;
     font-family: inherit;
     opacity: 1;
+}
+
+.editor[data-is-loading='true']:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 1;
 }
 
 .spinner {

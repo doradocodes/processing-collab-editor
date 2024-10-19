@@ -8,10 +8,18 @@ import {java} from "@codemirror/lang-java";
 
 import styles from './index.module.css';
 import {materialDark, materialLight} from "@uiw/codemirror-theme-material";
+import {useEditorStore} from "../../store/editorStore.js";
 
 const Editor = ({sketchName, sketchContent, theme, onChange, onSave}) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
+
+    const isLoading = useEditorStore(state => state.isLoading);
+    const isFocused = useEditorStore(state => state.isFocused);
+
+    useEffect(() => {
+        viewRef.current?.focus();
+    }, [isFocused]);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -79,7 +87,7 @@ const Editor = ({sketchName, sketchContent, theme, onChange, onSave}) => {
         };
     }, [sketchName, theme]);
 
-    return <div className={styles.editor} ref={editorRef}/>;
+    return <div className={styles.editor} ref={editorRef} data-is-loading={isLoading}/>;
 };
 
 export default Editor;

@@ -6,15 +6,16 @@ import PlayIcon from './../../assets/play_icon.png';
 import {useEffect, useState} from "react";
 
 const PlayButton = () => {
-    const [isLoading, setIsLoading] = useState(false);
+    const isLoading = useEditorStore(state => state.isLoading);
+    const setIsLoading = useEditorStore(state => state.setIsLoading);
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
 
     useEffect(() => {
-        window.electronAPI.onProcessingOutput((data) => {
+        window.electronAPI.onProcessingOutput(() => {
             setIsLoading(false);
         });
-        window.electronAPI.onProcessingOutputError((data) => {
+        window.electronAPI.onProcessingOutputError(() => {
             setIsLoading(false);
         });
     }, []);
@@ -31,7 +32,6 @@ const PlayButton = () => {
             folderPath = await updateSketch(fileName, currentSketch.content);
         } else {
             folderPath = await updateSketch(currentSketch.fileName, currentSketch.content);
-
         }
 
         setIsLoading(true);

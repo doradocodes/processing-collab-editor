@@ -57,8 +57,9 @@ const SketchDropdownMenu = ({onRename, hasCollab}) => {
                 </DropdownMenu.Item>
 
                 {hasCollab && [
-                    <DropdownMenu.Separator/>,
+                    <DropdownMenu.Separator key={1}/>,
                     <DropdownMenu.Item
+                        key={2}
                         onClick={onCollabToggle}
                     >
                         Collaborate

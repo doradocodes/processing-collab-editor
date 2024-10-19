@@ -16,6 +16,8 @@
 }
 
 .leftColumnHeader {
+    display: flex;
+    align-items: flex-end;
 }
 
 .rightColumnHeader {
@@ -25,7 +27,10 @@
 }
 
 .leftColumn {
-
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .rightColumn {
@@ -48,4 +53,13 @@
 .subheader {
     font-weight: bold;
     opacity: 0.25;
+}
+
+.logo {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
 }

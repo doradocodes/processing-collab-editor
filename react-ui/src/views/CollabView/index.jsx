@@ -45,7 +45,6 @@ function CollabView() {
                         ...currentSketch,
                         fileName: sketchFolder,
                         content,
-                        roomID,
                     };
                     setCurrentSketch(sketch);
                     setupProvider(roomID, true, sketch, userName);
@@ -56,10 +55,6 @@ function CollabView() {
                     setCurrentSketch({
                         fileName: `collab_${roomID}`,
                         content: '',
-                        userName,
-                        roomID,
-                        // isCollab: true,
-                        // isHost: false,
                     });
 
                     setupProvider(roomID, false, null, userName);
@@ -90,7 +85,7 @@ function CollabView() {
     }
 
     const copyIDToClipboard = () => {
-        navigator.clipboard.writeText(currentSketch.roomID);
+        navigator.clipboard.writeText(roomID);
     }
 
     return <Theme
@@ -102,15 +97,9 @@ function CollabView() {
         <div className='App'>
             <div className={styles.grid} data-panel-open={isLeftPanelOpen}>
                 <div className={styles.leftColumnHeader}>
-                    {isLeftPanelOpen &&
-                        <Flex justify="between" align="end">
-                            <IconButton onClick={toggleLeftPanel} variant="ghost">
-                                <ViewVerticalIcon/>
-                            </IconButton>
-                            <img className="logo" src="./Processing-logo.png" alt="logo"/>
-                            <div></div>
-                        </Flex>
-                    }
+                    <IconButton onClick={toggleLeftPanel} variant="ghost" mb="1">
+                        <ViewVerticalIcon/>
+                    </IconButton>
                 </div>
 
                 <div className={styles.rightColumnHeader}>
@@ -149,23 +138,20 @@ function CollabView() {
                 </div>
 
                 <div className={styles.leftColumn}>
-                    <Flex align="start" direction="column" gap="1" mb="3">
+                    <img className={styles.logo} src="./Processing-logo.png" alt="logo"/>
+
+                    <Flex align="start" direction="column" gap="1" mb="2">
                         <Text size="1" className={styles.subheader}>Room ID</Text>
 
-                        {currentSketch.roomID &&
+                        {roomID &&
                             <Tooltip content="Copy ID">
                                 <Button
                                     color="green"
                                     size="1"
                                     onClick={copyIDToClipboard}
                                 >
-                                    {currentSketch.roomID}
+                                    {roomID}
                                 </Button>
-                                {/*<Badge*/}
-                                {/*    color="green"*/}
-                                {/*    onClick={copyIDToClipboard}*/}
-                                {/*    size="2"*/}
-                                {/*>{currentSketch.roomID}</Badge>*/}
                             </Tooltip>
                         }
                     </Flex>

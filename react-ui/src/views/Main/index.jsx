@@ -53,10 +53,6 @@ function Main() {
         setIsLeftPanelOpen(!isLeftPanelOpen);
     }
 
-    const copyIDToClipboard = () => {
-        navigator.clipboard.writeText(currentSketch.roomID);
-    }
-
     return <Theme
         appearance={theme}
         accentColor="indigo"
@@ -66,15 +62,9 @@ function Main() {
         <div className='App'>
             <div className={styles.grid} data-panel-open={isLeftPanelOpen}>
                 <div className={styles.leftColumnHeader}>
-                    {isLeftPanelOpen &&
-                        <Flex justify="between" align="end">
-                            <IconButton onClick={toggleLeftPanel} variant="ghost">
-                                <ViewVerticalIcon/>
-                            </IconButton>
-                            <img className="logo" src="./Processing-logo.png" alt="logo"/>
-                            <div></div>
-                        </Flex>
-                    }
+                    <IconButton onClick={toggleLeftPanel} variant="ghost" mb="1">
+                        <ViewVerticalIcon/>
+                    </IconButton>
                 </div>
 
                 <div className={styles.rightColumnHeader}>
@@ -112,6 +102,7 @@ function Main() {
                 </div>
 
                 <div className={styles.leftColumn}>
+                    <img className={styles.logo} src="./Processing-logo.png" alt="logo"/>
                     <Sketches
                         onOpenRenameDialog={onOpenRenameDialog}
                     />
@@ -119,13 +110,10 @@ function Main() {
 
 
                 <div className={styles.rightColumn}>
-                    <Editor
+                <Editor
                         theme={theme}
                         sketchName={currentSketch.fileName}
                         sketchContent={currentSketch.content}
-                        roomID={currentSketch.roomID}
-                        isCollab={currentSketch.isCollab}
-                        isHost={currentSketch.isHost}
                         userName={currentSketch.userName}
                         onChange={(content) => {
                             setCurrentSketch({

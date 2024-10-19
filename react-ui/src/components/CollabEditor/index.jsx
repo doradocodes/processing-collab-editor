@@ -8,13 +8,21 @@ import {EditorState} from "@codemirror/state";
 import {indentWithTab} from "@codemirror/commands";
 import {java} from "@codemirror/lang-java";
 
-import styles from './index.module.css';
+import styles from './../Editor/index.module.css';
 import {materialDark, materialLight} from "@uiw/codemirror-theme-material";
 import {Spinner} from "@radix-ui/themes";
+import {useEditorStore} from "../../store/editorStore.js";
 
 const CollabEditor = ({theme, sketchContent, yDoc, provider, onChange, onSave, isDocLoading}) => {
     const editorRef = useRef(null);
     const viewRef = useRef(null);
+
+    const isLoading = useEditorStore(state => state.isLoading);
+    const isFocused = useEditorStore(state => state.isFocused);
+
+    useEffect(() => {
+        viewRef.current?.focus();
+    }, [isFocused]);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -88,7 +96,7 @@ const CollabEditor = ({theme, sketchContent, yDoc, provider, onChange, onSave, i
     }, [theme]);
 
     return [
-        <div className={styles.editor} ref={editorRef} data-is-loading={isDocLoading}/>,
+        <div className={styles.editor} ref={editorRef} data-is-loading={isDocLoading || isLoading}/>,
         isDocLoading && <Spinner className={styles.spinner} size="20px" color="#1be7ff"/>
     ];
 };

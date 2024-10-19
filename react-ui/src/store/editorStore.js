@@ -1,16 +1,14 @@
-import { create } from 'zustand';
-import {devtools, redux} from 'zustand/middleware'
-
+import {create} from 'zustand';
+import {devtools} from 'zustand/middleware';
 
 export const useEditorStore = create(devtools((set) => ({
     currentSketch: {
         fileName: null,
         content: '',
-        isCollab: false,
-        isHost: false,
-        roomID: null,
     },
     isLoading: false,
-    setCurrentSketch: (currentSketch) => set({ currentSketch }),
-    setIsLoading: (isLoading) => set({ isLoading }),
+    setIsLoading: (isLoading) => set({isLoading}),
+    setCurrentSketch: (currentSketch) => set({currentSketch}),
+    isFocused: false,
+    setIsFocused: (isFocused) => set({isFocused}),
 })));

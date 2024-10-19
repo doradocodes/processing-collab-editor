@@ -1,14 +1,14 @@
 .sketches {
     overflow-y: auto;
     overflow-x: hidden;
-    height: 100%;
+    flex: 1;
+    max-height: 75vh;
     position: relative;
     padding: 0 5px;
 }
 
 .sketchListWrapper {
     overflow-y: auto;
-    max-height: 70vh;
     position: relative;
 }
 
@@ -19,7 +19,6 @@
     font-size: 0.9em;
     margin-right: 5px;
     padding-bottom: 10px;
-
 }
 
 .sketchList:not(:last-child) {
@@ -38,20 +37,6 @@
     border-radius: var(--radius-3);
     color: #222222;
 }
-
-.sketchItem[data-is-connected='true']:after {
-    content: '';
-    display: block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #00be00;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
 
 .subheader {
     font-weight: bold;
