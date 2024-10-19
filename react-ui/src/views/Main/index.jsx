@@ -1,7 +1,7 @@
 import {useEditorStore} from "../../store/editorStore.js";
-import React, {useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {renameSketch, updateSketch} from "../../utils/localStorageUtils.js";
-import {Button, Flex, Heading, IconButton, Tooltip} from "@radix-ui/themes";
+import {Button, Flex, Heading, IconButton, Theme, Tooltip} from "@radix-ui/themes";
 import {ViewVerticalIcon} from "@radix-ui/react-icons";
 import styles from "../../App.module.css";
 import SketchDropdownMenu from "../../components/SketchDropdownMenu/index.jsx";
@@ -18,7 +18,7 @@ import DisconnectAlertDialog from "../../components/DisconnectAlertDialog/index.
 import {useParams} from "react-router-dom";
 
 function Main() {
-    const { theme } = useParams();
+    const {theme} = useParams();
 
     const currentSketch = useEditorStore(state => state.currentSketch);
     const setCurrentSketch = useEditorStore(state => state.setCurrentSketch);
@@ -57,104 +57,113 @@ function Main() {
         navigator.clipboard.writeText(currentSketch.roomID);
     }
 
-    return <div className='App'>
-        <div className={styles.grid} data-panel-open={isLeftPanelOpen}>
-            <div className={styles.leftColumnHeader}>
-                {isLeftPanelOpen &&
-                    [
-                        <IconButton onClick={toggleLeftPanel} variant="ghost" mb="1">
-                            <ViewVerticalIcon/>
-                        </IconButton>,
-                        <img className="logo" src="./Processing-logo.png" alt="logo"/>,
-                        <div></div>
-                    ]
-                }
-            </div>
-
-            <div className={styles.rightColumnHeader}>
-                <Flex gap="3" align="center">
-                    {!isLeftPanelOpen &&
-                        <IconButton onClick={toggleLeftPanel} variant="ghost">
-                            <ViewVerticalIcon/>
-                        </IconButton>
+    return <Theme
+        appearance={theme}
+        accentColor="indigo"
+        panelBackground="translucent"
+        radius="medium"
+    >
+        <div className='App'>
+            <div className={styles.grid} data-panel-open={isLeftPanelOpen}>
+                <div className={styles.leftColumnHeader}>
+                    {isLeftPanelOpen &&
+                        <Flex justify="between" align="end">
+                            <IconButton onClick={toggleLeftPanel} variant="ghost">
+                                <ViewVerticalIcon/>
+                            </IconButton>
+                            <img className="logo" src="./Processing-logo.png" alt="logo"/>
+                            <div></div>
+                        </Flex>
                     }
+                </div>
 
-                    <Heading
-                        size="4"
-                        truncate={true}
-                        className={styles.sketchName}
-                    >
-                        {formatSketchName(currentSketch?.fileName)}
-                    </Heading>
+                <div className={styles.rightColumnHeader}>
+                    <Flex gap="3" align="center">
+                        {!isLeftPanelOpen &&
+                            <IconButton onClick={toggleLeftPanel} variant="ghost">
+                                <ViewVerticalIcon/>
+                            </IconButton>
+                        }
 
-                    <SketchDropdownMenu
-                        onRename={onOpenRenameDialog}
-                        hasCollab={true}
-                    />
+                        <Heading
+                            size="4"
+                            truncate={true}
+                            className={styles.sketchName}
+                        >
+                            {formatSketchName(currentSketch?.fileName)}
+                        </Heading>
 
-                    <RenameSketchDialog
-                        defaultValue={currentSketch.fileName}
-                        isOpen={isRenameDialogOpen}
-                        onSave={onRename}
-                        onClose={() => setIsRenameDialogOpen(false)}
-                    />
+                        <SketchDropdownMenu
+                            onRename={onOpenRenameDialog}
+                            hasCollab={true}
+                        />
 
-                    {currentSketch.isCollab && currentSketch.roomID &&
-                        <Tooltip content="Copy ID" size="1">
-                            <Button
-                                variant="soft" size="1" color="green"
-                                onClick={copyIDToClipboard}
-                            >Room ID: {currentSketch.roomID}</Button>
-                        </Tooltip>
-                    }
+                        <RenameSketchDialog
+                            defaultValue={currentSketch.fileName}
+                            isOpen={isRenameDialogOpen}
+                            onSave={onRename}
+                            onClose={() => setIsRenameDialogOpen(false)}
+                        />
 
-                    {hasSaved && <span>Saved!</span>}
+                        {currentSketch.isCollab && currentSketch.roomID &&
+                            <Tooltip content="Copy ID" size="1">
+                                <Button
+                                    variant="soft" size="1" color="green"
+                                    onClick={copyIDToClipboard}
+                                >Room ID: {currentSketch.roomID}</Button>
+                            </Tooltip>
+                        }
 
-                </Flex>
-                <PlayButton/>
-            </div>
+                        {hasSaved && <span>Saved!</span>}
 
-            <div className={styles.leftColumn}>
-                <Sketches />
-            </div>
+                    </Flex>
+                    <PlayButton/>
+                </div>
 
-
-            <div className={styles.rightColumn}>
-                <Editor
-                    theme={theme}
-                    sketchName={currentSketch.fileName}
-                    sketchContent={currentSketch.content}
-                    roomID={currentSketch.roomID}
-                    isCollab={currentSketch.isCollab}
-                    isHost={currentSketch.isHost}
-                    userName={currentSketch.userName}
-                    onChange={(content) => {
-                        setCurrentSketch({
-                            ...currentSketch,
-                            content
-                        });
-                    }}
-                    onSave={() => {
-                        updateSketch(currentSketchRef.current.fileName, currentSketchRef.current.content);
-                        setHasSaved(true);
-                        setTimeout(() => {
-                            setHasSaved(false);
-                        }, 2000);
-                    }}
-                />
-                <div className={styles.layoutResize}>
-                    <DraggableElement
-                        onDrag={(height) => {
-                            setConsoleHeight(height);
-                        }}
+                <div className={styles.leftColumn}>
+                    <Sketches
+                        onOpenRenameDialog={onOpenRenameDialog}
                     />
                 </div>
-                {<Console theme="dark" height={consoleHeight}/>}
-            </div>
-        </div>
 
-        {isDisconnectDialogOpen && <DisconnectAlertDialog isOpen={true}/>}
-    </div>
+
+                <div className={styles.rightColumn}>
+                    <Editor
+                        theme={theme}
+                        sketchName={currentSketch.fileName}
+                        sketchContent={currentSketch.content}
+                        roomID={currentSketch.roomID}
+                        isCollab={currentSketch.isCollab}
+                        isHost={currentSketch.isHost}
+                        userName={currentSketch.userName}
+                        onChange={(content) => {
+                            setCurrentSketch({
+                                ...currentSketch,
+                                content
+                            });
+                        }}
+                        onSave={() => {
+                            updateSketch(currentSketchRef.current.fileName, currentSketchRef.current.content);
+                            setHasSaved(true);
+                            setTimeout(() => {
+                                setHasSaved(false);
+                            }, 2000);
+                        }}
+                    />
+                    <div className={styles.layoutResize}>
+                        <DraggableElement
+                            onDrag={(height) => {
+                                setConsoleHeight(height);
+                            }}
+                        />
+                    </div>
+                    {<Console theme="dark" height={consoleHeight}/>}
+                </div>
+            </div>
+
+            {isDisconnectDialogOpen && <DisconnectAlertDialog isOpen={true}/>}
+        </div>
+    </Theme>
 }
 
 export default Main;

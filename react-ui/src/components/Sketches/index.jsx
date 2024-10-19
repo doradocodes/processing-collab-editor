@@ -8,7 +8,7 @@ import {useSketchesStore} from "../../store/sketchesStore.js";
 import {useWebsocketStore} from "../../store/websocketStore.js";
 import SketchDropdownMenu from "../SketchDropdownMenu/index.jsx";
 
-const Sketches = () => {
+const Sketches = ({onOpenRenameDialog}) => {
     const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
 
     const currentSketch = useEditorStore(state => state.currentSketch);
@@ -69,10 +69,6 @@ const Sketches = () => {
             return `Untitled sketch (${formattedTimestamp})`;
         }
         if (name.indexOf('collab_') === 0) {
-            // return [
-            //     <Badge color="green" size="1" mr="1">Collab</Badge>,
-            //     name.replace('collab_', '')
-            // ]
             return name.replace('collab_', '') + ' (Copy)';
         }
         return name.replaceAll('_', ' ');
@@ -89,12 +85,12 @@ const Sketches = () => {
                             data-active={currentSketch.fileName === fileName}
                             data-is-connected={(currentSketch.fileName === fileName) && isConnected}
                             key={`${fileName}-${i}`}
-                            onClick={(e) => onGetSketchFile(fileName)}
+                            onClick={() => onGetSketchFile(fileName)}
                         >
-                            <Flex align="center" gap="1" key={i}>
+                            <Flex align="center" justify="between" gap="1" key={i}>
                                 <Text size="2" truncate={true} mr="1">{formatSketchName(fileName)}</Text>
                                 <SketchDropdownMenu
-                                    // onRename={onOpenRenameDialog}
+                                    onRename={onOpenRenameDialog}
                                     hasCollab={true}
                                 />
                             </Flex>

@@ -20,12 +20,17 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit, isOpen, onC
     };
 
     const joinSketch = async () => {
-        const roomID = sketchNameInput.current.value;
-        if (!roomID) {
+        const userName = userNameInput.current.value;
+        if (!userName) {
+            setError('Please enter your name');
             return;
         }
 
-        const userName = userNameInput.current.value;
+        const roomID = sketchNameInput.current.value;
+        if (!roomID) {
+            setError('Please enter a room ID');
+            return;
+        }
 
         console.log('username:', userName)
         console.log('Joining sketch:', roomID);
@@ -34,6 +39,7 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit, isOpen, onC
 
         onSubmit();
         onCloseDialog();
+        onClose();
     };
 
     return <Dialog.Root open={isOpen}>
@@ -66,7 +72,7 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit, isOpen, onC
                         <Text as="div" size="2" mb="1" weight="bold">
                             Room ID
                         </Text>
-                        <TextField.Root placeholder="Enter room ID" ref={sketchNameInput}>
+                        <TextField.Root placeholder="Enter room ID" ref={sketchNameInput} onSubmit={joinSketch}>
                             <TextField.Slot>
                                 <FileIcon height="16" width="16"/>
                             </TextField.Slot>
@@ -80,9 +86,8 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit, isOpen, onC
                     <Button radius="large" variant="soft" color="gray" onClick={onCloseDialog}>
                         Cancel
                     </Button>
-                    <Dialog.Close>
-                        <Button radius="large" onClick={joinSketch}>Join</Button>
-                    </Dialog.Close>
+                    <Button radius="large" onClick={joinSketch}>Join</Button>
+
                 </Flex>
             </div>
 
