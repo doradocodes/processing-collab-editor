@@ -133,3 +133,4 @@ dist
 # vite
 .vite
 /build
+/tools/PlugIns

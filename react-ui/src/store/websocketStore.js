@@ -4,7 +4,7 @@ import * as Y from "yjs";
 
 // export const websocketServer = 'ws://pce-server.glitch.me/1234';
 // export const websocketServer = 'ws://localhost:1234';
-export const websocketServer = 'ws://pce-server.onrender.com/1234';
+export const websocketServer = 'wss://pce-server.onrender.com/1234';
 
 const userColors = [
     { color: '#30bced', light: '#30bced33' },

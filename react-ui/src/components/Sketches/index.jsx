@@ -8,7 +8,7 @@ import {useWebsocketStore} from "../../store/websocketStore.js";
 import SketchDropdownMenu from "../SketchDropdownMenu/index.jsx";
 import JoinCollaborativeSketchDialog from "../JoinCollaborativeSketchDialog/index.jsx";
 
-const Sketches = ({onOpenRenameDialog}) => {
+const Sketches = ({onOpenRenameDialog, theme}) => {
     const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
 
     const currentSketch = useEditorStore(state => state.currentSketch);
@@ -73,28 +73,29 @@ const Sketches = ({onOpenRenameDialog}) => {
         return name.replaceAll('_', ' ');
     }
 
-    return [
-        <Flex gap="1" mb="2" justify="center" key={1}>
-            <Button radius="large" variant="surface" onClick={onCreateSketch}>Create new</Button>
+    return <div className={styles.sketchesWrapper} data-theme={theme}>
+        <div className={styles.buttonWrapper}>
+            <Button radius="large" onClick={onCreateSketch}>Create new</Button>
             <Flex direction="column" gap="3">
                 <JoinCollaborativeSketchDialog
                     isOpen={isJoinDialogOpen}
-                    trigger={<Button radius="large" onClick={() => setIsJoinDialogOpen(true)}>Join a sketch</Button>}
+                    trigger={<Button variant="surface" radius="large" onClick={() => setIsJoinDialogOpen(true)}>Join a sketch</Button>}
                     onSubmit={async () => {
                         await updateFilesFromLocalStorage();
                     }}
                     onClose={() => setIsJoinDialogOpen(false)}
                 />
             </Flex>
-        </Flex>,
-        <div className={styles.sketches} key={2}>
+        </div>
+        <Text size="1" className={styles.subheader}>Sketches</Text>
+        <div className={styles.sketches}>
             <div className={styles.sketchListWrapper}>
-                <Text size="1" className={styles.subheader}>Sketches</Text>
                 <div className={styles.sketchList}>
                     {files
                         .map((fileName, i) => {
                             return <div
                                 className={styles.sketchItem}
+                                data-theme={theme}
                                 data-active={currentSketch.fileName === fileName}
                                 data-is-connected={(currentSketch.fileName === fileName) && isConnected}
                                 key={`${fileName}-${i}`}
@@ -112,7 +113,7 @@ const Sketches = ({onOpenRenameDialog}) => {
                 </div>
             </div>
         </div>
-        ];
+    </div>;
 }
 
 export default Sketches;

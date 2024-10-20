@@ -1,6 +1,6 @@
 .grid {
     display: grid;
-    grid-template-columns: min(30%, 300px) 1fr;
+    grid-template-columns: min(35%, 280px) 1fr;
     grid-template-rows: 40px 1fr;
     column-gap: var(--gap);
     row-gap: var(--gap);
@@ -56,10 +56,11 @@
 }
 
 .logo {
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
     position: absolute;
     bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
+    left: 0;
+    /*transform: translate(-50%, 0);*/
 }
+

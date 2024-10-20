@@ -3,7 +3,6 @@
     position: relative;
     border-radius: var(--radius-3);
     overflow: hidden;
-    /*box-shadow: var(--box-shadow);*/
 }
 
 .editor :global(.cm-editor) {
@@ -16,7 +15,13 @@
     opacity: 1;
 }
 
-.editor[data-is-loading='true']:after {
+.spinner {
+    position: absolute !important;
+    top: 0;
+    left: 50%;
+}
+
+.editor[data-is-loading='true']:after{
     content: '';
     position: absolute;
     top: 0;
@@ -27,8 +32,13 @@
     z-index: 1;
 }
 
-.spinner {
-    position: absolute !important;
+.editor[data-theme="dark"][data-is-loading='true']:after{
+    content: '';
+    position: absolute;
     top: 0;
-    left: 50%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
 }

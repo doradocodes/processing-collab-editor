@@ -1,5 +1,6 @@
 import styles from "./index.module.css";
 import {useEffect, useRef, useState} from "react";
+import {Text} from "@radix-ui/themes";
 
 const Console = ({theme = 'light', height}) => {
     const consoleRef = useRef(null);
@@ -9,13 +10,13 @@ const Console = ({theme = 'light', height}) => {
         window.electronAPI.onProcessingOutput((data) => {
             setOutput((prevOutput) => [
                 ...prevOutput,
-                <div>{data}</div>,
+                <Text>{data}</Text>,
             ]);
         });
         window.electronAPI.onProcessingOutputError((data) => {
             setOutput((prevOutput) => [
                 ...prevOutput,
-                <div className={styles.error}>{data}</div>
+                <Text color="red">{data}</Text>
             ]);
         });
     }, []);

@@ -1,7 +1,7 @@
 import {useEditorStore} from "../../store/editorStore.js";
 import {useEffect, useRef, useState} from "react";
 import {renameSketch, updateSketch} from "../../utils/localStorageUtils.js";
-import {Button, Flex, Heading, IconButton, Theme, Tooltip} from "@radix-ui/themes";
+import {Flex, Heading, IconButton, Theme} from "@radix-ui/themes";
 import {ViewVerticalIcon} from "@radix-ui/react-icons";
 import styles from "../../App.module.css";
 import SketchDropdownMenu from "../../components/SketchDropdownMenu/index.jsx";
@@ -55,7 +55,7 @@ function Main() {
 
     return <Theme
         appearance={theme}
-        accentColor="indigo"
+        accentColor="blue"
         panelBackground="translucent"
         radius="medium"
     >
@@ -104,13 +104,14 @@ function Main() {
                 <div className={styles.leftColumn}>
                     <img className={styles.logo} src="./Processing-logo.png" alt="logo"/>
                     <Sketches
+                        theme={theme}
                         onOpenRenameDialog={onOpenRenameDialog}
                     />
                 </div>
 
 
                 <div className={styles.rightColumn}>
-                <Editor
+                    <Editor
                         theme={theme}
                         sketchName={currentSketch.fileName}
                         sketchContent={currentSketch.content}

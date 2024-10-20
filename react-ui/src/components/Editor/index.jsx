@@ -87,7 +87,7 @@ const Editor = ({sketchName, sketchContent, theme, onChange, onSave}) => {
         };
     }, [sketchName, theme]);
 
-    return <div className={styles.editor} ref={editorRef} data-is-loading={isLoading}/>;
+    return <div className={styles.editor} ref={editorRef} data-is-loading={isLoading} data-theme={theme}/>;
 };
 
 export default Editor;

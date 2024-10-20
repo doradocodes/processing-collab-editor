@@ -17,7 +17,6 @@ const isMac = process.platform === 'darwin';
 
 const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
 
-// Load initial preferences
 const userPreferences = loadPreferences();
 
 const template = [
@@ -78,7 +77,6 @@ const template = [
 ];
 
 function createSketchFolder() {
-    // Attempt to write to the Documents folder
     try {
         if (!fs.existsSync(documentsFolderPath)) {
             fs.mkdirSync(documentsFolderPath, {recursive: true});
@@ -135,7 +133,6 @@ const loadWindow = (window, urlPath = '') => {
 }
 
 const loadSplashWindow = () => {
-    // Create the splash screen window
     splashWindow = new BrowserWindow({
         width: 400,
         height: 300,

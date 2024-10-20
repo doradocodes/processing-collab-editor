@@ -1,6 +1,4 @@
-import {useEffect, useState} from "react";
 import Main from "./views/Main/index.jsx";
-import './App.css';
 import {HashRouter, Route, Routes} from 'react-router-dom';
 import CollabView from "./views/CollabView/index.jsx";
 
