@@ -1,37 +1,56 @@
-const {ipcMain, app} = require('electron');
+const { ipcMain, app } = require('electron');
 const fs = require('fs');
 const path = require('path');
-const {exec} = require('child_process');
-const {createSketchFile, deleteSketchFile, getSketchFile, getSketchFolders} = require("./fsUtils");
+const { exec } = require('child_process');
+const { createSketchFile, deleteSketchFile, getSketchFile, getSketchFolders } = require("./fsUtils");
 const os = require("os");
-const isPackaged = app.isPackaged;
 
+const isPackaged = app.isPackaged;
 const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
 const processingJavaPath = isPackaged
     ? path.join(process.resourcesPath, 'tools', 'processing-java')
     : 'processing-java';
 
+let processingProcess = null; // To store the reference to the process
+
+/**
+ * Loads all IPC (Inter-Process Communication) functions for the application.
+ * This function sets up handlers for various IPC events related to sketch management and Processing execution.
+ */
 function loadIpcFunctions() {
+    /**
+     * Retrieves a list of sketch folders.
+     * @returns {Promise<string[]>} A promise that resolves with an array of folder names.
+     */
     ipcMain.handle('get-sketch-folders', async (event) => {
         try {
-            const folders = await getSketchFolders();
-            return folders;
+            return await getSketchFolders();
         } catch (error) {
             console.error('Error getting sketch folders:', error);
             throw error;
         }
     });
 
+    /**
+     * Retrieves the content of a specific sketch file.
+     * @param {string} folderName - The name of the folder containing the sketch.
+     * @returns {Promise<string>} A promise that resolves with the content of the sketch file.
+     */
     ipcMain.handle('get-sketch-file', async (event, folderName) => {
         try {
-            const fileContent = await getSketchFile(folderName);
-            return fileContent;
+            return await getSketchFile(folderName);
         } catch (error) {
             console.error('Error getting sketch file:', error);
             throw error;
         }
     });
 
+    /**
+     * Creates a new sketch file with the given name and content.
+     * @param {string} fileName - The name of the new sketch file.
+     * @param {string} content - The content of the new sketch file.
+     * @returns {Promise<string>} A promise that resolves with the path of the created folder.
+     */
     ipcMain.handle('create-new-sketch', async (event, fileName, content) => {
         try {
             const folderPath = await createSketchFile(fileName, content);
@@ -43,11 +62,15 @@ function loadIpcFunctions() {
         }
     });
 
+    /**
+     * Renames an existing sketch folder and file.
+     * @param {string} oldName - The current name of the sketch.
+     * @param {string} newName - The new name for the sketch.
+     * @returns {Promise<string>} A promise that resolves with the path of the renamed folder.
+     */
     ipcMain.handle('rename-sketch', async (event, oldName, newName) => {
-        // rename folder and file name
         const oldFolderPath = path.join(documentsFolderPath, oldName);
         const newFolderPath = path.join(documentsFolderPath, newName);
-
         const oldFilePath = path.join(newFolderPath, `${oldName}.pde`);
         const newFilePath = path.join(newFolderPath, `${newName}.pde`);
 
@@ -68,6 +91,11 @@ function loadIpcFunctions() {
         });
     });
 
+    /**
+     * Deletes a sketch folder and its contents.
+     * @param {string} folderName - The name of the folder to delete.
+     * @returns {Promise<string>} A promise that resolves with the name of the deleted folder.
+     */
     ipcMain.handle('delete-sketch', async (event, folderName) => {
         try {
             const deletedFolder = await deleteSketchFile(folderName);
@@ -79,10 +107,13 @@ function loadIpcFunctions() {
         }
     });
 
-    let processingProcess = null; // To store the reference to the process
-
+    /**
+     * Runs a Processing sketch.
+     * @param {string} folderPath - The path to the folder containing the sketch.
+     * @returns {Promise<string>} A promise that resolves when the sketch execution is complete.
+     */
     ipcMain.handle('run-processing', (event, folderPath) => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             console.log('Running Processing sketch:', processingJavaPath, folderPath);
 
             processingProcess = exec(`"${processingJavaPath}" --sketch="${folderPath}" --run`);
@@ -110,6 +141,10 @@ function loadIpcFunctions() {
         });
     });
 
+    /**
+     * Stops the currently running Processing sketch.
+     * @returns {Promise<string>} A promise that resolves when the sketch is stopped.
+     */
     ipcMain.handle('stop-processing', () => {
         return new Promise((resolve, reject) => {
             if (processingProcess) {
@@ -123,4 +158,4 @@ function loadIpcFunctions() {
     });
 }
 
-module.exports = {loadIpcFunctions};
+module.exports = { loadIpcFunctions };

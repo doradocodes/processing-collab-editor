@@ -1,9 +1,15 @@
-const path = require('node:path')
+const path = require('node:path');
 const fs = require('node:fs');
-const os = require("os");
+const os = require('os');
 
 const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
 
+/**
+ * Creates a new sketch file with the given name and content.
+ * @param {string} fileName - The name of the sketch file. If not provided, a timestamp-based name will be used.
+ * @param {string} fileContent - The content to be written to the sketch file.
+ * @returns {Promise<string>} A promise that resolves with the path of the created folder.
+ */
 const createSketchFile = (fileName, fileContent) => {
     let fn = fileName;
     let folderPath = path.join(documentsFolderPath, fileName);
@@ -16,8 +22,8 @@ const createSketchFile = (fileName, fileContent) => {
 
     return new Promise((resolve, reject) => {
         try {
-            fs.mkdirSync(folderPath, {recursive: true});
-            fs.writeFileSync(filePath, fileContent, {encoding: 'utf8'});
+            fs.mkdirSync(folderPath, { recursive: true });
+            fs.writeFileSync(filePath, fileContent, { encoding: 'utf8' });
             resolve(folderPath);
         } catch (error) {
             reject(error);
@@ -25,11 +31,16 @@ const createSketchFile = (fileName, fileContent) => {
     });
 };
 
+/**
+ * Deletes a sketch folder and its contents.
+ * @param {string} folderName - The name of the folder to delete.
+ * @returns {Promise<string>} A promise that resolves with the name of the deleted folder.
+ */
 const deleteSketchFile = (folderName) => {
     const folderPath = path.join(documentsFolderPath, folderName);
 
     return new Promise((resolve, reject) => {
-        fs.rmdir(folderPath, {recursive: true}, (error) => {
+        fs.rmdir(folderPath, { recursive: true }, (error) => {
             if (error) {
                 reject(error);
                 return;
@@ -37,12 +48,15 @@ const deleteSketchFile = (folderName) => {
             resolve(folderName);
         });
     });
+};
 
-}
-
+/**
+ * Retrieves a list of sketch folders.
+ * @returns {Promise<string[]>} A promise that resolves with an array of folder names.
+ */
 const getSketchFolders = async () => {
     try {
-        const entries = await fs.promises.readdir(documentsFolderPath, {withFileTypes: true});
+        const entries = await fs.promises.readdir(documentsFolderPath, { withFileTypes: true });
         const folders = entries
             .filter(entry => entry.isDirectory())
             .map(dir => dir.name)
@@ -54,6 +68,11 @@ const getSketchFolders = async () => {
     }
 };
 
+/**
+ * Retrieves the content of a sketch file.
+ * @param {string} folderName - The name of the folder containing the sketch file.
+ * @returns {Promise<string>} A promise that resolves with the content of the sketch file.
+ */
 const getSketchFile = (folderName) => {
     const folderPath = path.join(documentsFolderPath, folderName);
     const filePath = path.join(folderPath, `${folderName}.pde`);

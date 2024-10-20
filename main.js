@@ -1,58 +1,64 @@
-const {app, BrowserWindow, session, nativeImage, Menu, globalShortcut} = require('electron')
-const path = require('node:path')
-const {ipcMain} = require('electron')
+/**
+ * Main entry point for the Electron application.
+ * This file sets up the main process, creates windows, and handles app lifecycle.
+ */
+
+// Import required modules
+const { app, BrowserWindow, session, nativeImage, Menu, globalShortcut } = require('electron');
+const path = require('node:path');
+const { ipcMain } = require('electron');
 const fs = require('node:fs');
 const os = require('os');
-const {loadPreferences, savePreferences} = require("./electronUtils/preferences");
+const { loadPreferences, savePreferences } = require("./electronUtils/preferences");
+const { loadIpcFunctions } = require("./electronUtils/ipcUtils");
 
-const {loadIpcFunctions} = require("./electronUtils/ipcUtils");
-
-
+// Set development mode flag
 const isDev = process.env.NODE_ENV === 'development';
 
+// Initialize window management
 const windows = [];
 let splashWindow = null;
 
+// Check if running on macOS
 const isMac = process.platform === 'darwin';
 
+// Set up file paths
 const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
 
+// Load user preferences
 const userPreferences = loadPreferences();
 
+/**
+ * Define menu template for the application
+ * @type {Electron.MenuItemConstructorOptions[]}
+ */
 const template = [
     {
         label: app.name,
         role: 'appMenu',
         submenu: [
-            {
-                label: 'About ' + app.name,
-                role: 'about'
-            },
-            {type: 'separator'},
-            {
-                role: 'quit'
-            }
+            { label: 'About ' + app.name, role: 'about' },
+            { type: 'separator' },
+            { role: 'quit' }
         ]
     },
     {
         label: 'File',
         submenu: [
-            {label: 'New window', accelerator: 'CmdOrCtrl+N', click: () => createWindow('')},
-            // {label: 'Open', click: () => console.log('Open clicked')},
-            // {label: 'Save', click: () => console.log('Save clicked')},
-            {type: 'separator'},
-            {label: 'Exit', role: 'quit'}
+            { label: 'New window', accelerator: 'CmdOrCtrl+N', click: () => createWindow('') },
+            { type: 'separator' },
+            { label: 'Exit', role: 'quit' }
         ]
     },
     {
         label: 'Edit',
         submenu: [
-            {label: 'Undo', role: 'undo'},
-            {label: 'Redo', role: 'redo'},
-            {type: 'separator'},
-            {label: 'Cut', role: 'cut'},
-            {label: 'Copy', role: 'copy'},
-            {label: 'Paste', role: 'paste'}
+            { label: 'Undo', role: 'undo' },
+            { label: 'Redo', role: 'redo' },
+            { type: 'separator' },
+            { label: 'Cut', role: 'cut' },
+            { label: 'Copy', role: 'copy' },
+            { label: 'Paste', role: 'paste' }
         ]
     },
     {
@@ -70,24 +76,30 @@ const template = [
                     app.exit(0); // Exit the current instance with a status code of 0 (success)
                 },
             },
-            {role: 'reload'},
-            {role: 'toggledevtools'}
+            { role: 'reload' },
+            { role: 'toggledevtools' }
         ]
     }
 ];
 
+/**
+ * Creates the sketch folder in the user's Documents directory
+ */
 function createSketchFolder() {
     try {
         if (!fs.existsSync(documentsFolderPath)) {
-            fs.mkdirSync(documentsFolderPath, {recursive: true});
+            fs.mkdirSync(documentsFolderPath, { recursive: true });
         }
-        // fs.writeFileSync(testFilePath, 'Testing access to Documents folder');
         console.log('Access granted to Documents folder');
     } catch (error) {
         console.error('No permission to access Documents folder:', error);
     }
 }
 
+/**
+ * Creates a new application window
+ * @param {string} urlPath - The URL path to load in the new window
+ */
 const createWindow = (urlPath = '') => {
     let options = {
         width: 800,
@@ -115,6 +127,11 @@ const createWindow = (urlPath = '') => {
     loadWindow(newWindow, urlPath);
 }
 
+/**
+ * Loads the specified URL in the given window
+ * @param {Electron.BrowserWindow} window - The window to load the URL in
+ * @param {string} urlPath - The URL path to load
+ */
 const loadWindow = (window, urlPath = '') => {
     const windowUrl = isDev ?
         `http://localhost:5173#/theme/${userPreferences.theme}/${urlPath}`
@@ -132,6 +149,9 @@ const loadWindow = (window, urlPath = '') => {
     });
 }
 
+/**
+ * Loads the splash window
+ */
 const loadSplashWindow = () => {
     splashWindow = new BrowserWindow({
         width: 400,
@@ -143,39 +163,42 @@ const loadSplashWindow = () => {
     splashWindow.loadFile(path.join(__dirname, 'splash.html'));
 }
 
+// App ready event handler
 app.whenReady().then(async () => {
     loadSplashWindow();
-
     createSketchFolder();
-
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu);
-
     createWindow();
 });
 
+// Window creation event handler
 app.on('browser-window-created', () => {
+    // Add any necessary logic for new window creation
 })
 
+// Window close event handler
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
 
+// Window focus event handler
 app.on('browser-window-focus', function () {
     // globalShortcut.register("CommandOrControl+R", () => {
     //     console.log("CommandOrControl+R is pressed: Shortcut Disabled");
     // });
-
     globalShortcut.register("F5", () => {
         console.log("F5 is pressed: Shortcut Disabled");
     });
 });
 
+// Window blur event handler
 app.on('browser-window-blur', function () {
     globalShortcut.unregister('CommandOrControl+R');
     globalShortcut.unregister('F5');
 });
 
+// Set about panel options
 app.setAboutPanelOptions({
     iconPath: '/assets/Processing-logo.png',
     applicationName: "Processing Collaborative Editor",
@@ -185,10 +208,10 @@ app.setAboutPanelOptions({
     copyright: "Copyright"
 });
 
+// Load IPC functions
 loadIpcFunctions();
 
+// IPC handler for opening a new window
 ipcMain.handle('open-new-window', (event, urlPath) => {
     createWindow(urlPath);
 });
-
-

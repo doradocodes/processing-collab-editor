@@ -2,15 +2,21 @@ const fs = require('fs');
 const path = require('path');
 const { app } = require('electron');
 
+/**
+ * Path to the preferences file in the user's data directory.
+ * @constant {string}
+ */
 const preferencesFilePath = path.join(app.getPath('userData'), 'pce_preferences.json');
-console.log(preferencesFilePath);
 
+/**
+ * Loads user preferences from the file system.
+ * If the preferences file doesn't exist, it creates one with default settings.
+ * @returns {Object} The user preferences object.
+ */
 function loadPreferences() {
     try {
-        // Check if preferences.json exists
         if (!fs.existsSync(preferencesFilePath)) {
             console.log('Preferences file not found, creating new');
-            // If the file doesn't exist, create it with default preferences
             const defaultPreferences = {
                 theme: 'light',
             };
@@ -18,17 +24,20 @@ function loadPreferences() {
             return defaultPreferences;
         }
 
-        // If it exists, read and return the preferences
         const data = fs.readFileSync(preferencesFilePath);
         return JSON.parse(data);
     } catch (error) {
-        // Return default preferences if file doesn't exist or there is an error
+        console.error('Error loading preferences:', error);
         return {
             theme: 'light',
         };
     }
 }
 
+/**
+ * Saves the given preferences to the file system.
+ * @param {Object} preferences - The preferences object to save.
+ */
 function savePreferences(preferences) {
     try {
         fs.writeFileSync(preferencesFilePath, JSON.stringify(preferences, null, 2));
