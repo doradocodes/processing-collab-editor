@@ -144,14 +144,14 @@
 }
 
 :root, .light, .light-theme, .radix-themes {
-    --color-background-base: #efebeb;
-    --color-background: #efebeb;
+    --color-background-base: #F5F5F5;
+    --color-background: #F5F5F5;
 }
 
 .dark, .dark-theme, :is(.dark, .dark-theme) :where(.radix-themes:not(.light, .light-theme)) {
     --color-background-base: #141414;
     --color-background: #141414;
-    --color-background: linear-gradient(45deg, #141414 20%, var(--blue-a2) 100%);
+    --color-background: linear-gradient(45deg, #141414 50%, var(--blue-a2) 100%);
 }
 
 .radix-themes {

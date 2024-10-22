@@ -20,7 +20,7 @@ export function formatSketchName(name) {
         return `Untitled sketch (${formattedTimestamp})`;
     }
     if (name.indexOf('collab_') === 0) {
-        return name.replace('collab_', 'Collaborative sketch: ');
+        return name.replace('collab_', '') + ' (copy)';
     }
     return name.replaceAll('_', ' ');
 }
@@ -29,3 +29,11 @@ export function checkValidSketchName(name) {
     // allow only letters, numbers, and underscores and spaces
     return /^[a-zA-Z0-9_ ]+$/.test(name);
 }
+
+export const sketchTemplate = `void setup() {
+    size(400, 400);
+}
+
+void draw() {
+    background(0);
+}`

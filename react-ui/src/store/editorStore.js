@@ -1,16 +1,11 @@
 import {create} from 'zustand';
 import {devtools} from 'zustand/middleware';
+import {sketchTemplate} from "../utils/utils.js";
 
 export const useEditorStore = create(devtools((set) => ({
     currentSketch: {
         fileName: null,
-        content: `void setup() {
-    size(400, 400);
-}
-
-void draw() {
-    background(0);
-}`,
+        content: sketchTemplate,
     },
     isLoading: false,
     setIsLoading: (isLoading) => set({isLoading}),

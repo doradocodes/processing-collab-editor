@@ -3,6 +3,8 @@
     position: relative;
     border-radius: var(--radius-3);
     overflow: hidden;
+    box-shadow: var(--box-shadow);
+    margin: 10px 10px 5px;
 }
 
 .editor :global(.cm-editor) {

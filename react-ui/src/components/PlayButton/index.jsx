@@ -2,7 +2,7 @@ import {useEditorStore} from "../../store/editorStore.js";
 import styles from './index.module.css';
 import {updateSketch} from "../../utils/localStorageUtils.js";
 import {IconButton} from "@radix-ui/themes";
-import PlayIcon from './../../assets/play_icon.png';
+import PlayIcon from './../../assets/play_icon.svg';
 import {useEffect, useState} from "react";
 
 const PlayButton = () => {

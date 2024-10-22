@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 
 import {basicSetup, EditorView} from "codemirror";
 import {keymap} from "@codemirror/view";
@@ -7,7 +7,7 @@ import {indentWithTab} from "@codemirror/commands";
 import {java} from "@codemirror/lang-java";
 
 import styles from './index.module.css';
-import {materialDark, materialLight} from "@uiw/codemirror-theme-material";
+import {githubLight, githubDark} from "@uiw/codemirror-theme-github";
 import {useEditorStore} from "../../store/editorStore.js";
 
 const Editor = ({sketchName, sketchContent, theme, onChange, onSave}) => {
@@ -46,7 +46,7 @@ const Editor = ({sketchName, sketchContent, theme, onChange, onSave}) => {
     const getExtensions = () => {
         const extensions = [
             basicSetup,
-            theme === 'dark' ? materialDark : materialLight,
+            theme === 'dark' ? githubDark : githubLight,
             EditorView.theme({
                 ".cm-content": {
                     fontSize: "0.8em" // Set your desired font size here

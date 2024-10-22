@@ -13,11 +13,15 @@
     border-radius: var(--radius-3);
     min-height: 5vh;
     overflow: auto;
+    box-shadow: var(--box-shadow);
+    margin: 5px 10px 10px;
 }
 
 .output {
     padding: 5px;
     font-family: monospace;
+    display: flex;
+    flex-direction: column;
 }
 
 .prompt {

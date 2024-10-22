@@ -9,7 +9,7 @@ import {indentWithTab} from "@codemirror/commands";
 import {java} from "@codemirror/lang-java";
 
 import styles from './../Editor/index.module.css';
-import {materialDark, materialLight} from "@uiw/codemirror-theme-material";
+import {githubLight, githubDark} from "@uiw/codemirror-theme-github";
 import {Spinner} from "@radix-ui/themes";
 import {useEditorStore} from "../../store/editorStore.js";
 
@@ -52,7 +52,7 @@ const CollabEditor = ({theme, sketchContent, yDoc, provider, onChange, onSave, i
         const undoManager = new Y.UndoManager(ytext);
         const extensions = [
             basicSetup,
-            theme === 'dark' ? materialDark : materialLight,
+            theme === 'dark' ? githubDark : githubLight,
             EditorView.theme({
                 ".cm-content": {
                     fontSize: "0.8em" // Set your desired font size here
@@ -96,7 +96,7 @@ const CollabEditor = ({theme, sketchContent, yDoc, provider, onChange, onSave, i
     }, [theme]);
 
     return [
-        <div className={styles.editor} ref={editorRef} data-is-loading={isDocLoading || isLoading}/>,
+        <div className={styles.editor} ref={editorRef} data-theme={theme} data-is-loading={isDocLoading || isLoading}/>,
         isDocLoading && <Spinner className={styles.spinner} size="20px" color="#1be7ff"/>
     ];
 };
