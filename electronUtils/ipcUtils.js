@@ -2,7 +2,7 @@ const { ipcMain, app } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
-const { createSketchFile, deleteSketchFile, getSketchFile, getSketchFolders } = require("./fsUtils");
+const { createSketchFile, deleteSketchFile, getSketchFile, getSketchFolders, getSketchFoldersByLastUpdated} = require("./fsUtils");
 const os = require("os");
 
 const isPackaged = app.isPackaged;
@@ -22,9 +22,9 @@ function loadIpcFunctions() {
      * Retrieves a list of sketch folders.
      * @returns {Promise<string[]>} A promise that resolves with an array of folder names.
      */
-    ipcMain.handle('get-sketch-folders', async (event) => {
+    ipcMain.handle('get-sketch-folders', async () => {
         try {
-            return await getSketchFolders();
+            return await getSketchFoldersByLastUpdated(documentsFolderPath);
         } catch (error) {
             console.error('Error getting sketch folders:', error);
             throw error;
@@ -38,7 +38,7 @@ function loadIpcFunctions() {
      */
     ipcMain.handle('get-sketch-file', async (event, folderName) => {
         try {
-            return await getSketchFile(folderName);
+            return await getSketchFile(documentsFolderPath, folderName);
         } catch (error) {
             console.error('Error getting sketch file:', error);
             throw error;
@@ -53,7 +53,7 @@ function loadIpcFunctions() {
      */
     ipcMain.handle('create-new-sketch', async (event, fileName, content) => {
         try {
-            const folderPath = await createSketchFile(fileName, content);
+            const folderPath = await createSketchFile(documentsFolderPath, fileName, content);
             console.log('Sketch created successfully', folderPath);
             return folderPath;
         } catch (error) {
@@ -98,7 +98,7 @@ function loadIpcFunctions() {
      */
     ipcMain.handle('delete-sketch', async (event, folderName) => {
         try {
-            const deletedFolder = await deleteSketchFile(folderName);
+            const deletedFolder = await deleteSketchFile(documentsFolderPath, folderName);
             console.log('Sketch deleted successfully:', deletedFolder);
             return deletedFolder;
         } catch (error) {

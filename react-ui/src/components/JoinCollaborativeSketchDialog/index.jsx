@@ -1,14 +1,8 @@
 import React, {createRef, useState} from 'react';
-import {Cross2Icon, FileIcon, PersonIcon} from '@radix-ui/react-icons';
-import styles from './index.module.css';
-import {Button, Flex, Text, TextField, Dialog} from "@radix-ui/themes";
-import {getSketchFolders, updateSketch} from "../../utils/localStorageUtils.js";
-import {useEditorStore} from "../../store/editorStore.js";
-import {WebsocketProvider} from "y-websocket";
-import {useWebsocketStore, websocketServer} from "../../store/websocketStore.js";
-import * as Y from "yjs";
+import {FileIcon, PersonIcon} from '@radix-ui/react-icons';
+import {Button, Dialog, Flex, Text, TextField} from "@radix-ui/themes";
 
-const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit, isOpen, onClose }) => {
+const JoinCollaborativeSketchDialog = ({trigger, isOpen, onClick, onClose, isHost = false}) => {
     const [error, setError] = useState(null);
 
     const userNameInput = createRef();
@@ -37,7 +31,6 @@ const JoinCollaborativeSketchDialog = ({ trigger, onClick, onSubmit, isOpen, onC
 
         window.electronAPI.openNewWindow(`collab/${roomID}/user/${userName}`);
 
-        onSubmit();
         onCloseDialog();
         onClose();
     };

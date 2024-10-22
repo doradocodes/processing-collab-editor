@@ -7,6 +7,7 @@ import {useSketchesStore} from "../../store/sketchesStore.js";
 import {useWebsocketStore} from "../../store/websocketStore.js";
 import SketchDropdownMenu from "../SketchDropdownMenu/index.jsx";
 import JoinCollaborativeSketchDialog from "../JoinCollaborativeSketchDialog/index.jsx";
+import {formatSketchName, sketchTemplate} from "../../utils/utils.js";
 
 const Sketches = ({onOpenRenameDialog, theme}) => {
     const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
@@ -44,7 +45,7 @@ const Sketches = ({onOpenRenameDialog, theme}) => {
         const fileName = `sketch_${new Date().getTime()}`;
         setCurrentSketch({
             fileName,
-            content: '',
+            content: sketchTemplate,
         });
         await updateSketch(fileName, currentSketch.content);
         await updateFilesFromLocalStorage();
@@ -59,20 +60,6 @@ const Sketches = ({onOpenRenameDialog, theme}) => {
         });
     }
 
-    function formatSketchName(name) {
-        if (!name) {
-            return 'Untitled sketch';
-        }
-        if (name.indexOf('sketch_') === 0) {
-            const formattedTimestamp = new Date(parseInt(name.split('_')[1])).toLocaleString();
-            return `Untitled sketch (${formattedTimestamp})`;
-        }
-        if (name.indexOf('collab_') === 0) {
-            return name.replace('collab_', '') + ' (Copy)';
-        }
-        return name.replaceAll('_', ' ');
-    }
-
     return <div className={styles.sketchesWrapper} data-theme={theme}>
         <div className={styles.buttonWrapper}>
             <Button radius="large" onClick={onCreateSketch}>Create new</Button>
@@ -80,9 +67,6 @@ const Sketches = ({onOpenRenameDialog, theme}) => {
                 <JoinCollaborativeSketchDialog
                     isOpen={isJoinDialogOpen}
                     trigger={<Button variant="surface" radius="large" onClick={() => setIsJoinDialogOpen(true)}>Join a sketch</Button>}
-                    onSubmit={async () => {
-                        await updateFilesFromLocalStorage();
-                    }}
                     onClose={() => setIsJoinDialogOpen(false)}
                 />
             </Flex>
