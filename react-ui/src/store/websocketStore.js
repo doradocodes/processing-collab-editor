@@ -2,8 +2,8 @@ import {create} from 'zustand';
 import {WebsocketProvider} from "y-websocket";
 import * as Y from "yjs";
 
-// export const websocketServer = 'ws://pce-server.glitch.me/1234';
 // export const websocketServer = 'ws://localhost:1234';
+// ws://zoooggksg00c8444ok08kss0.tormore.steftervelde.org/fsjfdsjk/jkfdjskfj
 export const websocketServer = 'wss://pce-server.onrender.com/1234';
 
 const userColors = [
