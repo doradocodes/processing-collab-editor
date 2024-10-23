@@ -3,7 +3,7 @@ import styles from './index.module.css';
 import {updateSketch} from "../../utils/localStorageUtils.js";
 import {IconButton} from "@radix-ui/themes";
 import PlayIcon from './../../assets/play_icon.svg';
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 
 const PlayButton = () => {
     const isLoading = useEditorStore(state => state.isLoading);
@@ -20,7 +20,23 @@ const PlayButton = () => {
         });
     }, []);
 
-    const onClick = async () => {
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if ((event.ctrlKey || event.metaKey) && event.key === 'r') {
+                event.preventDefault();
+                // console.log(currentSketch.content);
+                runSketch();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        }
+    }, [currentSketch]);
+
+    const runSketch = async () => {
         let fileName = currentSketch.fileName;
         let folderPath = '';
         if (!currentSketch.fileName) {
@@ -41,7 +57,7 @@ const PlayButton = () => {
     return (
         <IconButton
             size="3"
-            onClick={onClick}
+            onClick={runSketch}
             radius="full"
             loading={isLoading}
             className={styles.playButton}

@@ -1,21 +1,31 @@
 import styles from "./index.module.css";
 import {useEffect, useRef, useState} from "react";
 import {Text} from "@radix-ui/themes";
+import {useEditorStore} from "../../store/editorStore.js";
 
 const Console = ({theme = 'light', height}) => {
     const consoleRef = useRef(null);
     const [output, setOutput] = useState([]);
+    const isLoading = useEditorStore(state => state.isLoading);
+
+    useEffect(() => {
+        if (isLoading) {
+            setOutput([]);
+        }
+    }, [isLoading]);
 
     useEffect(() => {
         window.electronAPI.onProcessingOutput((data) => {
             setOutput((prevOutput) => [
                 ...prevOutput,
+                // eslint-disable-next-line react/jsx-key
                 <Text>{data}</Text>,
             ]);
         });
         window.electronAPI.onProcessingOutputError((data) => {
             setOutput((prevOutput) => [
                 ...prevOutput,
+                // eslint-disable-next-line react/jsx-key
                 <Text color="red">{data}</Text>
             ]);
         });

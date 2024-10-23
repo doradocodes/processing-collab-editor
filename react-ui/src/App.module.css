@@ -1,8 +1,11 @@
+.collabView {
+    /*background: linear-gradient(360deg, #ffffff00 70%, var(--green-9) 100%);*/
+}
+
 .grid {
     display: grid;
-    grid-template-columns: min(35%, 280px) 1fr;
+    grid-template-columns: min(32%, 280px) 1fr;
     grid-template-rows: 40px 1fr;
-    row-gap: var(--gap);
     height: 100vh;
     padding: calc(var(--gap) * 2) 0 0 var(--gap);
     box-sizing: border-box;
@@ -42,6 +45,10 @@
 }
 
 .sketchName {
+    max-width: 50vw;
+}
+
+.collabSketchName {
     max-width: 50vw;
 }
 

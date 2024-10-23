@@ -155,7 +155,6 @@
 }
 
 .radix-themes {
-    color: var(--color-text);
 }
 
 .radix-themes:where([data-has-background='true']) {

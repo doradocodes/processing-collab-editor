@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Badge, Button, Flex, Heading, IconButton, Text, Theme, Tooltip } from "@radix-ui/themes";
+import {Badge, Button, Flex, Heading, IconButton, Text, Theme, Tooltip} from "@radix-ui/themes";
 import { ViewVerticalIcon } from "@radix-ui/react-icons";
 
 import { useEditorStore } from "../../store/editorStore.js";
@@ -23,10 +23,10 @@ import styles from './../../App.module.css';
 
 /**
  * CollabView Component
- * 
+ *
  * This component represents the collaborative view of the application.
  * It handles the main layout, collaborative editing, and various user interactions.
- * 
+ *
  * @returns {JSX.Element} The rendered CollabView component
  */
 function CollabView() {
@@ -126,7 +126,7 @@ function CollabView() {
             panelBackground="translucent"
             radius="medium"
         >
-            <div className='App'>
+            <div className={styles.collabView}>
                 <div className={styles.grid} data-panel-open={isLeftPanelOpen}>
                     <div className={styles.leftColumnHeader}>
                         <IconButton onClick={toggleLeftPanel} variant="ghost" mb="1">
@@ -146,7 +146,7 @@ function CollabView() {
                                 size="4"
                                 truncate={true}
                                 verticalAlign="text-top"
-                                className={styles.sketchName}
+                                className={styles.collabSketchName}
                             >
                                 {formatSketchName(currentSketch?.fileName)}
                             </Heading>
