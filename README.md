@@ -1,5 +1,7 @@
 # Processing Collaborative Code Editor
 
+![PCE_banner2.png](assets/PCE_banner2.png)
+
 ## Description
 This project is a prototype for a new collaborative code editor designed for the Processing Foundation (2024 pr05). It aims to enhance the coding experience for Processing users by providing a platform for real-time collaboration.
 
