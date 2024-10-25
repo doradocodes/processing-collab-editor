@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 import {basicSetup, EditorView} from "codemirror";
 import {keymap} from "@codemirror/view";
@@ -11,6 +11,8 @@ import {githubLight, githubDark} from "@uiw/codemirror-theme-github";
 import {useEditorStore} from "../../store/editorStore.js";
 
 const Editor = ({sketchName, sketchContent, theme, onChange, onSave}) => {
+    const [fontSize, setFontSize] = useState(12);
+
     const editorRef = useRef(null);
     const viewRef = useRef(null);
 
@@ -36,12 +38,31 @@ const Editor = ({sketchName, sketchContent, theme, onChange, onSave}) => {
         //     onSave();
         // }, 60000);
 
-        // Cleanup the event listener on component unmount
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
             // clearInterval(interval);
         };
-    }, []);
+    }, [sketchContent]);
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.metaKey && event.key === '=') {
+                event.preventDefault();
+                setFontSize(fontSize => fontSize + 1);
+            }
+
+            if (event.metaKey && event.key === '-') {
+                event.preventDefault();
+                setFontSize(fontSize => fontSize - 1);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        }
+    }, [fontSize]);
 
     const getExtensions = () => {
         const extensions = [
@@ -49,10 +70,10 @@ const Editor = ({sketchName, sketchContent, theme, onChange, onSave}) => {
             theme === 'dark' ? githubDark : githubLight,
             EditorView.theme({
                 ".cm-content": {
-                    fontSize: "0.8em" // Set your desired font size here
+                    fontSize: fontSize + 'px'
                 },
                 ".cm-gutters": {
-                    fontSize: "0.8em" // Set your desired font size here
+                    fontSize: fontSize + 'px'
                 }
             }),
             keymap.of([indentWithTab]),
@@ -85,7 +106,7 @@ const Editor = ({sketchName, sketchContent, theme, onChange, onSave}) => {
             viewRef.current.destroy();
             console.log('Editor destroyed');
         };
-    }, [sketchName, theme]);
+    }, [sketchName, theme, fontSize]);
 
     return <div className={styles.editor} ref={editorRef} data-is-loading={isLoading} data-theme={theme}/>;
 };

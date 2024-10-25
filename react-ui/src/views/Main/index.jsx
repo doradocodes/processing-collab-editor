@@ -1,5 +1,5 @@
 import {useEditorStore} from "../../store/editorStore.js";
-import {useEffect, useRef, useState} from "react";
+import {useState} from "react";
 import {renameSketch, updateSketch} from "../../utils/localStorageUtils.js";
 import {Flex, Heading, IconButton, Theme} from "@radix-ui/themes";
 import {ViewVerticalIcon} from "@radix-ui/react-icons";
@@ -25,12 +25,6 @@ function Main() {
     const updateFilesFromLocalStorage = useSketchesStore(state => state.updateFilesFromLocalStorage)
     const isDisconnectDialogOpen = useWebsocketStore(state => state.isDisconnectDialogOpen)
 
-    const currentSketchRef = useRef(currentSketch); // Create a ref
-
-    useEffect(() => {
-        currentSketchRef.current = currentSketch; // Update the ref whenever currentSketch changes
-    }, [currentSketch]); // Ensure it runs on currentSketch updates
-
     const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
     const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
@@ -53,11 +47,27 @@ function Main() {
         setIsLeftPanelOpen(!isLeftPanelOpen);
     }
 
+    const handleEditorChange = (content) => {
+        setCurrentSketch({
+            ...currentSketch,
+            content
+        });
+    }
+
+    const handleEditorSave = async () => {
+        try {
+            await updateSketch(currentSketch.fileName, currentSketch.content);
+            console.log(currentSketch.content)
+            setHasSaved(true);
+            setTimeout(() => setHasSaved(false), 2000);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     return <Theme
         appearance={theme}
         accentColor="blue"
-        panelBackground="translucent"
-        radius="medium"
     >
         <div className='App'>
             <div className={styles.grid} data-panel-open={isLeftPanelOpen}>
@@ -116,19 +126,8 @@ function Main() {
                         sketchName={currentSketch.fileName}
                         sketchContent={currentSketch.content}
                         userName={currentSketch.userName}
-                        onChange={(content) => {
-                            setCurrentSketch({
-                                ...currentSketch,
-                                content
-                            });
-                        }}
-                        onSave={() => {
-                            updateSketch(currentSketchRef.current.fileName, currentSketchRef.current.content);
-                            setHasSaved(true);
-                            setTimeout(() => {
-                                setHasSaved(false);
-                            }, 2000);
-                        }}
+                        onChange={handleEditorChange}
+                        onSave={handleEditorSave}
                     />
                     <div className={styles.layoutResize}>
                         <DraggableElement

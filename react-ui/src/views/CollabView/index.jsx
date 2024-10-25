@@ -53,14 +53,6 @@ function CollabView() {
     const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
     const [consoleHeight, setConsoleHeight] = useState(100);
 
-    // Refs
-    const currentSketchRef = useRef(currentSketch);
-
-    // Effects
-    useEffect(() => {
-        currentSketchRef.current = currentSketch;
-    }, [currentSketch]);
-
     useEffect(() => {
         if (sketchFolder) {
             initializeWithSketchFolder();
@@ -112,10 +104,14 @@ function CollabView() {
         });
     };
 
-    const handleEditorSave = () => {
-        updateSketch(currentSketchRef.current.fileName, currentSketchRef.current.content);
-        setHasSaved(true);
-        setTimeout(() => setHasSaved(false), 2000);
+    const handleEditorSave = async () => {
+        try {
+            await updateSketch(currentSketch.fileName, currentSketch.content);
+            setHasSaved(true);
+            setTimeout(() => setHasSaved(false), 2000);
+        } catch (error) {
+            console.error('Error saving sketch:', error);
+        }
     };
 
     // Render
@@ -123,8 +119,6 @@ function CollabView() {
         <Theme
             appearance={theme}
             accentColor="indigo"
-            panelBackground="translucent"
-            radius="medium"
         >
             <div className={styles.collabView}>
                 <div className={styles.grid} data-panel-open={isLeftPanelOpen}>

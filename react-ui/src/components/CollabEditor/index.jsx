@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import * as Y from 'yjs'
 import {yCollab} from 'y-codemirror.next'
 
@@ -14,6 +14,8 @@ import {Spinner} from "@radix-ui/themes";
 import {useEditorStore} from "../../store/editorStore.js";
 
 const CollabEditor = ({theme, sketchContent, yDoc, provider, onChange, onSave, isDocLoading}) => {
+    const [fontSize, setFontSize] = useState(12);
+
     const editorRef = useRef(null);
     const viewRef = useRef(null);
 
@@ -44,7 +46,27 @@ const CollabEditor = ({theme, sketchContent, yDoc, provider, onChange, onSave, i
             window.removeEventListener('keydown', handleKeyDown);
             // clearInterval(interval);
         };
-    }, []);
+    }, [sketchContent]);
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.metaKey && event.key === '=') {
+                event.preventDefault();
+                setFontSize(fontSize => fontSize + 1);
+            }
+
+            if (event.metaKey && event.key === '-') {
+                event.preventDefault();
+                setFontSize(fontSize => fontSize - 1);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        }
+    }, [fontSize]);
 
     const getExtensions = () => {
         const doc = yDoc || new Y.Doc();
@@ -55,10 +77,10 @@ const CollabEditor = ({theme, sketchContent, yDoc, provider, onChange, onSave, i
             theme === 'dark' ? githubDark : githubLight,
             EditorView.theme({
                 ".cm-content": {
-                    fontSize: "0.8em" // Set your desired font size here
+                    fontSize: fontSize + 'px'
                 },
                 ".cm-gutters": {
-                    fontSize: "0.8em" // Set your desired font size here
+                    fontSize: fontSize + 'px'
                 }
             }),
             keymap.of([indentWithTab]),
@@ -93,11 +115,11 @@ const CollabEditor = ({theme, sketchContent, yDoc, provider, onChange, onSave, i
             viewRef?.current?.destroy();
             console.log('Editor destroyed');
         };
-    }, [theme]);
+    }, [theme, fontSize]);
 
     return [
-        <div className={styles.editor} ref={editorRef} data-theme={theme} data-is-loading={isDocLoading || isLoading}/>,
-        isDocLoading && <Spinner className={styles.spinner} size="20px" color="#1be7ff"/>
+        <div className={styles.editor} ref={editorRef} data-theme={theme} data-is-collab="true" data-is-loading={isDocLoading || isLoading}/>,
+        // isDocLoading && <Spinner className={styles.spinner} size="20px" color="#1be7ff"/>
     ];
 };
 
