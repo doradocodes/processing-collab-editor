@@ -3,23 +3,116 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing Collaborative Editor</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 16px;
+            overflow: hidden;
+        }
+        body {
+            font-family: "Inter", sans-serif;
+            /*background: url('assets/PCE_background.png') no-repeat center center fixed;*/
+            background: linear-gradient(145deg, #08204b 0%, #0368ff 100%);
+            text-align: center;
+        }
+        main {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 800px;
+            margin: 0 auto;
+            gap: 2.5em;
+            padding: 1em;
+        }
+        h1 {
+            margin: 0;
+            color: white;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 3.5em;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5em;
+            }
+        }
+        main > img {
+            width: 100%;
+        }
+        .button_wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75em;
+            flex-wrap: wrap;
+        }
+        button {
+            cursor: pointer;
+            font-family: inherit;
+            background: black;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            font-size: 1em;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        button > img {
+            height: 0.85em;
+            filter: invert(1);
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            margin: 1em;
+        }
+    </style>
 
 </head>
 <body>
-<h1>Hello World!</h1>
-We are using Node.js <span id="node-version"></span>,
-Chromium <span id="chrome-version"></span>,
-and Electron <span id="electron-version"></span>.
-<div>
-    <button id="runButton">Run sketch</button>
-    <input id="sketchPath" type="text" placeholder="Path to sketch"/>
-</div>
-<pre id="output"></pre>
+    <main>
+        <img src="assets/Processing_2021_logo_512x512.png" alt="PCE" class="logo" />
+        <h1>Processing <br>Collaborative Editor</h1>
+        <div class="button_wrapper">
+            <button>
+                <img src="assets/Apple_logo_black.svg" alt="Download for MacOS" />
+                Download for Mac</button>
+            <button>
+                <img src="assets/windows-logo.png" alt="Download for Windows" />
+                Download for Windows
+            </button>
+        </div>
+        <img src="assets/PCE_screenshot.png" alt="PCE">
+        <div>
+            <a href="https://github.com/doradocodes/processing-collab-editor">
+                <button>
+                    <img src="assets/github_logo.png" alt="Download for Windows" />
+                    Github
+                </button>
+            </a>
 
-<!-- You can also require other files to run in this process -->
-<script src="./renderer.js"></script>
+        </div>
+    </main>
+
 </body>
 </html>
