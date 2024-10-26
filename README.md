@@ -33,5 +33,8 @@ This project is a prototype for a new collaborative code editor designed for the
 - `npm run make:linux`: Packages the app for Linux using Electron Forge
 - `npm run sign_processing`: Signs the Processing library for notarization (macOS builds only). This script needs to be run only once, when packaging the app for the first time.
 
+## Websocket Server
+The server code for the WebSocket server is available in the [PCE-Server](https://github.com/doradocodes/pce-server) repository.
+
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.

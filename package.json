@@ -1,7 +1,7 @@
 {
   "name": "Proccessing-Collaborative-Editor",
   "productName": "Processing Collaborative Editor",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Collaborative code editor for Processing",
   "main": "main.js",
   "scripts": {
