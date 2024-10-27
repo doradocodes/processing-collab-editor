@@ -13,7 +13,7 @@ const { loadPreferences, savePreferences } = require("./electronUtils/preference
 const { loadIpcFunctions } = require("./electronUtils/ipcUtils");
 
 // Set development mode flag
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = 'development';
 
 // Initialize window management
 const windows = [];
@@ -23,7 +23,7 @@ let splashWindow = null;
 const isMac = process.platform === 'darwin';
 
 // Set up file paths
-const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
+const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing_Collaborative_Sketches');
 
 // Load user preferences
 const userPreferences = loadPreferences();
@@ -32,16 +32,16 @@ const userPreferences = loadPreferences();
  * Define menu template for the application
  * @type {Electron.MenuItemConstructorOptions[]}
  */
+
 const template = [
-    {
+    ...(isMac ? [{
         label: app.name,
-        role: 'appMenu',
         submenu: [
             { label: 'About ' + app.name, role: 'about' },
             { type: 'separator' },
             { role: 'quit' }
         ]
-    },
+    }] : []),
     {
         label: 'File',
         submenu: [
@@ -133,12 +133,13 @@ const createWindow = (urlPath = '') => {
  * @param {string} urlPath - The URL path to load
  */
 const loadWindow = (window, urlPath = '') => {
-    const windowUrl = isDev ?
-        `http://localhost:5173#/theme/${userPreferences.theme}/${urlPath}`
-        :
+    const windowUrl = 
+    // isDev ?
+    //     `http://localhost:5173#/theme/${userPreferences.theme}/${urlPath}`
+    //     :
         `file://${path.join(__dirname, 'build', 'index.html')}#theme/${userPreferences.theme}/${urlPath}`;
     window.loadURL(windowUrl);
-    window.hide();
+    // window.hide();
 
     window.once('ready-to-show', () => {
         if (splashWindow) {

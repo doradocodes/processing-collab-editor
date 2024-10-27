@@ -9,7 +9,7 @@ const isPackaged = app.isPackaged;
 const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing Collaborative Sketches');
 const processingJavaPath = isPackaged
     ? path.join(process.resourcesPath, 'tools', 'processing-java')
-    : 'processing-java';
+    : path.join(__dirname, '..', 'tools', 'processing-java');
 
 let processingProcess = null; // To store the reference to the process
 
