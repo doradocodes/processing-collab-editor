@@ -36,5 +36,13 @@ This project is a prototype for a new collaborative code editor designed for the
 ## Websocket Server
 The server code for the WebSocket server is available in the [PCE-Server](https://github.com/doradocodes/pce-server) repository.
 
+## Contributing
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
+
+## Acknowledgements
+A thank you to the Processing Foundation for the opportunity to work on this project. Special thanks to Sinan Ascioglu, Ted Davis,
+Raphaël de Courville, Stef Tervelde for their guidance and support throughout the design and development process of this project.
+
+
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
