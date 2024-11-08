@@ -112,7 +112,6 @@ function Main() {
                 </div>
 
                 <div className={styles.leftColumn}>
-                    <img className={styles.logo} src="./Processing-logo.png" alt="logo"/>
                     <Sketches
                         theme={theme}
                         onOpenRenameDialog={onOpenRenameDialog}

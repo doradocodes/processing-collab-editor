@@ -142,10 +142,14 @@ const loadWindow = (window, urlPath = '') => {
 
     window.once('ready-to-show', () => {
         if (splashWindow) {
-            splashWindow.close();
-            splashWindow = null;
+            setTimeout(() => {
+                splashWindow.close();
+                splashWindow = null;
+                window.show();
+            }, 2000);
+        } else {
+            window.show();
         }
-        window.show();
     });
 }
 

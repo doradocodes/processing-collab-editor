@@ -163,7 +163,6 @@ function CollabView() {
                     </div>
 
                     <div className={styles.leftColumn}>
-                        <img className={styles.logo} src="./Processing-logo.png" alt="logo"/>
 
                         <Flex align="start" direction="column" gap="1" mb="2">
                             <Text size="1" className={styles.subheader}>Room ID</Text>
