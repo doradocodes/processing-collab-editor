@@ -1,9 +1,13 @@
 # Processing Collaborative Code Editor
 
-![PCE_banner2.png](assets/PCE_banner2.png)
+![pce_banner3.png](assets/pce_banner3.png)
 
 ## Description
 This project is a prototype for a new collaborative code editor designed for the Processing Foundation (2024 pr05). It aims to enhance the coding experience for Processing users by providing a platform for real-time collaboration.
+
+## Download
+To directly download the app, visit the [landing page](https://doradocodes.github.io/processing-collab-editor/) and download the latest version.
+You can also view the releases [here](https://github.com/doradocodes/processing-collab-editor/releases).
 
 ## Installation
 To get started, visit the project's [landing page](https://doradocodes.github.io/processing-collab-editor/) and download the latest version. 
