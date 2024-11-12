@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Processing Collaborative Editor</title>
+    <link rel="icon" href="./assets/Processing_2021_logo_512x512.png" type="image/png">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap');
@@ -19,30 +20,37 @@
             width: 100%;
             height: 100%;
             font-size: 16px;
-            overflow: hidden;
         }
+
         body {
             font-family: "Inter", sans-serif;
-            background: linear-gradient(145deg, #08204b 0%, #0368ff 100%);
+            /*background: linear-gradient(145deg, #08204b 0%, #0368ff 100%);*/
+            background: url("assets/pce_gradient_1.png");
             text-align: center;
         }
+
         main {
             width: 100%;
-            height: 100%;
+            min-height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            gap: 2.5em;
             padding: 1em;
+            gap: 1.5em;
         }
         h1 {
             margin: 0;
-            color: white;
             font-family: "Space Grotesk", sans-serif;
             font-size: 3.5em;
+        }
+        h2 {
+            margin: 0;
+        }
+        p {
+            margin: 0;
         }
         @media (max-width: 600px) {
             h1 {
@@ -50,7 +58,9 @@
             }
         }
         main > img {
-            width: 100%;
+            width: auto;
+            max-width: 100%;
+            max-height: 40vh;
         }
         .button_wrapper {
             display: flex;
@@ -94,29 +104,29 @@
 </head>
 <body>
     <main>
-        <img src="./assets/Processing_2021_logo_512x512.png" alt="PCE" class="logo" />
         <h1>Processing <br>Collaborative Editor</h1>
+        <h2>Beta (v 1.0.0)</h2>
         <div class="button_wrapper">
-            <a href="https://drive.google.com/file/d/128fufgKMaag2QE-njDXdI5EYyG3BOVjr/view?usp=drive_link">
+            <a href="https://github.com/doradocodes/processing-collab-editor/releases/download/v1.0.4/Processing.Collaborative.Editor-darwin-arm64-1.0.0.zip">
                 <button>
                     <img src="./assets/Apple_logo_black.svg" alt="Download for MacOS" />
                     Download for Mac (Apple Silicon)
                 </button>
             </a>
-            <a href="https://drive.google.com/file/d/1986W414LR3zqTXMH_N8SWvMFRXQZDCKn/view?usp=drive_link">
+            <a href="https://github.com/doradocodes/processing-collab-editor/releases/download/v1.0.4/Processing.Collaborative.Editor-darwin-x64-1.0.0.zip">
                 <button>
                     <img src="./assets/Apple_logo_black.svg" alt="Download for MacOS" />
                     Download for Mac (Intel)
                 </button>
             </a>
-<!--            <a href="#">-->
-<!--                <button>-->
-<!--                    <img src="./assets/windows-logo.png" alt="Download for Windows" />-->
-<!--                    Download for Windows-->
-<!--                </button>-->
-<!--            </a>-->
+            <a href="https://github.com/doradocodes/processing-collab-editor/releases/download/v1.0.4/Processing.Collaborative.Editor-win32-x64-1.0.4.zip">
+                <button>
+                    <img src="./assets/windows-logo.png" alt="Download for Windows" />
+                    Download for Windows
+                </button>
+            </a>
         </div>
-        <img src="./assets/PCE_screenshot.png" alt="PCE">
+        <img src="./assets/PCE_screenshot1.png" alt="PCE">
         <div>
             <a href="https://github.com/doradocodes/processing-collab-editor">
                 <button>

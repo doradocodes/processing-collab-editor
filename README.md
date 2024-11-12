@@ -1,11 +1,42 @@
 # Processing Collaborative Code Editor
 
-![PCE_banner2.png](assets/PCE_banner2.png)
+![pce_banner3.png](assets/pce_banner3.png)
 
 ## Description
 This project is a prototype for a new collaborative code editor designed for the Processing Foundation (2024 pr05). It aims to enhance the coding experience for Processing users by providing a platform for real-time collaboration.
 
+## Download
+To directly download the app, visit the [landing page](https://doradocodes.github.io/processing-collab-editor/) and download the latest version.
+You can also view the releases [here](https://github.com/doradocodes/processing-collab-editor/releases).
+
 ## Installation
+To get started, visit the project's [landing page](https://doradocodes.github.io/processing-collab-editor/) and download the latest version. 
+
+### macOS
+1.   Unzip the downloaded file.
+2.   Move the `.app` file to your Applications folder.
+
+### Windows
+
+1.  **Unzip the Downloaded File**:
+    
+    -   Right-click the downloaded `.zip` file and select “Extract All…” to unzip it.
+2.  **Move the Entire Folder**:
+    
+    -   After unzipping, move the entire folder (e.g., `Processing.Collaborative.Editor-win32-x64-1.0.4`) to your `Program Files` directory. 
+3.  **Create a Shortcut** (Optional):
+    
+    -   For easy access, right-click on `Processing-Collaborative-Editor.exe`, select “Create shortcut,” and place the shortcut on your Desktop or Start Menu.
+4.  **Run the Application**:
+    
+    -   Double-click `Processing-Collaborative-Editor.exe` inside the folder in `Program Files` to launch the app, or use the shortcut if you created one.
+
+### Linux
+Currently, Linux is not supported. If you're interested in contributing a Linux build, please open an issue or submit a pull request!
+
+For a list of stable releases, visit our [Releases page](https://github.com/doradocodes/processing-collab-editor/releases).
+
+## Local setup
 1. Clone the repository to your local machine.
 2. Install dependencies by running `npm install` in the project directory.
 3. Download JDK 17.0.8 from the [Oracle Archive](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) and extract it into the `/tools/PlugIns` directory.
@@ -35,6 +66,14 @@ This project is a prototype for a new collaborative code editor designed for the
 
 ## Websocket Server
 The server code for the WebSocket server is available in the [PCE-Server](https://github.com/doradocodes/pce-server) repository.
+
+## Contributing
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
+
+## Acknowledgements
+A thank you to the Processing Foundation for the opportunity to work on this project. Special thanks to Sinan Ascioglu, Ted Davis,
+Raphaël de Courville, Stef Tervelde for their guidance and support throughout the design and development process of this project.
+
 
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.

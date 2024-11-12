@@ -29,7 +29,7 @@ module.exports = {
       teamId: process.env.APPLE_TEAM_ID
     },
     appBundleId: "com.doradocodes.pce",
-    icon: path.resolve(__dirname, 'assets/Processing_2021_logo_512x512.icns'),
+    icon: path.resolve(__dirname, 'assets/PCE_icon.icns'),
     executableName: 'Processing-Collaborative-Editor',
   },
   makers: [
@@ -38,7 +38,7 @@ module.exports = {
       name: '@electron-forge/maker-squirrel',
       config: {
         name: 'processing-collaborative-editor',
-        setupIcon: './assets/Processing_2021_logo_512x512.ico'  // You can add an .ico file for Windows installer
+        setupIcon: './assets/PCE_icon.ico'  // You can add an .ico file for Windows installer
       },
     },
     // Maker for Windows (.zip)

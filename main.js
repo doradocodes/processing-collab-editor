@@ -11,6 +11,7 @@ const fs = require('node:fs');
 const os = require('os');
 const { loadPreferences, savePreferences } = require("./electronUtils/preferences");
 const { loadIpcFunctions } = require("./electronUtils/ipcUtils");
+const package = require('./package.json');
 
 // Set development mode flag
 const isDev = 'development';
@@ -27,6 +28,8 @@ const documentsFolderPath = path.join(os.homedir(), 'Documents', 'Processing_Col
 
 // Load user preferences
 const userPreferences = loadPreferences();
+
+const version = package.version;
 
 /**
  * Define menu template for the application
@@ -143,10 +146,14 @@ const loadWindow = (window, urlPath = '') => {
 
     window.once('ready-to-show', () => {
         if (splashWindow) {
-            splashWindow.close();
-            splashWindow = null;
+            setTimeout(() => {
+                splashWindow.close();
+                splashWindow = null;
+                window.show();
+            }, 2000);
+        } else {
+            window.show();
         }
-        window.show();
     });
 }
 
@@ -201,10 +208,10 @@ app.on('browser-window-blur', function () {
 
 // Set about panel options
 app.setAboutPanelOptions({
-    iconPath: '/assets/Processing-logo.png',
+    iconPath: '/assets/PCE_icon_48x48.png',
     applicationName: "Processing Collaborative Editor",
     applicationVersion: "App Version",
-    version: "1.0",
+    version: version,
     credits: "Dora Do",
     copyright: "Copyright"
 });
