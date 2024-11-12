@@ -134,3 +134,6 @@ dist
 .vite
 /build
 /tools/PlugIns
+
+# macOS generated files
+.DS_Store
