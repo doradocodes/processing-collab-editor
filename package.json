@@ -8,7 +8,7 @@
     "build": "cd react-ui && npm run build",
     "dev": "concurrently \"npm run dev:react\" \"npm run dev:electron\"",
     "dev:react": "cd react-ui && npm run dev",
-    "dev:electron": "wait-on tcp:5173 && ELECTRON_START_URL=http://localhost:5173/ NODE_ENV=development electron-forge start",
+    "dev:electron": "wait-on tcp:5173 && electron-forge start",
     "package": "electron-forge package",
     "make": "npm run build && electron-forge make",
     "make:win": "npm run build && electron-forge make --platform=win32",
